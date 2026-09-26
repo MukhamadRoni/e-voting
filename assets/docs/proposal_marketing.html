@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Proposal & Feature Showcase - E-Voting Koperasi Modern</title>
+    <title>E-Voting Koperasi - Product Showcase & Panduan Visual Sistem</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         @page {
@@ -20,10 +20,10 @@
 
         body {
             font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #f1f3f5;
+            background-color: #e5e7eb;
             color: #1a1a1a;
-            font-size: 13px;
-            line-height: 1.5;
+            font-size: 11.5px;
+            line-height: 1.45;
         }
 
         .page {
@@ -31,7 +31,7 @@
             height: 297mm;
             min-height: 297mm;
             max-height: 297mm;
-            padding: 16mm 18mm 16mm 18mm;
+            padding: 14mm 16mm 14mm 16mm;
             margin: 0 auto 10mm auto;
             background: #ffffff;
             position: relative;
@@ -60,8 +60,9 @@
             align-items: center;
             justify-content: space-between;
             border-bottom: 1.5px solid #e5e5e5;
-            padding-bottom: 10px;
-            margin-bottom: 16px;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            flex-shrink: 0;
         }
 
         .header-brand {
@@ -71,909 +72,718 @@
         }
 
         .header-logo {
-            width: 28px;
-            height: 28px;
-            background: #1a1a1a;
-            border-radius: 8px;
+            width: 26px;
+            height: 26px;
+            background: #0f172a;
+            border-radius: 7px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #ffffff;
             font-weight: 800;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .header-title {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
-            color: #1a1a1a;
+            color: #0f172a;
             letter-spacing: -0.2px;
         }
 
         .header-tag {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
-            color: #6b7280;
-            background: #f5f5f7;
+            color: #475569;
+            background: #f1f5f9;
             padding: 3px 10px;
             border-radius: 9999px;
-            border: 1px solid #e5e5e5;
+            border: 1px solid #e2e8f0;
         }
 
         .page-footer {
-            border-top: 1px solid #e5e5e5;
-            padding-top: 10px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 11px;
-            color: #9ca3af;
-            margin-top: auto;
+            border-top: 1px solid #e5e5e5;
+            padding-top: 8px;
+            font-size: 10px;
+            color: #64748b;
+            flex-shrink: 0;
         }
 
-        .page-footer strong {
-            color: #4b5563;
+        .page-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow: hidden;
         }
 
         /* ── Typography & Components ── */
         h1, h2, h3, h4 {
-            color: #1a1a1a;
-            font-weight: 700;
+            color: #0f172a;
             letter-spacing: -0.3px;
+            font-weight: 700;
         }
 
-        .pill-badge {
+        .section-badge {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            padding: 4px 12px;
-            border-radius: 9999px;
-            font-size: 11px;
+            gap: 6px;
+            font-size: 9.5px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.8px;
+            color: #2563eb;
+            background: #eff6ff;
+            border: 1px solid #dbeafe;
+            padding: 3px 10px;
+            border-radius: 9999px;
+            margin-bottom: 6px;
+            width: fit-content;
         }
 
-        .badge-dark {
-            background: #1a1a1a;
-            color: #ffffff;
+        .section-heading {
+            font-size: 18px;
+            margin-bottom: 4px;
+            line-height: 1.25;
         }
 
-        .badge-amber {
-            background: #fef3c7;
-            color: #b45309;
-            border: 1px solid #fde68a;
+        .section-desc {
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 12px;
+            line-height: 1.4;
         }
 
-        .badge-green {
-            background: #dcfce7;
-            color: #15803d;
-            border: 1px solid #bbf7d0;
-        }
-
-        .badge-blue {
-            background: #e0f2fe;
-            color: #0369a1;
-            border: 1px solid #bae6fd;
-        }
-
-        .badge-purple {
-            background: #f3e8ff;
-            color: #7e22ce;
-            border: 1px solid #e9d5ff;
-        }
-
-        .badge-gray {
-            background: #f3f4f6;
-            color: #4b5563;
-            border: 1px solid #e5e7eb;
-        }
-
-        /* Cards */
-        .card {
+        /* ── Browser Mockup Frame for Screenshots ── */
+        .mockup-window {
             background: #ffffff;
-            border: 1px solid #e5e5e5;
-            border-radius: 14px;
-            padding: 16px;
-        }
-
-        .card-soft {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
+            border: 1.5px solid #e2e8f0;
             border-radius: 12px;
-            padding: 14px;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
         }
 
+        .mockup-window-dark {
+            background: #0f172a;
+            border: 1.5px solid #334155;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        .mockup-header {
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mockup-window-dark .mockup-header {
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+        }
+
+        .mockup-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .mockup-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .mockup-address {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 2px 12px;
+            font-size: 9px;
+            color: #64748b;
+            font-family: monospace;
+            max-width: 240px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mockup-window-dark .mockup-address {
+            background: #0f172a;
+            border-color: #475569;
+            color: #94a3b8;
+        }
+
+        .mockup-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* ── Grid Layouts ── */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 14px;
+            gap: 12px;
         }
 
         .grid-3 {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
-        }
-
-        .grid-4 {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
             gap: 10px;
         }
 
-        /* Feature List */
-        .feature-item {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 8px;
+        .feature-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 12px;
         }
 
-        .feature-icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #1a1a1a;
-            color: #ffffff;
+        .feature-card h4 {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 3px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 11px;
+            gap: 6px;
+        }
+
+        .feature-card p {
+            font-size: 10.5px;
+            color: #64748b;
+            line-height: 1.35;
+        }
+
+        .badge-pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 9px;
             font-weight: 700;
-            flex-shrink: 0;
-            margin-top: 1px;
         }
+        .badge-blue { background: #eff6ff; color: #1d4ed8; }
+        .badge-green { background: #f0fdf4; color: #15803d; }
+        .badge-amber { background: #fffbeb; color: #b45309; }
+        .badge-purple { background: #faf5ff; color: #7e22ce; }
 
-        .feature-text strong {
-            color: #1a1a1a;
-            display: block;
-            font-size: 12px;
-            margin-bottom: 2px;
-        }
-
-        .feature-text span {
-            color: #6b7280;
-            font-size: 11.5px;
-            line-height: 1.4;
-            display: block;
-        }
-
-        /* Tables */
-        .table-custom {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 11.5px;
+        .callout-box {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            padding: 10px 14px;
             margin-top: 8px;
         }
 
-        .table-custom th {
-            background: #f8f9fa;
-            color: #4b5563;
-            text-align: left;
-            padding: 8px 12px;
-            border-bottom: 1.5px solid #e5e5e5;
+        .callout-box-title {
+            font-size: 11px;
             font-weight: 700;
-            text-transform: uppercase;
-            font-size: 10.5px;
-            letter-spacing: 0.3px;
+            color: #166534;
+            margin-bottom: 2px;
         }
 
-        .table-custom td {
-            padding: 8px 12px;
-            border-bottom: 1px solid #f0f0f0;
-            color: #1a1a1a;
-        }
-
-        .table-custom tr:last-child td {
-            border-bottom: none;
-        }
-
-        /* ── COVER PAGE SPECIFICS ── */
-        .cover-hero {
-            text-align: center;
-            margin: auto 0;
-        }
-
-        .cover-badge-band {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #1a1a1a;
-            color: #ffffff;
-            padding: 6px 18px;
-            border-radius: 9999px;
-            font-size: 11.5px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            margin-bottom: 24px;
-        }
-
-        .cover-title {
-            font-size: 36px;
-            font-weight: 800;
-            line-height: 1.15;
-            color: #1a1a1a;
-            letter-spacing: -1.2px;
-            margin-bottom: 16px;
-        }
-
-        .cover-title span {
-            background: linear-gradient(135deg, #1a1a1a 0%, #4b5563 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .cover-subtitle {
-            font-size: 14.5px;
-            color: #4b5563;
-            max-width: 580px;
-            margin: 0 auto 32px auto;
-            line-height: 1.6;
-        }
-
-        .cover-highlight-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-            margin-top: 36px;
-            text-align: left;
-        }
-
-        .cover-card {
-            background: #ffffff;
-            border: 1.5px solid #e5e5e5;
-            border-radius: 16px;
-            padding: 18px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
-        }
-
-        .cover-card .icon-box {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: #f5f5f7;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            margin-bottom: 12px;
-        }
-
-        .cover-card h3 {
-            font-size: 13.5px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .cover-card p {
-            font-size: 11.5px;
-            color: #6b7280;
-            line-height: 1.45;
-        }
-
-        .cover-meta-box {
-            background: #f8f9fa;
-            border-radius: 14px;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid #e5e5e5;
-            margin-top: 28px;
-        }
-
-        /* ── SECTION HEADER ── */
-        .section-header {
-            margin-bottom: 16px;
-        }
-
-        .section-header h2 {
-            font-size: 20px;
-            font-weight: 800;
-            color: #1a1a1a;
-            margin-bottom: 4px;
-            letter-spacing: -0.4px;
-        }
-
-        .section-header p {
-            font-size: 12.5px;
-            color: #6b7280;
-            line-height: 1.5;
+        .callout-box-desc {
+            font-size: 10px;
+            color: #15803d;
+            line-height: 1.35;
         }
     </style>
 </head>
 <body>
 
-    <!-- ═══════════════════════════════════════════════════════════
-         HALAMAN 1: COVER & EXECUTIVE SHOWCASE
-         ═══════════════════════════════════════════════════════════ -->
-    <div class="page">
-        <header class="page-header">
+    <!-- ========================================================================= -->
+    <!-- PAGE 1: COVER & EXECUTIVE SHOWCASE                                       -->
+    <!-- ========================================================================= -->
+    <div class="page" style="background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
+        <div class="page-header" style="border-bottom: none;">
             <div class="header-brand">
-                <div class="header-logo">⚡</div>
-                <div class="header-title">E-VOTING KOPERASI INDONESIA</div>
+                <div class="header-logo">E</div>
+                <div class="header-title">E-Voting Koperasi Modern</div>
             </div>
-            <div class="header-tag">DOKUMEN PENAWARAN & FITUR 2026</div>
-        </header>
+            <span class="header-tag">RAT Solution Package 2026</span>
+        </div>
 
-        <div class="cover-hero">
-            <div class="cover-badge-band">
-                <span>★ SOLUSI DIGITALISASI PEMILIHAN & RAT KOPERASI TERLENGKAP ★</span>
-            </div>
-
-            <h1 class="cover-title">
-                Sistem E-Voting & Undian RAT<br>
-                <span>Generasi Baru Berbasis 3D WebGL</span>
+        <div class="page-content" style="justify-content: center; align-items: center; text-align: center; padding: 10px 0;">
+            <div class="section-badge" style="margin-bottom: 12px;">★ Solusi Pemilihan Digital & Doorprize RAT</div>
+            <h1 style="font-size: 28px; line-height: 1.2; font-weight: 800; color: #0f172a; margin-bottom: 12px; max-width: 580px;">
+                Platform E-Voting, Bilik Undian, & Real Count 3D Interaktif
             </h1>
-
-            <p class="cover-subtitle">
-                Platform pemilihan digital modern yang dirancang khusus untuk Rapat Anggota Tahunan (RAT) Koperasi, Musyawarah Nasional, dan Organisasi Profesional. Menghadirkan panggung <strong>Real Count 3D Interaktif</strong>, <strong>Bilik Suara RFID</strong>, serta <strong>Mesin Undian Door Prize Otomatis</strong> dengan estetika UI/UX kelas dunia.
+            <p style="font-size: 12.5px; color: #64748b; max-width: 540px; margin-bottom: 20px; line-height: 1.5;">
+                Solusi menyeluruh suksesi kepemimpinan Rapat Anggota Tahunan (RAT) Koperasi. Menghadirkan pemilihan suara nir-kertas (*paperless*), panggung undian *doorprize live*, dan visualisasi hasil 3D panggung olimpiade berkecepatan tinggi.
             </p>
 
-            <div class="cover-highlight-grid">
-                <div class="cover-card">
-                    <div class="icon-box">🗳️</div>
-                    <h3>Bilik Suara Smart Kiosk</h3>
-                    <p>Autentikasi kartu RFID instan & input NIK terpandu 3 tahap. Terbukti anti-double voting dan aman LUBERJURDIL.</p>
+            <!-- Hero Screenshot: Real Count 3D Stage -->
+            <div class="mockup-window" style="width: 100%; max-width: 620px; margin-bottom: 18px; border-color: #cbd5e1; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                <div class="mockup-header">
+                    <div class="mockup-dots">
+                        <div class="mockup-dot dot-red"></div>
+                        <div class="mockup-dot dot-yellow"></div>
+                        <div class="mockup-dot dot-green"></div>
+                    </div>
+                    <div class="mockup-address">http://kiosk.local/e-voting/real_count</div>
+                    <span style="font-size: 8.5px; font-weight: 700; color: #16a34a;">● LIVE 3D STAGE</span>
                 </div>
+                <img src="screenshots/screen_08_real_count.png" class="mockup-img" style="height: 220px; object-fit: cover; object-position: center top;" alt="Real Count 3D">
+            </div>
 
-                <div class="cover-card">
-                    <div class="icon-box">🏆</div>
-                    <h3>Real Count 3D Three.js</h3>
-                    <p>Panggung proyektor 3D berformasi podium Olympic. Animasi lompat lengkung (*rank swap*) saat peringkat bergeser.</p>
+            <!-- Key Metric Cards -->
+            <div class="grid-3" style="width: 100%; max-width: 620px; text-align: left;">
+                <div class="feature-card" style="background: #ffffff;">
+                    <div style="font-size: 18px; font-weight: 800; color: #2563eb; margin-bottom: 2px;">100% Cepat & Sah</div>
+                    <h4 style="font-size: 11px;">Akumulasi Real-Time</h4>
+                    <p style="font-size: 9.5px;">Hasil suara terhitung detik demi detik tanpa risiko manipulasi kertas suara manual.</p>
                 </div>
+                <div class="feature-card" style="background: #ffffff;">
+                    <div style="font-size: 18px; font-weight: 800; color: #16a34a; margin-bottom: 2px;">RFID & QR Token</div>
+                    <h4 style="font-size: 11px;">Otentikasi 1-Ketukan</h4>
+                    <p style="font-size: 9.5px;">Pemilih cukup *tap* kartu fisik atau scan QR untuk membuka bilik suara dalam 1 detik.</p>
+                </div>
+                <div class="feature-card" style="background: #ffffff;">
+                    <div style="font-size: 18px; font-weight: 800; color: #d97706; margin-bottom: 2px;">Visual 3D & Undian</div>
+                    <h4 style="font-size: 11px;">Audiens RAT Terpukau</h4>
+                    <p style="font-size: 9.5px;">Panggung 3D dinamis dan mesin pengacak doorprize yang adil & spektakuler di layar proyektor.</p>
+                </div>
+            </div>
+        </div>
 
-                <div class="cover-card">
-                    <div class="icon-box">🎁</div>
-                    <h3>Bilik Undian Door Prize</h3>
-                    <p>Mesin slot acak interaktif dengan toggle Auto-Valid, verifikasi kehadiran, konfeti, dan anti-undian ganda.</p>
+        <div class="page-footer">
+            <span>E-Voting Koperasi Modern &copy; 2026</span>
+            <span>Dokumen Presentasi Produk & Panduan Visual Sistem</span>
+            <span>Halaman 1 / 6</span>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- PAGE 2: USER JOURNEY & WORKFLOW                                          -->
+    <!-- ========================================================================= -->
+    <div class="page">
+        <div class="page-header">
+            <div class="header-brand">
+                <div class="header-logo">E</div>
+                <div class="header-title">E-Voting Koperasi Modern</div>
+            </div>
+            <span class="header-tag">Arsitektur & Alur Penggunaan</span>
+        </div>
+
+        <div class="page-content">
+            <div class="section-badge">Alur Operasional Lengkap</div>
+            <h2 class="section-heading">User Journey & Workflow Rapat Anggota Tahunan</h2>
+            <p class="section-desc">
+                Sistem dirancang dengan alur kerja intuitif tanpa kurva belajar rumit, memandu panitia dan anggota mulai dari registrasi DPT hingga perayaan pemenang doorprize.
+            </p>
+
+            <!-- 4-Stage Operational Flow -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px;">
+                <div class="feature-card" style="border-top: 3px solid #2563eb; background: #ffffff;">
+                    <span class="badge-pill badge-blue" style="margin-bottom: 4px;">Tahap 1</span>
+                    <h4 style="font-size: 11px;">Persiapan & DPT</h4>
+                    <p style="font-size: 9.5px;">Import data anggota via Excel, tetapkan nomor RFID/kartu, dan daftarkan profil kandidat Ketua & Pengawas.</p>
+                </div>
+                <div class="feature-card" style="border-top: 3px solid #16a34a; background: #ffffff;">
+                    <span class="badge-pill badge-green" style="margin-bottom: 4px;">Tahap 2</span>
+                    <h4 style="font-size: 11px;">Bilik Suara Kiosk</h4>
+                    <p style="font-size: 9.5px;">Anggota tap kartu RFID / ketik NIK, pilih foto calon di layar sentuh, dan lakukan konfirmasi suara 1x klik.</p>
+                </div>
+                <div class="feature-card" style="border-top: 3px solid #f59e0b; background: #ffffff;">
+                    <span class="badge-pill badge-amber" style="margin-bottom: 4px;">Tahap 3</span>
+                    <h4 style="font-size: 11px;">Real Count 3D Live</h4>
+                    <p style="font-size: 9.5px;">Proyeksikan panggung Three.js ke layar utama. Angka perolehan dan podium emas-perak-perunggu bergerak live.</p>
+                </div>
+                <div class="feature-card" style="border-top: 3px solid #7e22ce; background: #ffffff;">
+                    <span class="badge-pill badge-purple" style="margin-bottom: 4px;">Tahap 4</span>
+                    <h4 style="font-size: 11px;">Bilik Undian Doorprize</h4>
+                    <p style="font-size: 9.5px;">Undi doorprize otomatis dari pemilih yang sudah sah menyalurkan suara, lengkap dengan filter departemen & SFX.</p>
                 </div>
             </div>
 
-            <div class="cover-meta-box">
+            <!-- Visual Flow Comparison -->
+            <div class="grid-2" style="margin-bottom: 10px;">
+                <!-- Login Gateway -->
                 <div>
-                    <div style="font-size:11px; color:#6b7280; text-transform:uppercase; font-weight:700;">Standar Keamanan & Arsitektur</div>
-                    <div style="font-size:13px; font-weight:700; color:#1a1a1a; margin-top:2px;">100% Offline-Ready &bull; ACID Database Transaction &bull; Clean Light UI</div>
-                </div>
-                <div style="text-align:right;">
-                    <div style="font-size:11px; color:#6b7280; text-transform:uppercase; font-weight:700;">Versi Rilis</div>
-                    <div style="font-size:13px; font-weight:700; color:#1a1a1a; margin-top:2px;">E-Voting Koperasi v2.6 Pro Edition</div>
-                </div>
-            </div>
-        </div>
-
-        <footer class="page-footer">
-            <span>Disusun oleh: <strong>Tim Pengembang Solusi E-Voting Koperasi Modern</strong></span>
-            <span>Halaman 1 dari 6</span>
-        </footer>
-    </div>
-
-
-    <!-- ═══════════════════════════════════════════════════════════
-         HALAMAN 2: EXECUTIVE SUMMARY & COMPARISON
-         ═══════════════════════════════════════════════════════════ -->
-    <div class="page">
-        <header class="page-header">
-            <div class="header-brand">
-                <div class="header-logo">⚡</div>
-                <div class="header-title">E-VOTING KOPERASI &bull; EXECUTIVE SUMMARY</div>
-            </div>
-            <div class="header-tag">TRANSFORMASI DIGITAL RAT</div>
-        </header>
-
-        <div style="flex:1;">
-            <div class="section-header">
-                <div class="pill-badge badge-dark" style="margin-bottom:8px;">Latar Belakang & Urgensi</div>
-                <h2>Mengapa Koperasi Anda Memerlukan E-Voting?</h2>
-                <p>Pelaksanaan Rapat Anggota Tahunan (RAT) sering menghadapi kendala waktu perhitungan surat suara manual yang berlarut-larut, biaya cetak kertas mahal, serta risiko human error dan manipulasi suara.</p>
-            </div>
-
-            <!-- Comparison Table -->
-            <div class="card" style="margin-bottom:16px;">
-                <h3 style="font-size:13.5px; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-                    <span>📊 Perbandingan: Metode Konvensional Kertas vs. E-Voting Digital</span>
-                </h3>
-                <table class="table-custom">
-                    <thead>
-                        <tr>
-                            <th style="width:25%;">Parameter Pemilihan</th>
-                            <th style="width:37%;">Voting Konvensional (Kertas)</th>
-                            <th style="width:38%; color:#15803d;">E-Voting Koperasi Digital</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Waktu Perhitungan Suara</strong></td>
-                            <td style="color:#dc2626;">2 - 5 Jam (Melelahkan & Rentan Salah)</td>
-                            <td style="color:#15803d; font-weight:700;">Instan Real-Time (0 Detik)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Biaya Cetak & Logistik</strong></td>
-                            <td style="color:#dc2626;">Jutaan rupiah (Kertas, Tinta, Kotak Suara)</td>
-                            <td style="color:#15803d; font-weight:700;">Nol Kertas (Zero Paper Cost)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Pencegahan Suara Ganda</strong></td>
-                            <td>Sulit diawasi (Cap jari/Tanda tangan)</td>
-                            <td style="color:#15803d; font-weight:700;">Terkunci Otomatis via RFID/NIK</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Transparansi & Antusiasme</strong></td>
-                            <td>Pasif & Tertutup di bilik hitung</td>
-                            <td style="color:#15803d; font-weight:700;">Live 3D Stage di Layar Proyektor</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Rekapitulasi & Berita Acara</strong></td>
-                            <td>Ditulis manual, rawan selisih angka</td>
-                            <td style="color:#15803d; font-weight:700;">Auto-Generate PDF/Excel Siap Cetak</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- 4 Value Pillars -->
-            <div class="grid-2">
-                <div class="card-soft">
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-                        <span style="font-size:16px;">🛡️</span>
-                        <h4 style="font-size:13px;">1. Integritas Data & Anti-Fraud</h4>
+                    <div style="font-size: 10.5px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">
+                        1. Autentikasi Pengurus & Panitia
                     </div>
-                    <p style="font-size:11.5px; color:#4b5563;">Setiap surat suara dikunci melalui transaksi database ACID. Hak suara anggota berstatus <em>'T' (Sudah Memilih)</em> secara permanen sehingga tidak mungkin melakukan pencoblosan ganda.</p>
-                </div>
-
-                <div class="card-soft">
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-                        <span style="font-size:16px;">📴</span>
-                        <h4 style="font-size:13px;">2. Kemandirian Offline (Zero CDN)</h4>
-                    </div>
-                    <p style="font-size:11.5px; color:#4b5563;">Sistem tidak bergantung pada koneksi internet cloud. Seluruh vendor script (Three.js, SweetAlert2, DataTables) tersimpan lokal untuk keandalan 100% di ruang aula pertemuan.</p>
-                </div>
-
-                <div class="card-soft">
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-                        <span style="font-size:16px;">✨</span>
-                        <h4 style="font-size:13px;">3. Desain UI/UX Ramah Pengguna</h4>
-                    </div>
-                    <p style="font-size:11.5px; color:#4b5563;">Mengadopsi filosofi desain Apple/MiniMax: tata letak kanvas putih bersih, tombol pil yang tegas, kartu squircle membulat, dan tipografi DM Sans yang sangat nyaman dibaca segala usia.</p>
-                </div>
-
-                <div class="card-soft">
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-                        <span style="font-size:16px;">🎁</span>
-                        <h4 style="font-size:13px;">4. Door Prize RAT Terintegrasi</h4>
-                    </div>
-                    <p style="font-size:11.5px; color:#4b5563;">Hanya anggota yang telah menggunakan hak suaranya yang berhak masuk dalam putaran door prize RAT. Pemenang yang sah otomatis terkunci agar tidak mendapat hadiah ganda.</p>
-                </div>
-            </div>
-        </div>
-
-        <footer class="page-footer">
-            <span>E-Voting Koperasi Modern &bull; Dokumen Penawaran Teknis</span>
-            <span>Halaman 2 dari 6</span>
-        </footer>
-    </div>
-
-
-    <!-- ═══════════════════════════════════════════════════════════
-         HALAMAN 3: FITUR 1 & 2 (BILIK SUARA & REAL COUNT 3D)
-         ═══════════════════════════════════════════════════════════ -->
-    <div class="page">
-        <header class="page-header">
-            <div class="header-brand">
-                <div class="header-logo">⚡</div>
-                <div class="header-title">FITUR UNGGULAN &bull; MODUL 1 & 2</div>
-            </div>
-            <div class="header-tag">CORE VOTING & 3D STAGE</div>
-        </header>
-
-        <div style="flex:1;">
-            <!-- Fitur 1: Bilik Suara Digital -->
-            <div class="card" style="margin-bottom:16px;">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-                    <div>
-                        <div class="pill-badge badge-blue" style="margin-bottom:4px;">Modul 01 &bull; Kiosk Touchscreen</div>
-                        <h3 style="font-size:16px;">Bilik Suara Digital (RFID Sensor & NIK)</h3>
-                    </div>
-                    <span class="pill-badge badge-green">✓ Siap Operasional</span>
-                </div>
-                <p style="font-size:12px; color:#4b5563; margin-bottom:12px;">
-                    Antarmuka layar sentuh (*kiosk terminal*) mandiri yang memandu anggota koperasi menyelesaikan pemilihan dalam 3 langkah terstruktur:
-                </p>
-
-                <div class="grid-3" style="margin-bottom:12px;">
-                    <div style="background:#f8f9fa; border:1px solid #e5e5e5; border-radius:10px; padding:10px;">
-                        <div style="font-size:10px; font-weight:700; color:#0369a1; text-transform:uppercase;">Tahap 1 &bull; Tap Kartu</div>
-                        <div style="font-weight:700; font-size:12px; margin-top:2px;">Scan RFID / Input NIK</div>
-                        <div style="font-size:11px; color:#6b7280; margin-top:4px;">Identifikasi anggota instan & validasi DPT secara otomatis.</div>
-                    </div>
-                    <div style="background:#f8f9fa; border:1px solid #e5e5e5; border-radius:10px; padding:10px;">
-                        <div style="font-size:10px; font-weight:700; color:#0369a1; text-transform:uppercase;">Tahap 2 &bull; Surat Suara</div>
-                        <div style="font-weight:700; font-size:12px; margin-top:2px;">Pilih Ketua & Pengawas</div>
-                        <div style="font-size:11px; color:#6b7280; margin-top:4px;">Kartu visual foto kandidat, nomor urut, dan visi-misi lengkap.</div>
-                    </div>
-                    <div style="background:#f8f9fa; border:1px solid #e5e5e5; border-radius:10px; padding:10px;">
-                        <div style="font-size:10px; font-weight:700; color:#0369a1; text-transform:uppercase;">Tahap 3 &bull; Finalisasi</div>
-                        <div style="font-weight:700; font-size:12px; margin-top:2px;">Konfirmasi & Selesai</div>
-                        <div style="font-size:11px; color:#6b7280; margin-top:4px;">Review pilihan sebelum kirim, auto-reset 5 detik untuk pemilih baru.</div>
-                    </div>
-                </div>
-
-                <div class="grid-2">
-                    <div class="feature-item">
-                        <div class="feature-icon">✓</div>
-                        <div class="feature-text">
-                            <strong>Dukungan Dual-Input Fleksibel</strong>
-                            <span>Dapat menggunakan kartu RFID scanner USB atau keyboard virtual input NIK manual.</span>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">✓</div>
-                        <div class="feature-text">
-                            <strong>Proteksi Sesi Pemilih Terisolasi</strong>
-                            <span>Tombol pembatalan sesi darurat untuk mereset bilik jika anggota meninggalkan bilik suara.</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fitur 2: Real Count 3D Interactive -->
-            <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-                    <div>
-                        <div class="pill-badge badge-amber" style="margin-bottom:4px;">Modul 02 &bull; Three.js WebGL Engine</div>
-                        <h3 style="font-size:16px;">Panggung Real Count 3D Interactive Single Page</h3>
-                    </div>
-                    <span class="pill-badge badge-amber">★ Visual Utama Proyektor</span>
-                </div>
-                <p style="font-size:12px; color:#4b5563; margin-bottom:12px;">
-                    Visualisasi perolehan suara 3D mutakhir yang diproyeksikan ke layar utama aula untuk menciptakan suasana pemilihan yang transparan, modern, dan atraktif:
-                </p>
-
-                <div class="grid-2" style="margin-bottom:12px;">
-                    <div class="feature-item">
-                        <div class="feature-icon" style="background:#d97706;">1</div>
-                        <div class="feature-text">
-                            <strong>Formasi Podium Olympic Winner</strong>
-                            <span>Peringkat 1 diposisikan di <em>Tengah (Center Leader)</em>, Peringkat 2 di <em>Kiri</em>, dan Peringkat 3 di <em>Kanan</em> dengan kartu 3D beresolusi tinggi (800x1100 px).</span>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon" style="background:#d97706;">2</div>
-                        <div class="feature-text">
-                            <strong>Animasi Lompat 3D (*Rank Swap Jump*)</strong>
-                            <span>Saat ada pergeseran suara pada auto-refresh 10 detik, kartu kandidat akan meluncur dan melompat melengkung 3D secara dramatis.</span>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon" style="background:#d97706;">3</div>
-                        <div class="feature-text">
-                            <strong>Segmented Category Switcher</strong>
-                            <span>Beralih tampilan antara <em>Calon Ketua</em> dan <em>Calon Pengawas</em> secara instan tanpa reload halaman web.</span>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon" style="background:#d97706;">4</div>
-                        <div class="feature-text">
-                            <strong>Bottom Tray Kandidat Lanjutan</strong>
-                            <span>Kandidat peringkat 4 ke atas tertata rapi pada baki bawah lengkap dengan persentase progress bar.</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="background:#fef3c7; border:1px solid #fde68a; border-radius:10px; padding:8px 14px; font-size:11.5px; color:#92400e; display:flex; align-items:center; gap:8px;">
-                    <span>💡</span>
-                    <span><strong>Mode Fullscreen:</strong> Dilengkapi tombol proyektor layar penuh dan efek interaktif mouse parallax 3D.</span>
-                </div>
-            </div>
-        </div>
-
-        <footer class="page-footer">
-            <span>E-Voting Koperasi Modern &bull; Dokumen Penawaran Teknis</span>
-            <span>Halaman 3 dari 6</span>
-        </footer>
-    </div>
-
-
-    <!-- ═══════════════════════════════════════════════════════════
-         HALAMAN 4: FITUR 3 & 4 (BILIK UNDIAN & DPT EXCEL)
-         ═══════════════════════════════════════════════════════════ -->
-    <div class="page">
-        <header class="page-header">
-            <div class="header-brand">
-                <div class="header-logo">⚡</div>
-                <div class="header-title">FITUR UNGGULAN &bull; MODUL 3 & 4</div>
-            </div>
-            <div class="header-tag">DOOR PRIZE & DPT MANAGEMENT</div>
-        </header>
-
-        <div style="flex:1;">
-            <!-- Fitur 3: Bilik Undian RAT -->
-            <div class="card" style="margin-bottom:16px;">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-                    <div>
-                        <div class="pill-badge badge-purple" style="margin-bottom:4px;">Modul 03 &bull; Door Prize RAT Engine</div>
-                        <h3 style="font-size:16px;">Bilik Undian Door Prize & Pengacakan Hadiah</h3>
-                    </div>
-                    <span class="pill-badge badge-purple">🎯 Hiburan & Transparansi RAT</span>
-                </div>
-                <p style="font-size:12px; color:#4b5563; margin-bottom:12px;">
-                    Modul panggung khusus untuk mengundi hadiah door prize bagi anggota yang hadir dan telah menggunakan hak suaranya secara sah:
-                </p>
-
-                <div class="grid-2" style="margin-bottom:12px;">
-                    <div style="background:#faf5ff; border:1px solid #e9d5ff; border-radius:12px; padding:12px;">
-                        <h4 style="font-size:12.5px; color:#6b21a8; margin-bottom:4px;">🔒 Gerbang Keamanan Admin (Auth Gate)</h4>
-                        <p style="font-size:11px; color:#4b5563;">Akses masuk ke bilik undian dilindungi autentikasi password admin terverifikasi untuk mencegah pengacakan oleh pihak tak berwenang.</p>
-                    </div>
-                    <div style="background:#faf5ff; border:1px solid #e9d5ff; border-radius:12px; padding:12px;">
-                        <h4 style="font-size:12.5px; color:#6b21a8; margin-bottom:4px;">🚫 Anti-Undian Ganda (Fairness Lock)</h4>
-                        <p style="font-size:11px; color:#4b5563;">Anggota yang telah memenangkan hadiah secara sah otomatis dieksklusi dari putaran undian berikutnya.</p>
-                    </div>
-                </div>
-
-                <div class="card-soft" style="margin-bottom:10px;">
-                    <h4 style="font-size:12px; margin-bottom:6px; color:#1a1a1a;">⚙️ Fitur Unggulan Toggle Auto-Valid (ON / OFF):</h4>
-                    <div class="grid-2" style="gap:10px; font-size:11px;">
-                        <div style="background:#ffffff; border:1px solid #e5e5e5; padding:8px 12px; border-radius:8px;">
-                            <strong style="color:#15803d;">Mode Auto-Valid ON:</strong>
-                            <span style="color:#6b7280; display:block; margin-top:2px;">Pemenang langsung disahkan otomatis ke database saat slot berhenti berputar.</span>
-                        </div>
-                        <div style="background:#ffffff; border:1px solid #e5e5e5; padding:8px 12px; border-radius:8px;">
-                            <strong style="color:#b45309;">Mode Auto-Valid OFF:</strong>
-                            <span style="color:#6b7280; display:block; margin-top:2px;">Menampilkan pop-up konfirmasi kehadiran: jika tidak hadir, undian dapat digugurkan dan diundi ulang.</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="feature-item">
-                    <div class="feature-icon" style="background:#7c3aed;">🎉</div>
-                    <div class="feature-text">
-                        <strong>Animasi Slot Spinner & Selebrasi Konfeti 60fps</strong>
-                        <span>Menghadirkan ketegangan positif di aula dengan animasi putar deselerasi dan ledakan konfeti warna-warni.</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fitur 4: Manajemen DPT & Import Excel -->
-            <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-                    <div>
-                        <div class="pill-badge badge-green" style="margin-bottom:4px;">Modul 04 &bull; Data Pemilih Tetap (DPT)</div>
-                        <h3 style="font-size:16px;">Manajemen Data Pemilih & Import Excel 2 Tahap</h3>
-                    </div>
-                    <span class="pill-badge badge-green">⚡ Cepat & Akurat</span>
-                </div>
-
-                <div class="grid-2">
-                    <div>
-                        <div class="feature-item">
-                            <div class="feature-icon" style="background:#16a34a;">✓</div>
-                            <div class="feature-text">
-                                <strong>DataTables Search & Pagination Kustom</strong>
-                                <span>Pencarian data instan berdasarkan Nama, NIK, Departemen, atau Nomor RFID dengan pemilih paginasi 10/25/50/100/Semua.</span>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <div class="mockup-dots">
+                                <div class="mockup-dot dot-red"></div>
+                                <div class="mockup-dot dot-yellow"></div>
+                                <div class="mockup-dot dot-green"></div>
                             </div>
+                            <div class="mockup-address">http://kiosk.local/e-voting/auth</div>
                         </div>
-                        <div class="feature-item">
-                            <div class="feature-icon" style="background:#16a34a;">✓</div>
-                            <div class="feature-text">
-                                <strong>Quick Filter Status Voting</strong>
-                                <span>Filter satu klik untuk melihat pemilih dengan status <em>Semua</em>, <em>Sudah Memilih</em>, atau <em>Belum Memilih</em>.</span>
+                        <img src="screenshots/screen_01_login.png" class="mockup-img" style="height: 140px; object-fit: cover; object-position: top center;" alt="Login Screen">
+                    </div>
+                    <p style="font-size: 9.5px; color: #64748b;">Akses masuk berlapis bagi panitia dengan proteksi sesi terenkripsi dan pembatasan otorisasi menu.</p>
+                </div>
+
+                <!-- Admin Dashboard Overview -->
+                <div>
+                    <div style="font-size: 10.5px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">
+                        2. Dasbor Eksekutif & Telemetri Suara
+                    </div>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <div class="mockup-dots">
+                                <div class="mockup-dot dot-red"></div>
+                                <div class="mockup-dot dot-yellow"></div>
+                                <div class="mockup-dot dot-green"></div>
                             </div>
+                            <div class="mockup-address">http://kiosk.local/e-voting/dashboard</div>
                         </div>
+                        <img src="screenshots/screen_02_dashboard.png" class="mockup-img" style="height: 140px; object-fit: cover; object-position: top center;" alt="Dashboard Screen">
                     </div>
+                    <p style="font-size: 9.5px; color: #64748b;">Pantau total DPT terdaftar, jumlah kandidat, tingkat partisipasi, dan statistik kuorum seketika.</p>
+                </div>
+            </div>
 
-                    <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:12px;">
-                        <div style="font-size:11px; font-weight:700; color:#15803d; text-transform:uppercase; margin-bottom:4px;">📥 Fitur Import Excel 2 Tahap (Two-Step Preview)</div>
-                        <p style="font-size:11px; color:#166534; line-height:1.45;">
-                            Sebelum data anggota disimpan ke MySQL, sistem menampilkan tabel pratinjau lengkap dengan indikator validasi per baris (baris valid vs baris bermasalah / NIK duplikat). Dilengkapi konfirmasi SweetAlert2 sebelum eksekusi akhir.
-                        </p>
-                    </div>
+            <div class="callout-box">
+                <div class="callout-box-title">Keamanan Tanpa Jejak Identitas (Secret Ballot Principle)</div>
+                <div class="callout-box-desc">
+                    Sistem memisahkan tabel catatan identitas pemilih (`pemilih`) dan tabel penampung pilihan (`hasil`). Pilihan suara dicatat secara anonim dengan stempel waktu terenkripsi sehingga asas LUBER JURDIL tetap terjamin 100%.
                 </div>
             </div>
         </div>
 
-        <footer class="page-footer">
-            <span>E-Voting Koperasi Modern &bull; Dokumen Penawaran Teknis</span>
-            <span>Halaman 4 dari 6</span>
-        </footer>
+        <div class="page-footer">
+            <span>E-Voting Koperasi Modern &copy; 2026</span>
+            <span>Dokumen Presentasi Produk & Panduan Visual Sistem</span>
+            <span>Halaman 2 / 6</span>
+        </div>
     </div>
 
-
-    <!-- ═══════════════════════════════════════════════════════════
-         HALAMAN 5: MASTER DATA, LAPORAN & DESIGN SYSTEM
-         ═══════════════════════════════════════════════════════════ -->
+    <!-- ========================================================================= -->
+    <!-- PAGE 3: MASTER DATA MANAGEMENT (DPT & KANDIDAT)                           -->
+    <!-- ========================================================================= -->
     <div class="page">
-        <header class="page-header">
+        <div class="page-header">
             <div class="header-brand">
-                <div class="header-logo">⚡</div>
-                <div class="header-title">ADMINISTRASI & STANDAR DESIGN SYSTEM</div>
+                <div class="header-logo">E</div>
+                <div class="header-title">E-Voting Koperasi Modern</div>
             </div>
-            <div class="header-tag">UI/UX & TATA KELOLA</div>
-        </header>
+            <span class="header-tag">Manajemen Data Master</span>
+        </div>
 
-        <div style="flex:1;">
-            <!-- Modul Master Kandidat & Laporan -->
-            <div class="grid-2" style="margin-bottom:16px;">
-                <div class="card">
-                    <div class="pill-badge badge-gray" style="margin-bottom:6px;">Modul 05 &bull; Master Kandidat</div>
-                    <h3 style="font-size:14px; margin-bottom:8px;">Kelola Data Calon Ketua & Pengawas</h3>
-                    <div class="feature-item">
-                        <div class="feature-icon">1</div>
-                        <div class="feature-text">
-                            <strong>Struktur Tab Terpisah</strong>
-                            <span>Manajemen mandiri untuk Calon Ketua dan Calon Dewan Pengawas Koperasi.</span>
-                        </div>
+        <div class="page-content">
+            <div class="section-badge">Administrasi & DPT</div>
+            <h2 class="section-heading">Manajemen Pemilih (DPT) & Profil Kandidat</h2>
+            <p class="section-desc">
+                Pengelolaan data anggota koperasi dan kandidat pemilihan dilengkapi fitur import massal, pemetaan nomor RFID otomatis, dan pratinjau kartu suara digital.
+            </p>
+
+            <!-- Screen 03: Master Pemilih -->
+            <div style="margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <div style="font-size: 11px; font-weight: 700; color: #0f172a;">
+                        A. Modul DPT, Status Partisipasi, & Cetak Token QR
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">2</div>
-                        <div class="feature-text">
-                            <strong>Uploader Foto & Auto Thumbnail</strong>
-                            <span>Validasi berkas foto (JPG/PNG), auto-resize rasio persegi, dan pratinjau gambar instan.</span>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">3</div>
-                        <div class="feature-text">
-                            <strong>Editor Visi & Misi</strong>
-                            <span>Kolom teks terstruktur untuk mempublikasikan program kerja setiap calon ke bilik suara.</span>
-                        </div>
-                    </div>
+                    <span class="badge-pill badge-blue">Excel Import & Export Ready</span>
                 </div>
-
-                <div class="card">
-                    <div class="pill-badge badge-gray" style="margin-bottom:6px;">Modul 06 &bull; Laporan & Audit</div>
-                    <h3 style="font-size:14px; margin-bottom:8px;">Audit Trail & Rekapitulasi Suara</h3>
-                    <div class="feature-item">
-                        <div class="feature-icon">1</div>
-                        <div class="feature-text">
-                            <strong>Rekapitulasi Suara Sah</strong>
-                            <span>Tabulasi perolehan suara ketua & pengawas siap cetak sebagai lampiran Berita Acara RAT.</span>
+                <div class="mockup-window" style="margin-bottom: 6px;">
+                    <div class="mockup-header">
+                        <div class="mockup-dots">
+                            <div class="mockup-dot dot-red"></div>
+                            <div class="mockup-dot dot-yellow"></div>
+                            <div class="mockup-dot dot-green"></div>
                         </div>
+                        <div class="mockup-address">http://kiosk.local/e-voting/master_pemilih</div>
+                        <span style="font-size: 8.5px; color: #64748b;">Tabel DPT Aktif</span>
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">2</div>
-                        <div class="feature-text">
-                            <strong>Jejak Audit Waktu Nyata</strong>
-                            <span>Pencatatan timestamp detik pencoblosan untuk pembuktian akuntabilitas hukum.</span>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">3</div>
-                        <div class="feature-text">
-                            <strong>Rekap Pemenang Door Prize</strong>
-                            <span>Daftar lengkap pemenang door prize dan departemen asal untuk laporan panitia pelaksana.</span>
-                        </div>
-                    </div>
+                    <img src="screenshots/screen_03_pemilih.png" class="mockup-img" style="height: 145px; object-fit: cover; object-position: top center;" alt="Master Pemilih">
                 </div>
-            </div>
-
-            <!-- Standar UI/UX Design System -->
-            <div class="card">
-                <div class="pill-badge badge-dark" style="margin-bottom:8px;">Design Guidelines Standard</div>
-                <h3 style="font-size:15px; margin-bottom:6px;">Standar Estetika UI/UX Modern (Apple & MiniMax Inspired)</h3>
-                <p style="font-size:11.5px; color:#6b7280; margin-bottom:14px;">
-                    Sistem dibangun dengan mengikuti standar desain <em>Design Tokens</em> yang konsisten di seluruh layar untuk pengalaman pengguna yang intuitif, bersih, dan berwibawa:
+                <p style="font-size: 9.5px; color: #64748b;">
+                    Dilengkapi filter pencarian instan, status pemilihan (Sudah/Belum Memilih), badge departemen, serta tombol hapus/reset status jika terjadi pemilihan ulang.
                 </p>
+            </div>
 
-                <div class="grid-3" style="gap:10px; margin-bottom:12px;">
-                    <div class="card-soft">
-                        <div style="font-size:11px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">🔤 Tipografi DM Sans</div>
-                        <p style="font-size:10.5px; color:#6b7280; line-height:1.4;">Menggunakan satu variable sans-serif berkarakter geometris yang sangat tajam dan terbaca jelas pada layar bilik hingga proyektor aula.</p>
+            <!-- Screen 04: Master Kandidat -->
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <div style="font-size: 11px; font-weight: 700; color: #0f172a;">
+                        B. Modul Kandidat Ketua & Pengawas (Multi-Tab Kategori)
                     </div>
-
-                    <div class="card-soft">
-                        <div style="font-size:11px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">🔘 Pill Shapes (`rounded-full`)</div>
-                        <p style="font-size:10.5px; color:#6b7280; line-height:1.4;">Seluruh tombol aksi utama, badge status, dan navigasi tab menggunakan radius kapsul membulat penuh untuk estetika modern.</p>
-                    </div>
-
-                    <div class="card-soft">
-                        <div style="font-size:11px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">◽ Squircle Canvas</div>
-                        <p style="font-size:10.5px; color:#6b7280; line-height:1.4;">Kartu data berbingkai halus 1px border dengan sudut lengkung lembut (16–24px) berlatar kanvas putih bersih `#ffffff`.</p>
-                    </div>
+                    <span class="badge-pill badge-green">Foto HD & Visi Misi</span>
                 </div>
-
-                <div style="background:#f8f9fa; border:1px solid #e5e5e5; border-radius:10px; padding:10px 14px; font-size:11px; color:#4b5563; display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <strong style="color:#1a1a1a;">Zero Browser Alert Standard:</strong> Seluruh notifikasi, konfirmasi hapus, dan dialog peringatan menggunakan dialog SweetAlert2 kustom yang selaras dengan tema UI.
+                <div class="mockup-window" style="margin-bottom: 6px;">
+                    <div class="mockup-header">
+                        <div class="mockup-dots">
+                            <div class="mockup-dot dot-red"></div>
+                            <div class="mockup-dot dot-yellow"></div>
+                            <div class="mockup-dot dot-green"></div>
+                        </div>
+                        <div class="mockup-address">http://kiosk.local/e-voting/master_kandidat</div>
+                        <span style="font-size: 8.5px; color: #64748b;">Tab Ketua & Pengawas</span>
                     </div>
-                    <span class="pill-badge badge-green">100% Native UX</span>
+                    <img src="screenshots/screen_04_kandidat.png" class="mockup-img" style="height: 145px; object-fit: cover; object-position: top center;" alt="Master Kandidat">
                 </div>
+                <p style="font-size: 9.5px; color: #64748b;">
+                    Pengaturan nomor urut, upload foto resolusi tinggi, serta narasi visi dan misi yang tersaji langsung kepada pemilih saat berada di dalam bilik suara.
+                </p>
             </div>
         </div>
 
-        <footer class="page-footer">
-            <span>E-Voting Koperasi Modern &bull; Dokumen Penawaran Teknis</span>
-            <span>Halaman 5 dari 6</span>
-        </footer>
+        <div class="page-footer">
+            <span>E-Voting Koperasi Modern &copy; 2026</span>
+            <span>Dokumen Presentasi Produk & Panduan Visual Sistem</span>
+            <span>Halaman 3 / 6</span>
+        </div>
     </div>
 
-
-    <!-- ═══════════════════════════════════════════════════════════
-         HALAMAN 6: SPESIFIKASI TEKNIS & PENAWARAN KERJASAMA
-         ═══════════════════════════════════════════════════════════ -->
+    <!-- ========================================================================= -->
+    <!-- PAGE 4: BILIK SUARA (VOTING EXPERIENCE)                                  -->
+    <!-- ========================================================================= -->
     <div class="page">
-        <header class="page-header">
+        <div class="page-header">
             <div class="header-brand">
-                <div class="header-logo">⚡</div>
-                <div class="header-title">SPESIFIKASI TEKNIS & PAKET IMPLEMENTASI</div>
+                <div class="header-logo">E</div>
+                <div class="header-title">E-Voting Koperasi Modern</div>
             </div>
-            <div class="header-tag">PENUTUP & KERJASAMA</div>
-        </header>
+            <span class="header-tag">Pengalaman Pemilih di Bilik Suara</span>
+        </div>
 
-        <div style="flex:1;">
-            <!-- Tech Specs -->
-            <div class="card" style="margin-bottom:14px;">
-                <h3 style="font-size:14px; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-                    <span>⚙️ Spesifikasi Arsitektur Teknologi</span>
-                </h3>
-                <div class="grid-4" style="text-align:center;">
-                    <div style="background:#f8f9fa; padding:10px; border-radius:10px; border:1px solid #e5e5e5;">
-                        <div style="font-size:10px; color:#6b7280; font-weight:700;">BACKEND CORE</div>
-                        <div style="font-size:12.5px; font-weight:700; color:#1a1a1a; margin-top:2px;">CodeIgniter 3</div>
-                        <div style="font-size:10px; color:#9ca3af;">PHP 7.4 / 8.x Optimized</div>
-                    </div>
-                    <div style="background:#f8f9fa; padding:10px; border-radius:10px; border:1px solid #e5e5e5;">
-                        <div style="font-size:10px; color:#6b7280; font-weight:700;">DATABASE ENGINE</div>
-                        <div style="font-size:12.5px; font-weight:700; color:#1a1a1a; margin-top:2px;">MySQL / MariaDB</div>
-                        <div style="font-size:10px; color:#9ca3af;">ACID Safe Transactions</div>
-                    </div>
-                    <div style="background:#f8f9fa; padding:10px; border-radius:10px; border:1px solid #e5e5e5;">
-                        <div style="font-size:10px; color:#6b7280; font-weight:700;">3D GRAPHICS</div>
-                        <div style="font-size:12.5px; font-weight:700; color:#1a1a1a; margin-top:2px;">Three.js WebGL</div>
-                        <div style="font-size:10px; color:#9ca3af;">60 FPS GPU Acceleration</div>
-                    </div>
-                    <div style="background:#f8f9fa; padding:10px; border-radius:10px; border:1px solid #e5e5e5;">
-                        <div style="font-size:10px; color:#6b7280; font-weight:700;">HARDWARE SENSOR</div>
-                        <div style="font-size:12.5px; font-weight:700; color:#1a1a1a; margin-top:2px;">RFID USB Reader</div>
-                        <div style="font-size:10px; color:#9ca3af;">Plug & Play 13.56MHz/125KHz</div>
-                    </div>
-                </div>
-            </div>
+        <div class="page-content">
+            <div class="section-badge">Bilik Suara Kiosk</div>
+            <h2 class="section-heading">Pengalaman Memilih yang Cepat, Jelas, & Nyaman</h2>
+            <p class="section-desc">
+                Dirancang khusus untuk layar sentuh (*touchscreen kiosk*) maupun komputer meja biasa. Antarmuka minimalis bergaya Apple dengan visual kartu foto yang ramah semua kalangan usia.
+            </p>
 
-            <!-- Paket Layanan Turnkey -->
-            <div class="card" style="margin-bottom:14px;">
-                <h3 style="font-size:14px; margin-bottom:8px;">📦 Paket Layanan Implementasi Turnkey RAT Koperasi</h3>
-                <div class="grid-3" style="gap:10px;">
-                    <div class="card-soft">
-                        <div style="font-size:11px; font-weight:700; color:#0369a1; text-transform:uppercase;">1. Setup & Konfigurasi</div>
-                        <p style="font-size:10.5px; color:#4b5563; margin-top:4px;">Instalasi web server lokal on-premises, konfigurasi database, dan pairing sensor RFID reader di lokasi acara.</p>
+            <div class="grid-2" style="margin-bottom: 10px;">
+                <!-- Step 1: Identifikasi RFID / NIK -->
+                <div>
+                    <div style="font-size: 10.5px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">
+                        Langkah 1: Tap Kartu RFID / Input NIK
                     </div>
-                    <div class="card-soft">
-                        <div style="font-size:11px; font-weight:700; color:#0369a1; text-transform:uppercase;">2. Pendampingan Hari-H</div>
-                        <p style="font-size:10.5px; color:#4b5563; margin-top:4px;">Technical engineer standby mendampingi jalannya voting dari pembukaan hingga pengumuman pemenang undian.</p>
-                    </div>
-                    <div class="card-soft">
-                        <div style="font-size:11px; font-weight:700; color:#0369a1; text-transform:uppercase;">3. Pelatihan Panitia</div>
-                        <p style="font-size:10.5px; color:#4b5563; margin-top:4px;">Bimtek praktis untuk panitia pemilihan dalam mengelola DPT, kandidat, dan pencetakan berita acara resmi.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Penawaran & Hubungi Kami -->
-            <div style="background:#1a1a1a; color:#ffffff; border-radius:16px; padding:20px 24px;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <div class="pill-badge" style="background:#ffffff; color:#1a1a1a; margin-bottom:6px;">Hubungi Kami Sekarang</div>
-                        <h3 style="font-size:16px; color:#ffffff; margin-bottom:4px;">Siap Menyukseskan Pemilihan Koperasi Anda?</h3>
-                        <p style="font-size:11.5px; color:#9ca3af; max-width:440px;">
-                            Dapatkan presentasi demo live sistem, simulasi perangkat RFID, dan proposal penawaran khusus untuk Rapat Anggota Tahunan koperasi Anda.
-                        </p>
-                    </div>
-                    <div style="text-align:right;">
-                        <div style="background:#333333; border:1px solid #4b5563; border-radius:12px; padding:12px 18px;">
-                            <div style="font-size:10.5px; color:#9ca3af; text-transform:uppercase; font-weight:700;">Konsultasi & Demo Live</div>
-                            <div style="font-size:14px; font-weight:700; color:#ffffff; margin-top:2px;">Mukhamad Roni</div>
-                            <div style="font-size:11px; color:#60a5fa; margin-top:2px;">github.com/MukhamadRoni/e-voting</div>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <div class="mockup-dots">
+                                <div class="mockup-dot dot-red"></div>
+                                <div class="mockup-dot dot-yellow"></div>
+                                <div class="mockup-dot dot-green"></div>
+                            </div>
+                            <div class="mockup-address">http://kiosk.local/e-voting/voting</div>
                         </div>
+                        <img src="screenshots/screen_05_bilik_identifikasi.png" class="mockup-img" style="height: 125px; object-fit: cover; object-position: top center;" alt="Identifikasi">
                     </div>
+                    <p style="font-size: 9.5px; color: #64748b;">
+                        Layar standby *auto-focus*. Anggota cukup menempelkan kartu anggota RFID atau mengetik NIK untuk membuka bilik.
+                    </p>
+                </div>
+
+                <!-- Step 2: Pilih Kandidat -->
+                <div>
+                    <div style="font-size: 10.5px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">
+                        Langkah 2: Pemilihan Kandidat Interaktif
+                    </div>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <div class="mockup-dots">
+                                <div class="mockup-dot dot-red"></div>
+                                <div class="mockup-dot dot-yellow"></div>
+                                <div class="mockup-dot dot-green"></div>
+                            </div>
+                            <div class="mockup-address">http://kiosk.local/e-voting/voting/ketua</div>
+                        </div>
+                        <img src="screenshots/screen_06_bilik_pilih.png" class="mockup-img" style="height: 125px; object-fit: cover; object-position: top center;" alt="Pilih Kandidat">
+                    </div>
+                    <p style="font-size: 9.5px; color: #64748b;">
+                        Tampilan kartu calon berfoto besar, nomor urut tegas, dan tombol pill modern memudahkan penentuan pilihan.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 3: Konfirmasi Suara -->
+            <div style="margin-bottom: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <div style="font-size: 10.5px; font-weight: 700; color: #0f172a;">
+                        Langkah 3: Konfirmasi Pilihan Sebelum Kirim Suara Final
+                    </div>
+                    <span class="badge-pill badge-amber">Pencegahan Salah Pilih</span>
+                </div>
+                <div class="mockup-window" style="margin-bottom: 6px;">
+                    <div class="mockup-header">
+                        <div class="mockup-dots">
+                            <div class="mockup-dot dot-red"></div>
+                            <div class="mockup-dot dot-yellow"></div>
+                            <div class="mockup-dot dot-green"></div>
+                        </div>
+                        <div class="mockup-address">http://kiosk.local/e-voting/voting/konfirmasi</div>
+                    </div>
+                    <img src="screenshots/screen_06b_bilik_konfirmasi.png" class="mockup-img" style="height: 130px; object-fit: cover; object-position: top center;" alt="Konfirmasi Suara">
+                </div>
+                <p style="font-size: 9.5px; color: #64748b;">
+                    Pemilih dapat meninjau kembali pilihan Ketua dan Pengawas terpilih sebelum menekan tombol "Kirim Suara Sekarang", atau klik "Ubah Pilihan" jika ingin mengganti.
+                </p>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>E-Voting Koperasi Modern &copy; 2026</span>
+            <span>Dokumen Presentasi Produk & Panduan Visual Sistem</span>
+            <span>Halaman 4 / 6</span>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- PAGE 5: REAL COUNT 3D INTERACTIVE (THREE.JS)                             -->
+    <!-- ========================================================================= -->
+    <div class="page">
+        <div class="page-header">
+            <div class="header-brand">
+                <div class="header-logo">E</div>
+                <div class="header-title">E-Voting Koperasi Modern</div>
+            </div>
+            <span class="header-tag">Panggung Visualisasi 3D</span>
+        </div>
+
+        <div class="page-content">
+            <div class="section-badge">Three.js WebGL Engine</div>
+            <h2 class="section-heading">Real Count 3D Panggung Spektakuler</h2>
+            <p class="section-desc">
+                Dirancang untuk diproyeksikan pada layar videotron atau proyektor panggung utama RAT. Menyuguhkan pengalaman visual imersif dengan podium olimpiade dan kartu kandidat 3D dinamis.
+            </p>
+
+            <!-- Spotlight 3D Mockup -->
+            <div class="mockup-window" style="margin-bottom: 12px; border-color: #cbd5e1; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);">
+                <div class="mockup-header">
+                    <div class="mockup-dots">
+                        <div class="mockup-dot dot-red"></div>
+                        <div class="mockup-dot dot-yellow"></div>
+                        <div class="mockup-dot dot-green"></div>
+                    </div>
+                    <div class="mockup-address">http://kiosk.local/e-voting/real_count</div>
+                    <div style="display: flex; gap: 6px;">
+                        <span class="badge-pill badge-blue" style="font-size: 8px;">60 FPS WebGL</span>
+                        <span class="badge-pill badge-green" style="font-size: 8px;">Auto-Poll 10s</span>
+                    </div>
+                </div>
+                <img src="screenshots/screen_08_real_count.png" class="mockup-img" style="height: 235px; object-fit: cover; object-position: center top;" alt="Real Count 3D Interactive Stage">
+            </div>
+
+            <!-- 3D Feature Grid -->
+            <div class="grid-3">
+                <div class="feature-card" style="background: #ffffff;">
+                    <h4 style="color: #b45309;">🥇 Podium Metalik Olimpiade</h4>
+                    <p style="font-size: 9.5px;">Kaki podium berbalut material metalik: Peringkat 1 Gold (Emas), Peringkat 2 Silver (Perak), dan Peringkat 3 Bronze (Perunggu).</p>
+                </div>
+                <div class="feature-card" style="background: #ffffff;">
+                    <h4 style="color: #0f172a;">🃏 Kartu Obsidian HD</h4>
+                    <p style="font-size: 9.5px;">Permukaan kartu bertekstur slate gelap (*Obsidian*) dengan bingkai *LED glow* dan tipografi putih tajam yang mudah dibaca dari kejauhan.</p>
+                </div>
+                <div class="feature-card" style="background: #ffffff;">
+                    <h4 style="color: #2563eb;">🚀 Animasi Transisi Ranking</h4>
+                    <p style="font-size: 9.5px;">Setiap 10 detik sistem memperbarui suara masuk. Jika urutan ranking berubah, kartu berpindah tempat dengan lompatan kurva 3D.</p>
                 </div>
             </div>
         </div>
 
-        <footer class="page-footer">
-            <span>© 2026 E-Voting Koperasi Modern &bull; Seluruh Hak Cipta Dilindungi</span>
-            <span>Halaman 6 dari 6</span>
-        </footer>
+        <div class="page-footer">
+            <span>E-Voting Koperasi Modern &copy; 2026</span>
+            <span>Dokumen Presentasi Produk & Panduan Visual Sistem</span>
+            <span>Halaman 5 / 6</span>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- PAGE 6: BILIK UNDIAN DOOR PRIZE & AUDIT LAPORAN                          -->
+    <!-- ========================================================================= -->
+    <div class="page">
+        <div class="page-header">
+            <div class="header-brand">
+                <div class="header-logo">E</div>
+                <div class="header-title">E-Voting Koperasi Modern</div>
+            </div>
+            <span class="header-tag">Bilik Undian & Rekapitulasi</span>
+        </div>
+
+        <div class="page-content">
+            <div class="section-badge">Doorprize & Laporan Resmi</div>
+            <h2 class="section-heading">Bilik Undian Door Prize & Audit Trail Laporan</h2>
+            <p class="section-desc">
+                Kemeriahan pembagian hadiah RAT dijamin adil tanpa kecurangan, disusul pencetakan berita acara dan laporan perolehan suara sah siap tanda tangan.
+            </p>
+
+            <!-- Screen 07: Bilik Undian -->
+            <div style="margin-bottom: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <div style="font-size: 11px; font-weight: 700; color: #0f172a;">
+                        A. Panggung Mesin Undian (*Dynamic 3-Column Slot Machine Reel*)
+                    </div>
+                    <span class="badge-pill badge-purple">Fair Play & Anti-Duplikasi</span>
+                </div>
+                <div class="mockup-window" style="margin-bottom: 6px;">
+                    <div class="mockup-header">
+                        <div class="mockup-dots">
+                            <div class="mockup-dot dot-red"></div>
+                            <div class="mockup-dot dot-yellow"></div>
+                            <div class="mockup-dot dot-green"></div>
+                        </div>
+                        <div class="mockup-address">http://kiosk.local/e-voting/bilik_undian</div>
+                        <span style="font-size: 8.5px; color: #15803d; font-weight: 700;">● Live Slot Machine</span>
+                    </div>
+                    <img src="screenshots/screen_07_bilik_undian.png" class="mockup-img" style="height: 135px; object-fit: cover; object-position: top center;" alt="Bilik Undian">
+                </div>
+                <p style="font-size: 9.5px; color: #64748b;">
+                    Hanya anggota yang telah menggunakan hak suara yang berhak diundi. Dilengkapi mode Auto-Valid, filter per departemen/divisi, audio efek dramatis, dan riwayat pemenang sah di bilah kanan.
+                </p>
+            </div>
+
+            <!-- Screen 09 & 10: Laporan & Trace Back -->
+            <div class="grid-2" style="margin-bottom: 6px;">
+                <div>
+                    <div style="font-size: 10.5px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">
+                        B. Laporan Rekapitulasi Suara Resmi
+                    </div>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <div class="mockup-dots">
+                                <div class="mockup-dot dot-red"></div>
+                                <div class="mockup-dot dot-yellow"></div>
+                                <div class="mockup-dot dot-green"></div>
+                            </div>
+                            <div class="mockup-address">http://kiosk.local/e-voting/laporan</div>
+                        </div>
+                        <img src="screenshots/screen_09_laporan_pemenang.png" class="mockup-img" style="height: 100px; object-fit: cover; object-position: top center;" alt="Laporan Hasil">
+                    </div>
+                    <p style="font-size: 9px; color: #64748b;">Format cetak A4 siap ditandatangani Ketua Sidang dan Saksi Pemilihan.</p>
+                </div>
+
+                <div>
+                    <div style="font-size: 10.5px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">
+                        C. Trace Back & Audit Trail Transaksi
+                    </div>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <div class="mockup-dots">
+                                <div class="mockup-dot dot-red"></div>
+                                <div class="mockup-dot dot-yellow"></div>
+                                <div class="mockup-dot dot-green"></div>
+                            </div>
+                            <div class="mockup-address">http://kiosk.local/e-voting/laporan/trace_back</div>
+                        </div>
+                        <img src="screenshots/screen_10_trace_back.png" class="mockup-img" style="height: 100px; object-fit: cover; object-position: top center;" alt="Trace Back">
+                    </div>
+                    <p style="font-size: 9px; color: #64748b;">Log transaksi audit anti-manipulasi membuktikan integritas total pemilihan.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>E-Voting Koperasi Modern &copy; 2026</span>
+            <span>Dokumen Presentasi Produk & Panduan Visual Sistem</span>
+            <span>Halaman 6 / 6</span>
+        </div>
     </div>
 
 </body>
