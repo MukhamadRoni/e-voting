@@ -16,8 +16,8 @@
 
         body {
             font-family: 'DM Sans', sans-serif;
-            background-color: #07090e;
-            color: #f8fafc;
+            background-color: #f8f9fa;
+            color: #1a1a1a;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -27,50 +27,50 @@
 
         /* ── Topbar Stage Header ── */
         .stage-navbar {
-            background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 0 36px;
-            height: 72px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 0 32px;
+            height: 64px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
 
         .stage-brand {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
             text-decoration: none;
-            color: #ffffff;
+            color: #1a1a1a;
         }
 
         .stage-brand img {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
         }
 
         .stage-brand h1 {
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: -0.3px;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.2;
             display: flex;
             align-items: center;
             gap: 8px;
+            color: #1a1a1a;
         }
 
         .live-dot {
-            width: 9px;
-            height: 9px;
+            width: 8px;
+            height: 8px;
             background: #ef4444;
             border-radius: 50%;
             display: inline-block;
-            box-shadow: 0 0 12px #ef4444;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
             animation: pulse-live 1.2s infinite ease-in-out;
         }
 
@@ -81,31 +81,31 @@
 
         .stage-brand span {
             font-size: 12px;
-            color: #94a3b8;
+            color: #6b7280;
             display: block;
         }
 
         /* Kategori Segmented Control */
         .segmented-control {
             display: flex;
-            background: #1e293b;
+            background: #f1f2f4;
             padding: 4px;
             border-radius: 9999px;
-            border: 1px solid #334155;
+            border: 1px solid #e2e4e8;
             gap: 4px;
         }
 
         .segment-btn {
-            padding: 8px 24px;
+            padding: 7px 20px;
             border-radius: 9999px;
             font-family: 'DM Sans', sans-serif;
             font-size: 13px;
-            font-weight: 700;
-            color: #94a3b8;
+            font-weight: 600;
+            color: #6b7280;
             background: transparent;
             border: none;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
@@ -114,39 +114,40 @@
 
         .segment-btn.active {
             background: #ffffff;
-            color: #0f172a;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+            color: #1a1a1a;
+            font-weight: 700;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
         }
 
         .segment-btn:hover:not(.active) {
-            color: #ffffff;
+            color: #1a1a1a;
         }
 
         /* Topbar Controls */
         .stage-controls {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .pill-widget {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(30, 41, 59, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 6px;
+            background: #f5f5f7;
+            border: 1px solid #e5e5e5;
             padding: 6px 14px;
             border-radius: 9999px;
-            font-size: 13px;
-            color: #cbd5e1;
+            font-size: 12px;
+            color: #4b5563;
         }
 
         .btn-action-icon {
-            background: #1e293b;
-            color: #e2e8f0;
-            border: 1px solid #334155;
+            background: #ffffff;
+            color: #1a1a1a;
+            border: 1px solid #e5e5e5;
             border-radius: 9999px;
-            padding: 8px 18px;
+            padding: 8px 16px;
             font-family: 'DM Sans', sans-serif;
             font-size: 13px;
             font-weight: 600;
@@ -159,8 +160,7 @@
         }
 
         .btn-action-icon:hover {
-            background: #334155;
-            color: #ffffff;
+            background: #f5f5f7;
         }
 
         /* ── Main Stage Area ── */
@@ -169,7 +169,7 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            min-height: calc(100vh - 72px);
+            min-height: calc(100vh - 64px);
         }
 
         /* Stats Bar Banner */
@@ -185,21 +185,20 @@
         }
 
         .stat-glass-card {
-            background: rgba(17, 24, 39, 0.8);
-            backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
             border-radius: 18px;
             padding: 14px 22px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.02);
         }
 
         .stat-glass-card .label {
             font-size: 12px;
             font-weight: 600;
-            color: #94a3b8;
+            color: #6b7280;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -207,7 +206,7 @@
         .stat-glass-card .value {
             font-size: 24px;
             font-weight: 800;
-            color: #ffffff;
+            color: #1a1a1a;
             margin-top: 2px;
         }
 
@@ -234,21 +233,21 @@
             top: 14px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
             padding: 6px 18px;
             border-radius: 9999px;
             font-size: 12px;
-            color: #94a3b8;
+            color: #4b5563;
             pointer-events: none;
-            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
             z-index: 10;
         }
 
         /* ── Bottom Tray: Kandidat Lainnya (Rank 4, 5, dst) ── */
         .bottom-tray-container {
-            background: rgba(11, 15, 23, 0.95);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            background: #ffffff;
+            border-top: 1px solid #e5e5e5;
             padding: 18px 36px 24px;
             z-index: 20;
         }
@@ -268,7 +267,7 @@
         .tray-header h3 {
             font-size: 13px;
             font-weight: 700;
-            color: #cbd5e1;
+            color: #1a1a1a;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             display: flex;
@@ -283,8 +282,8 @@
         }
 
         .other-candidate-card {
-            background: #131c2e;
-            border: 1px solid #1f2d45;
+            background: #f8f9fa;
+            border: 1px solid #e5e5e5;
             border-radius: 16px;
             padding: 12px 18px;
             display: flex;
@@ -294,15 +293,17 @@
         }
 
         .other-candidate-card:hover {
-            border-color: #3b82f6;
+            border-color: #1a1a1a;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
             transform: translateY(-2px);
         }
 
         .other-rank-badge {
             width: 32px;
             height: 32px;
-            background: #1e293b;
-            color: #94a3b8;
+            background: #ffffff;
+            color: #1a1a1a;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -310,7 +311,7 @@
             font-size: 13px;
             font-weight: 700;
             flex-shrink: 0;
-            border: 1px solid #334155;
+            border: 1px solid #e5e5e5;
         }
 
         .other-avatar {
@@ -318,8 +319,8 @@
             height: 48px;
             border-radius: 12px;
             object-fit: cover;
-            border: 1px solid rgba(255,255,255,0.12);
-            background: #1e293b;
+            border: 1px solid #e5e5e5;
+            background: #f5f5f7;
         }
 
         .other-info {
@@ -330,7 +331,7 @@
         .other-name {
             font-size: 13px;
             font-weight: 700;
-            color: #ffffff;
+            color: #1a1a1a;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -338,15 +339,15 @@
 
         .other-votes {
             font-size: 12px;
-            color: #94a3b8;
+            color: #6b7280;
             margin-top: 3px;
             display: flex;
             justify-content: space-between;
         }
 
         .other-progress-bg {
-            height: 5px;
-            background: #1e293b;
+            height: 6px;
+            background: #e5e5e5;
             border-radius: 9999px;
             margin-top: 6px;
             overflow: hidden;
@@ -354,7 +355,7 @@
 
         .other-progress-bar {
             height: 100%;
-            background: #3b82f6;
+            background: #1a1a1a;
             border-radius: 9999px;
             transition: width 0.6s ease;
         }
@@ -364,12 +365,12 @@
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background: linear-gradient(135deg, #1e1b4b, #312e81);
-            border: 1px solid #6366f1;
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
             border-radius: 16px;
             padding: 16px 24px;
-            color: #ffffff;
-            box-shadow: 0 12px 36px rgba(99, 102, 241, 0.4);
+            color: #1a1a1a;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
             display: flex;
             align-items: center;
             gap: 14px;
@@ -417,7 +418,7 @@
             <!-- Countdown Timer Indicator -->
             <div class="pill-widget" id="updateTimerPill" title="Auto-refresh setiap 10 detik">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                <span>Sync: <strong id="countdownText">10s</strong></span>
+                <span>Sync: <strong id="countdownText" style="color:#1a1a1a;">10s</strong></span>
             </div>
 
             <!-- Manual Refresh -->
@@ -447,9 +448,9 @@
             <div class="stat-glass-card">
                 <div>
                     <div class="label">Total Suara Masuk</div>
-                    <div class="value" id="displayTotalSuara"><?= $total_suara; ?> <span style="font-size:14px; color:#94a3b8; font-weight:500;">Suara</span></div>
+                    <div class="value" id="displayTotalSuara"><?= $total_suara; ?> <span style="font-size:14px; color:#6b7280; font-weight:500;">Suara</span></div>
                 </div>
-                <div style="color:#60a5fa;">
+                <div style="color:#1a1a1a;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                 </div>
             </div>
@@ -461,7 +462,7 @@
                         <?= ($total_dpt > 0) ? round(($total_suara / $total_dpt) * 100, 1) : 0; ?>%
                     </div>
                 </div>
-                <div style="color:#10b981;">
+                <div style="color:#16a34a;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
                 </div>
             </div>
@@ -469,9 +470,9 @@
             <div class="stat-glass-card">
                 <div>
                     <div class="label">Total Pemilih DPT</div>
-                    <div class="value" id="displayTotalDpt"><?= $total_dpt; ?> <span style="font-size:14px; color:#94a3b8; font-weight:500;">Anggota</span></div>
+                    <div class="value" id="displayTotalDpt"><?= $total_dpt; ?> <span style="font-size:14px; color:#6b7280; font-weight:500;">Anggota</span></div>
                 </div>
-                <div style="color:#f59e0b;">
+                <div style="color:#b45309;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76V14h2V8.76L15.38 12 17 10.83 14.92 8H20v6z"/></svg>
                 </div>
             </div>
@@ -479,9 +480,9 @@
             <div class="stat-glass-card">
                 <div>
                     <div class="label">Terakhir Diperbarui</div>
-                    <div class="value" id="displayUpdatedAt" style="font-size:18px; color:#e2e8f0;"><?= date('H:i:s'); ?> WIB</div>
+                    <div class="value" id="displayUpdatedAt" style="font-size:18px; color:#1a1a1a;"><?= date('H:i:s'); ?> WIB</div>
                 </div>
-                <div style="color:#a855f7;">
+                <div style="color:#6b7280;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/></svg>
                 </div>
             </div>
@@ -503,7 +504,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
                         <span>Kandidat Lainnya (Klasemen Lanjutan)</span>
                     </h3>
-                    <span style="font-size:12px; color:#94a3b8;" id="otherCountBadge">0 Kandidat</span>
+                    <span style="font-size:12px; color:#6b7280;" id="otherCountBadge">0 Kandidat</span>
                 </div>
                 <div class="other-candidates-grid" id="otherCandidatesGrid">
                     <!-- Dynamic Other Candidate Cards -->
@@ -514,10 +515,10 @@
 
     <!-- Rank Shift Notification Toast -->
     <div class="rank-shift-toast" id="rankShiftToast">
-        <div style="font-size:26px;">🔥</div>
+        <div style="font-size:24px;">🔥</div>
         <div>
-            <div style="font-size:14px; font-weight:700;">Perubahan Peringkat Terdeteksi!</div>
-            <div style="font-size:12px; color:#c7d2fe;" id="rankShiftToastMsg">Posisi suara kandidat telah bergeser secara dinamis.</div>
+            <div style="font-size:14px; font-weight:700; color:#1a1a1a;">Perubahan Peringkat Terdeteksi!</div>
+            <div style="font-size:12px; color:#6b7280;" id="rankShiftToastMsg">Posisi suara kandidat telah bergeser secara dinamis.</div>
         </div>
     </div>
 
@@ -527,7 +528,7 @@
 
     <script>
     // ═══════════════════════════════════════════════════════════
-    // THREE.JS 3D INTERACTIVE REAL COUNT ENGINE (APPLE MINIMALIST)
+    // THREE.JS 3D INTERACTIVE REAL COUNT ENGINE (LIGHT MINIMALIST)
     // ═══════════════════════════════════════════════════════════
 
     var activeKategori = "<?= $kategori; ?>";
@@ -554,38 +555,44 @@
 
     var rankThemes = [
         { 
-            color: 0xf59e0b, 
-            hex: '#f59e0b', 
-            label: '★ PERINGKAT 1 (PEMIMPIN SUARA) ★', 
-            badgeBg: '#78350f', 
-            barColor: '#f59e0b',
-            accent: '#fbbf24',
-            ledColor: 0xf59e0b
+            color: 0xd97706, 
+            hex: '#d97706', 
+            label: '★ PERINGKAT 1 (LEADER) ★', 
+            badgeBg: '#fef3c7', 
+            badgeText: '#b45309',
+            badgeBorder: '#fde68a',
+            barColor: '#d97706',
+            accent: '#f59e0b',
+            ledColor: 0xd97706
         }, // Rank 1: Gold / Amber
         { 
-            color: 0x38bdf8, 
-            hex: '#38bdf8', 
+            color: 0x0284c7, 
+            hex: '#0284c7', 
             label: '★ PERINGKAT 2 ★', 
-            badgeBg: '#075985', 
-            barColor: '#38bdf8',
-            accent: '#7dd3fc',
-            ledColor: 0x38bdf8
+            badgeBg: '#f0f9ff', 
+            badgeText: '#0369a1',
+            badgeBorder: '#bae6fd',
+            barColor: '#0284c7',
+            accent: '#38bdf8',
+            ledColor: 0x0284c7
         }, // Rank 2: Silver / Sky Blue
         { 
-            color: 0xa855f7, 
-            hex: '#a855f7', 
+            color: 0x7c3aed, 
+            hex: '#7c3aed', 
             label: '★ PERINGKAT 3 ★', 
-            badgeBg: '#581c87', 
-            barColor: '#a855f7',
-            accent: '#c084fc',
-            ledColor: 0xa855f7
+            badgeBg: '#faf5ff', 
+            badgeText: '#6d28d9',
+            badgeBorder: '#e9d5ff',
+            barColor: '#7c3aed',
+            accent: '#a855f7',
+            ledColor: 0x7c3aed
         }  // Rank 3: Bronze / Purple
     ];
 
     // ── 1. Init Three.js Scene ──
     function init3DScene() {
         scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x07090e, 0.028);
+        scene.fog = new THREE.FogExp2(0xf8f9fa, 0.02);
 
         var width = canvasWrapper.clientWidth;
         var height = canvasWrapper.clientHeight;
@@ -598,31 +605,23 @@
         renderer.setSize(width, height);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.25;
+        renderer.toneMappingExposure = 1.1;
 
-        // Ambient & Directional Lighting
-        var ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+        // Ambient & Directional Lighting for Bright Studio Look
+        var ambientLight = new THREE.AmbientLight(0xffffff, 1.1);
         scene.add(ambientLight);
 
-        // Center Key Spotlight for Rank 1 Podium
-        var centerSpot = new THREE.SpotLight(0xffedd5, 2.5, 30, Math.PI / 4, 0.5);
-        centerSpot.position.set(0, 14, 8);
+        // Center Spotlight for Podium
+        var centerSpot = new THREE.SpotLight(0xffffff, 1.2, 40, Math.PI / 3, 0.4);
+        centerSpot.position.set(0, 14, 10);
         scene.add(centerSpot);
 
-        var blueLight = new THREE.PointLight(0x38bdf8, 2.2, 35);
-        blueLight.position.set(-12, 5, -2);
-        scene.add(blueLight);
-
-        var purpleLight = new THREE.PointLight(0xa855f7, 2.2, 35);
-        purpleLight.position.set(12, 5, -2);
-        scene.add(purpleLight);
-
-        // 3D Floor Grid
-        var gridHelper = new THREE.GridHelper(50, 50, 0x334155, 0x1e293b);
+        // 3D Floor Subtle Grid
+        var gridHelper = new THREE.GridHelper(50, 50, 0xd1d5db, 0xe5e7eb);
         gridHelper.position.y = -2.8;
         scene.add(gridHelper);
 
-        // Floating Background Particles
+        // Floating Background Subtle Particles
         initParticles();
 
         // Window resize
@@ -632,8 +631,8 @@
         document.addEventListener('mousemove', function(e) {
             mouseX = (e.clientX / window.innerWidth) * 2 - 1;
             mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-            targetCameraX = mouseX * 1.8;
-            targetCameraY = 1.4 + mouseY * 0.9;
+            targetCameraX = mouseX * 1.5;
+            targetCameraY = 1.4 + mouseY * 0.7;
         });
 
         // Start render loop
@@ -643,7 +642,7 @@
     // ── 2. Background Floating Particles ──
     var particlesMesh;
     function initParticles() {
-        var particleCount = 220;
+        var particleCount = 180;
         var geometry = new THREE.BufferGeometry();
         var positions = new Float32Array(particleCount * 3);
 
@@ -656,18 +655,17 @@
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
         var material = new THREE.PointsMaterial({
-            color: 0x60a5fa,
-            size: 0.15,
+            color: 0x94a3b8,
+            size: 0.12,
             transparent: true,
-            opacity: 0.5,
-            blending: THREE.AdditiveBlending
+            opacity: 0.35
         });
 
         particlesMesh = new THREE.Points(geometry, material);
         scene.add(particlesMesh);
     }
 
-    // ── 3. High-Resolution Texture Generator (Apple-Inspired Design Tokens) ──
+    // ── 3. High-Resolution Texture Generator (Clean Light Apple/MiniMax Design) ──
     function createCardTexture(candidate, rankIndex, callback) {
         var cardCanvas = document.createElement('canvas');
         cardCanvas.width = 800;
@@ -677,35 +675,32 @@
         var theme = rankThemes[rankIndex] || rankThemes[2];
         var isRank1 = (rankIndex === 0);
 
-        // Background Glass/Metallic Rounded Card
-        ctx.fillStyle = '#0b0f19';
-        roundRect(ctx, 16, 16, 768, 1068, 44, true, false);
+        // Clean White Card Background
+        ctx.fillStyle = '#ffffff';
+        roundRect(ctx, 16, 16, 768, 1068, 40, true, false);
 
-        // Inner Card Gradient
+        // Subtle Soft Card Header Gradient
         var innerGrad = ctx.createLinearGradient(0, 0, 0, 1100);
-        innerGrad.addColorStop(0, isRank1 ? 'rgba(245, 158, 11, 0.12)' : 'rgba(30, 41, 59, 0.8)');
-        innerGrad.addColorStop(1, 'rgba(11, 15, 25, 0.95)');
+        innerGrad.addColorStop(0, isRank1 ? 'rgba(254, 243, 199, 0.35)' : 'rgba(248, 249, 250, 0.8)');
+        innerGrad.addColorStop(0.3, '#ffffff');
+        innerGrad.addColorStop(1, '#ffffff');
         ctx.fillStyle = innerGrad;
-        roundRect(ctx, 16, 16, 768, 1068, 44, true, false);
+        roundRect(ctx, 16, 16, 768, 1068, 40, true, false);
 
-        // Premium Dual-Tone Outer Border Rim
-        ctx.lineWidth = isRank1 ? 12 : 8;
-        var borderGrad = ctx.createLinearGradient(0, 0, 800, 1100);
-        borderGrad.addColorStop(0, theme.accent);
-        borderGrad.addColorStop(0.5, '#334155');
-        borderGrad.addColorStop(1, theme.hex);
-        ctx.strokeStyle = borderGrad;
-        roundRect(ctx, 16, 16, 768, 1068, 44, false, true);
+        // Card Outer Border
+        ctx.lineWidth = isRank1 ? 8 : 4;
+        ctx.strokeStyle = isRank1 ? theme.accent : '#e5e5e5';
+        roundRect(ctx, 16, 16, 768, 1068, 40, false, true);
 
         // ── Header Rank Badge (Pill Shaped per design.md) ──
         ctx.fillStyle = theme.badgeBg;
-        roundRect(ctx, 160, 46, 480, 56, 28, true, false);
-        ctx.strokeStyle = theme.accent;
-        ctx.lineWidth = 3;
-        roundRect(ctx, 160, 46, 480, 56, 28, false, true);
+        roundRect(ctx, 180, 48, 440, 54, 27, true, false);
+        ctx.strokeStyle = theme.badgeBorder;
+        ctx.lineWidth = 2;
+        roundRect(ctx, 180, 48, 440, 54, 27, false, true);
 
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 24px "DM Sans", sans-serif';
+        ctx.fillStyle = theme.badgeText;
+        ctx.font = 'bold 22px "DM Sans", sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(theme.label, 400, 83);
 
@@ -728,7 +723,7 @@
             try {
                 ctx.drawImage(img, photoCenterX - photoRadius, photoCenterY - photoRadius, photoRadius * 2, photoRadius * 2);
             } catch(e) {
-                ctx.fillStyle = '#1e293b';
+                ctx.fillStyle = '#f3f4f6';
                 ctx.fill();
             }
             ctx.restore();
@@ -736,44 +731,50 @@
             // Photo Outer Stroke
             ctx.beginPath();
             ctx.arc(photoCenterX, photoCenterY, photoRadius + 2, 0, Math.PI * 2);
-            ctx.strokeStyle = theme.accent;
-            ctx.lineWidth = isRank1 ? 8 : 6;
+            ctx.strokeStyle = isRank1 ? theme.accent : '#e5e5e5';
+            ctx.lineWidth = isRank1 ? 6 : 4;
             ctx.stroke();
 
             // ── Candidate Name ──
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 38px "DM Sans", sans-serif';
+            ctx.fillStyle = '#1a1a1a';
+            ctx.font = 'bold 36px "DM Sans", sans-serif';
             ctx.textAlign = 'center';
             var name = candidate.nama.length > 24 ? candidate.nama.substring(0, 22) + '...' : candidate.nama;
             ctx.fillText(name, 400, 480);
 
-            // ── NIK & Subtitle ──
-            ctx.fillStyle = '#94a3b8';
-            ctx.font = '500 22px "DM Sans", sans-serif';
-            ctx.fillText('NIK: ' + candidate.nik, 400, 525);
+            // ── NIK Pill ──
+            ctx.fillStyle = '#f5f5f7';
+            roundRect(ctx, 270, 506, 260, 38, 19, true, false);
+            ctx.strokeStyle = '#e5e5e5';
+            ctx.lineWidth = 1;
+            roundRect(ctx, 270, 506, 260, 38, 19, false, true);
+
+            ctx.fillStyle = '#6b7280';
+            ctx.font = '600 18px "DM Sans", sans-serif';
+            ctx.fillText('NIK: ' + candidate.nik, 400, 531);
 
             // ── Giant Vote Percentage (DM Sans 800) ──
-            ctx.fillStyle = theme.accent;
+            ctx.fillStyle = isRank1 ? theme.accent : '#1a1a1a';
             ctx.font = '800 96px "DM Sans", sans-serif';
             ctx.fillText(candidate.persentase + '%', 400, 650);
 
             // ── Vote Count Badge ──
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 34px "DM Sans", sans-serif';
+            ctx.fillStyle = '#1a1a1a';
+            ctx.font = 'bold 32px "DM Sans", sans-serif';
             ctx.fillText(candidate.total_suara + ' Suara Masuk', 400, 720);
 
             // ── Progress Bar Track & Fill (Pill Shaped) ──
-            ctx.fillStyle = '#1e293b';
-            roundRect(ctx, 70, 770, 660, 36, 18, true, false);
+            ctx.fillStyle = '#f1f2f4';
+            roundRect(ctx, 70, 770, 660, 32, 16, true, false);
 
-            var barWidth = Math.max(36, (candidate.persentase / 100) * 660);
+            var barWidth = Math.max(32, (candidate.persentase / 100) * 660);
             ctx.fillStyle = theme.barColor;
-            roundRect(ctx, 70, 770, barWidth, 36, 18, true, false);
+            roundRect(ctx, 70, 770, barWidth, 32, 16, true, false);
 
             // ── Card Footer Subtitle ──
-            ctx.fillStyle = '#64748b';
-            ctx.font = '600 20px "DM Sans", sans-serif';
-            ctx.fillText('E-VOTING KOPERASI REAL COUNT', 400, 880);
+            ctx.fillStyle = '#9ca3af';
+            ctx.font = '600 18px "DM Sans", sans-serif';
+            ctx.fillText('E-VOTING KOPERASI REAL COUNT', 400, 875);
 
             var texture = new THREE.CanvasTexture(cardCanvas);
             texture.needsUpdate = true;
@@ -806,10 +807,6 @@
         var activeIds = {};
 
         top3.forEach(function(cand, rankIndex) {
-            // Mapping:
-            // rankIndex 0 (Rank 1) -> slotPositions[0] (Center X = 0.0)
-            // rankIndex 1 (Rank 2) -> slotPositions[1] (Left X = -5.6)
-            // rankIndex 2 (Rank 3) -> slotPositions[2] (Right X = 5.6)
             var targetSlot = slotPositions[rankIndex] || { x: 0, y: 0, z: 0, scale: 1.0 };
             activeIds[cand.nik] = true;
 
@@ -828,12 +825,12 @@
                 group.currentRank = rankIndex + 1;
                 group.jumpOffset = 0;
 
-                // Base 3D Pedestal Cylinder (Besar & Kokoh)
+                // Base 3D Pedestal Cylinder (Clean Light Metallic)
                 var baseGeo = new THREE.CylinderGeometry(2.1, 2.3, 0.45, 36);
                 var baseMat = new THREE.MeshStandardMaterial({
-                    color: 0x1e293b,
-                    metalness: 0.85,
-                    roughness: 0.2
+                    color: 0xffffff,
+                    metalness: 0.1,
+                    roughness: 0.8
                 });
                 var baseMesh = new THREE.Mesh(baseGeo, baseMat);
                 baseMesh.position.y = -2.6;
@@ -848,7 +845,7 @@
                 group.add(ringMesh);
                 group.ringMesh = ringMesh;
 
-                // Main Floating 3D Plane Card (Ukuran Diperbesar Signifikan: 4.8 x 6.6)
+                // Main Floating 3D Plane Card
                 var cardGeo = new THREE.PlaneGeometry(4.8, 6.6);
                 var cardMat = new THREE.MeshBasicMaterial({ transparent: true, side: THREE.DoubleSide });
                 var cardMesh = new THREE.Mesh(cardGeo, cardMat);
@@ -935,7 +932,7 @@
                     '<div class="other-name">' + cand.nama + '</div>' +
                     '<div class="other-votes">' +
                         '<span>' + cand.total_suara + ' Suara</span>' +
-                        '<strong style="color:#60a5fa;">' + cand.persentase + '%</strong>' +
+                        '<strong style="color:#1a1a1a;">' + cand.persentase + '%</strong>' +
                     '</div>' +
                     '<div class="other-progress-bg">' +
                         '<div class="other-progress-bar" style="width:' + cand.persentase + '%;"></div>' +
@@ -961,7 +958,7 @@
 
         // Rotate Background Particles gently
         if (particlesMesh) {
-            particlesMesh.rotation.y = time * 0.025;
+            particlesMesh.rotation.y = time * 0.02;
         }
 
         // Animate each 3D Candidate Group
@@ -1026,9 +1023,9 @@
                 isFetching = false;
                 if (response.status === 'success') {
                     // Update Header Stats
-                    document.getElementById('displayTotalSuara').innerHTML = response.total_suara + ' <span style="font-size:14px; color:#94a3b8; font-weight:500;">Suara</span>';
+                    document.getElementById('displayTotalSuara').innerHTML = response.total_suara + ' <span style="font-size:14px; color:#6b7280; font-weight:500;">Suara</span>';
                     document.getElementById('displayPersenPartisipasi').textContent = response.persen_partisipasi + '%';
-                    document.getElementById('displayTotalDpt').innerHTML = response.total_dpt + ' <span style="font-size:14px; color:#94a3b8; font-weight:500;">Anggota</span>';
+                    document.getElementById('displayTotalDpt').innerHTML = response.total_dpt + ' <span style="font-size:14px; color:#6b7280; font-weight:500;">Anggota</span>';
                     document.getElementById('displayUpdatedAt').textContent = response.updated_at;
 
                     // Update 3D Stage & Bottom Tray

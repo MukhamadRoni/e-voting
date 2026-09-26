@@ -16,8 +16,8 @@
 
         body {
             font-family: 'DM Sans', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #ffffff;
+            background-color: #f8f9fa;
+            color: #1a1a1a;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -31,56 +31,46 @@
             width: 100%;
             max-width: 440px;
             border-radius: 24px;
-            padding: 40px 36px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+            padding: 44px 36px;
+            border: 1px solid #e5e5e5;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
             position: relative;
-            overflow: hidden;
-        }
-
-        .auth-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, #1a1a1a, #4f46e5, #ec4899);
         }
 
         .brand-header {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 28px;
         }
 
         .brand-logo-wrap {
             width: 68px;
             height: 68px;
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 20px;
+            background: #f5f5f7;
+            border: 1px solid #e5e5e5;
+            border-radius: 18px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
         .brand-logo-wrap img {
             width: 44px;
             height: 44px;
             object-fit: contain;
+            border-radius: 10px;
         }
 
         .brand-header h1 {
             font-size: 22px;
             font-weight: 700;
-            color: #0f172a;
+            color: #1a1a1a;
             margin-bottom: 6px;
         }
 
         .brand-header p {
             font-size: 13px;
-            color: #64748b;
+            color: #6b7280;
             line-height: 1.5;
         }
 
@@ -88,9 +78,9 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: #f1f5f9;
-            color: #334155;
-            padding: 4px 12px;
+            background: #f5f5f7;
+            color: #4b5563;
+            padding: 5px 14px;
             border-radius: 9999px;
             font-size: 12px;
             font-weight: 600;
@@ -106,7 +96,7 @@
             display: block;
             font-size: 13px;
             font-weight: 600;
-            color: #334155;
+            color: #374151;
             margin-bottom: 8px;
         }
 
@@ -121,19 +111,19 @@
             left: 14px;
             width: 18px;
             height: 18px;
-            fill: #94a3b8;
+            fill: #9ca3af;
             pointer-events: none;
         }
 
         .input-wrapper input {
             width: 100%;
-            height: 46px;
+            height: 48px;
             padding: 0 16px 0 44px;
             font-family: 'DM Sans', sans-serif;
             font-size: 14px;
-            color: #0f172a;
-            background: #f8fafc;
-            border: 1px solid #cbd5e1;
+            color: #1a1a1a;
+            background: #ffffff;
+            border: 1.5px solid #e5e5e5;
             border-radius: 12px;
             outline: none;
             transition: all 0.2s ease;
@@ -141,14 +131,14 @@
 
         .input-wrapper input:focus {
             background: #ffffff;
-            border-color: #0f172a;
-            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+            border-color: #1a1a1a;
+            box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.08);
         }
 
         .btn-submit {
             width: 100%;
             height: 48px;
-            background: #0f172a;
+            background: #1a1a1a;
             color: #ffffff;
             border: none;
             border-radius: 9999px;
@@ -161,14 +151,12 @@
             justify-content: center;
             gap: 8px;
             margin-top: 10px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+            transition: all 0.15s ease;
         }
 
         .btn-submit:hover {
-            background: #1e293b;
+            background: #333333;
             transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.35);
         }
 
         .btn-submit:active {
@@ -178,7 +166,7 @@
         .auth-footer {
             margin-top: 28px;
             padding-top: 20px;
-            border-top: 1px solid #f1f5f9;
+            border-top: 1px solid #f0f0f0;
             text-align: center;
             display: flex;
             justify-content: space-between;
@@ -187,14 +175,14 @@
         }
 
         .auth-footer a {
-            color: #64748b;
+            color: #6b7280;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.15s ease;
         }
 
         .auth-footer a:hover {
-            color: #0f172a;
+            color: #1a1a1a;
         }
 
         /* ── SweetAlert2 Custom Styling ── */
@@ -202,17 +190,17 @@
             font-family: 'DM Sans', sans-serif !important;
             border-radius: 24px !important;
             padding: 32px !important;
-            border: 1px solid #e2e8f0 !important;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.12) !important;
+            border: 1px solid #e5e5e5 !important;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
         }
         .swal2-title {
             font-size: 20px !important;
             font-weight: 700 !important;
-            color: #0f172a !important;
+            color: #1a1a1a !important;
         }
         .swal2-html-container {
             font-size: 14px !important;
-            color: #475569 !important;
+            color: #4b5563 !important;
             line-height: 1.6 !important;
         }
         .swal2-confirm {
@@ -281,7 +269,7 @@
             icon: 'error',
             title: 'Otentikasi Gagal',
             text: <?= json_encode($this->session->flashdata('error')); ?>,
-            confirmButtonColor: '#0f172a',
+            confirmButtonColor: '#1a1a1a',
             confirmButtonText: 'Coba Lagi'
         });
     <?php endif; ?>
@@ -291,7 +279,7 @@
             icon: 'success',
             title: 'Berhasil',
             text: <?= json_encode($this->session->flashdata('success')); ?>,
-            confirmButtonColor: '#0f172a',
+            confirmButtonColor: '#1a1a1a',
             confirmButtonText: 'Lanjutkan'
         });
     <?php endif; ?>

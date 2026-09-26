@@ -16,8 +16,8 @@
 
         body {
             font-family: 'DM Sans', sans-serif;
-            background-color: #0b0f17;
-            color: #f8fafc;
+            background-color: #f8f9fa;
+            color: #1a1a1a;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -26,50 +26,50 @@
 
         /* ── Topbar Stage ── */
         .stage-navbar {
-            background: #111827;
-            border-bottom: 1px solid #1f2937;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
             padding: 0 32px;
-            height: 70px;
+            height: 64px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 50;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
 
         .stage-brand {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
             text-decoration: none;
-            color: #ffffff;
+            color: #1a1a1a;
         }
 
         .stage-brand img {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
         .stage-brand h1 {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
-            letter-spacing: -0.3px;
+            line-height: 1.2;
+            color: #1a1a1a;
         }
 
         .stage-brand span {
             font-size: 12px;
-            color: #94a3b8;
+            color: #6b7280;
             display: block;
         }
 
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .btn-nav {
@@ -83,25 +83,25 @@
             text-decoration: none;
             cursor: pointer;
             transition: all 0.15s ease;
-            border: 1px solid #374151;
-            background: #1f2937;
-            color: #e5e7eb;
+            border: 1px solid #e5e5e5;
+            background: #ffffff;
+            color: #1a1a1a;
         }
 
         .btn-nav:hover {
-            background: #374151;
-            color: #ffffff;
+            background: #f5f5f7;
         }
 
         .btn-nav.danger {
-            border-color: rgba(220, 38, 38, 0.4);
-            color: #f87171;
-            background: rgba(220, 38, 38, 0.1);
+            border-color: #fecaca;
+            color: #dc2626;
+            background: #fef2f2;
         }
 
         .btn-nav.danger:hover {
             background: #dc2626;
             color: #ffffff;
+            border-color: #dc2626;
         }
 
         /* ── Main Stage Grid Layout ── */
@@ -112,7 +112,7 @@
             margin: 0 auto;
             padding: 28px 32px 40px;
             display: grid;
-            grid-template-columns: 1fr 420px;
+            grid-template-columns: 1fr 400px;
             gap: 28px;
         }
 
@@ -131,16 +131,16 @@
 
         /* Control Bar Card */
         .control-card {
-            background: #111827;
-            border: 1px solid #1f2937;
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
             border-radius: 20px;
-            padding: 20px 24px;
+            padding: 18px 24px;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
             gap: 16px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.02);
         }
 
         .control-group {
@@ -153,41 +153,46 @@
         .control-label {
             font-size: 13px;
             font-weight: 600;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            color: #4b5563;
         }
 
         .input-hadiah {
-            background: #1f2937;
-            border: 1px solid #374151;
+            background: #f8f9fa;
+            border: 1.5px solid #e5e5e5;
             border-radius: 12px;
             padding: 8px 14px;
-            color: #f8fafc;
+            color: #1a1a1a;
             font-family: 'DM Sans', sans-serif;
             font-size: 14px;
             font-weight: 600;
             outline: none;
             min-width: 220px;
-            transition: border-color 0.15s ease;
+            transition: all 0.15s ease;
         }
 
         .input-hadiah:focus {
-            border-color: #6366f1;
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+            background: #ffffff;
+            border-color: #1a1a1a;
+            box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.08);
         }
 
         .select-filter {
-            background: #1f2937;
-            border: 1px solid #374151;
+            background: #f8f9fa;
+            border: 1.5px solid #e5e5e5;
             border-radius: 12px;
             padding: 8px 14px;
-            color: #f8fafc;
+            color: #1a1a1a;
             font-family: 'DM Sans', sans-serif;
             font-size: 14px;
             font-weight: 500;
             outline: none;
             cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .select-filter:focus {
+            background: #ffffff;
+            border-color: #1a1a1a;
         }
 
         /* Toggle Auto-Valid Switch */
@@ -195,18 +200,18 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            background: #1e293b;
+            background: #f5f5f7;
             padding: 6px 14px;
             border-radius: 9999px;
-            border: 1px solid #334155;
+            border: 1px solid #e5e5e5;
             user-select: none;
         }
 
         .switch-toggle {
             position: relative;
             display: inline-block;
-            width: 44px;
-            height: 24px;
+            width: 42px;
+            height: 22px;
         }
 
         .switch-toggle input {
@@ -222,26 +227,26 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #64748b;
+            background-color: #d1d5db;
             transition: .25s;
-            border-radius: 24px;
+            border-radius: 22px;
         }
 
         .slider:before {
             position: absolute;
             content: "";
-            height: 18px;
-            width: 18px;
+            height: 16px;
+            width: 16px;
             left: 3px;
             bottom: 3px;
             background-color: white;
             transition: .25s;
             border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
         }
 
         input:checked + .slider {
-            background-color: #10b981;
+            background-color: #16a34a;
         }
 
         input:checked + .slider:before {
@@ -249,113 +254,99 @@
         }
 
         .toggle-status-text {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             letter-spacing: 0.2px;
         }
 
         .status-on {
-            color: #34d399;
+            color: #15803d;
         }
 
         .status-off {
-            color: #fbbf24;
+            color: #b45309;
         }
 
         /* ── Big Stage Display Card ── */
         .stage-display {
-            background: radial-gradient(circle at 50% 30%, #1e1e2f 0%, #111420 100%);
-            border: 1px solid #2a2d3e;
-            border-radius: 28px;
-            padding: 48px 36px;
+            background: #ffffff;
+            border: 2px solid #e5e5e5;
+            border-radius: 24px;
+            padding: 44px 36px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            min-height: 480px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            min-height: 460px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
         }
 
-        .stage-display::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at center, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
         .prize-tag {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(249, 115, 22, 0.15));
-            border: 1px solid rgba(234, 179, 8, 0.35);
-            color: #fde047;
-            padding: 8px 20px;
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            color: #b45309;
+            padding: 8px 22px;
             border-radius: 9999px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             text-transform: uppercase;
-            box-shadow: 0 4px 12px rgba(234, 179, 8, 0.1);
         }
 
         /* Winner Visual Arena */
         .spinner-arena {
             width: 100%;
-            margin: 36px 0;
+            margin: 32px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 220px;
+            min-height: 200px;
             position: relative;
         }
 
         .slot-box {
             width: 100%;
-            max-width: 680px;
-            background: rgba(15, 23, 42, 0.7);
-            border: 2px solid #334155;
+            max-width: 640px;
+            background: #f8f9fa;
+            border: 2px dashed #d1d5db;
             border-radius: 24px;
             padding: 36px 28px;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.05);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .slot-box.spinning {
-            border-color: #6366f1;
-            box-shadow: 0 0 35px rgba(99, 102, 241, 0.4), inset 0 0 15px rgba(99, 102, 241, 0.2);
-            animation: pulse-glow 1.2s infinite alternate;
+            border: 2px solid #1a1a1a;
+            background: #f3f4f6;
+            box-shadow: 0 0 25px rgba(26, 26, 26, 0.08);
+            animation: pulse-glow-light 1.2s infinite alternate;
         }
 
         .slot-box.winner-revealed {
-            border-color: #10b981;
-            background: radial-gradient(circle at center, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0.85) 100%);
-            box-shadow: 0 0 45px rgba(16, 185, 129, 0.4), inset 0 0 20px rgba(16, 185, 129, 0.2);
+            border: 2px solid #16a34a;
+            background: #f0fdf4;
+            box-shadow: 0 10px 30px rgba(22, 163, 74, 0.12);
             transform: scale(1.02);
         }
 
-        @keyframes pulse-glow {
-            from { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
-            to { box-shadow: 0 0 40px rgba(99, 102, 241, 0.6); }
+        @keyframes pulse-glow-light {
+            from { box-shadow: 0 0 10px rgba(26, 26, 26, 0.05); }
+            to { box-shadow: 0 0 25px rgba(26, 26, 26, 0.15); }
         }
 
         .slot-name {
-            font-size: 42px;
+            font-size: 38px;
             font-weight: 800;
-            color: #ffffff;
+            color: #1a1a1a;
             line-height: 1.2;
             margin-bottom: 12px;
             letter-spacing: -0.5px;
-            text-shadow: 0 4px 16px rgba(0,0,0,0.5);
             word-break: break-word;
         }
 
@@ -363,62 +354,61 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 14px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
         .slot-badge {
-            background: #1e293b;
-            color: #94a3b8;
+            background: #ffffff;
+            color: #4b5563;
             padding: 6px 16px;
             border-radius: 9999px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            border: 1px solid #334155;
+            border: 1px solid #e5e5e5;
         }
 
         .slot-badge strong {
-            color: #f8fafc;
+            color: #1a1a1a;
         }
 
         .slot-hint {
-            color: #64748b;
-            font-size: 16px;
+            color: #6b7280;
+            font-size: 15px;
             font-weight: 500;
             margin-top: 8px;
         }
 
         /* Giant Spin Button */
         .btn-spin {
-            background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+            background: #1a1a1a;
             color: #ffffff;
             border: none;
             border-radius: 9999px;
-            padding: 18px 56px;
+            padding: 18px 52px;
             font-family: 'DM Sans', sans-serif;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 14px;
-            box-shadow: 0 10px 30px rgba(234, 88, 12, 0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+            gap: 12px;
+            box-shadow: 0 8px 24px rgba(26, 26, 26, 0.18);
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
         }
 
         .btn-spin:hover:not(:disabled) {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 15px 40px rgba(234, 88, 12, 0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+            background: #333333;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(26, 26, 26, 0.25);
         }
 
         .btn-spin:active:not(:disabled) {
-            transform: translateY(1px);
+            transform: translateY(0);
         }
 
         .btn-spin:disabled {
-            background: #374151;
+            background: #e5e5e5;
             color: #9ca3af;
             cursor: not-allowed;
             box-shadow: none;
@@ -426,8 +416,8 @@
         }
 
         .btn-spin svg {
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
             transition: transform 0.6s ease;
         }
 
@@ -441,114 +431,115 @@
 
         /* ── Right Column: Daftar Pemenang Live ── */
         .stage-sidebar {
-            background: #111827;
-            border: 1px solid #1f2937;
-            border-radius: 24px;
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.02);
             max-height: calc(100vh - 120px);
             position: sticky;
-            top: 94px;
+            top: 88px;
         }
 
         .sidebar-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid #1f2937;
+            padding: 18px 20px;
+            border-bottom: 1px solid #e5e5e5;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: #131c2e;
+            background: #fafafa;
         }
 
         .sidebar-header h2 {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
-            color: #ffffff;
+            color: #1a1a1a;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .badge-count {
-            background: #3b82f6;
+            background: #1a1a1a;
             color: #ffffff;
             font-size: 12px;
             font-weight: 700;
-            padding: 2px 10px;
+            padding: 2px 8px;
             border-radius: 9999px;
         }
 
         .winners-scroll-area {
             flex: 1;
             overflow-y: auto;
-            padding: 16px 20px;
+            padding: 16px 18px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .winner-card {
-            background: #1a2234;
-            border: 1px solid #28334b;
-            border-radius: 16px;
-            padding: 16px;
+            background: #f8f9fa;
+            border: 1px solid #e5e5e5;
+            border-radius: 14px;
+            padding: 14px 16px;
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
             gap: 12px;
-            transition: transform 0.15s ease, border-color 0.15s ease;
-            position: relative;
+            transition: all 0.15s ease;
         }
 
         .winner-card:hover {
-            border-color: #3b82f6;
-            transform: translateX(2px);
+            border-color: #1a1a1a;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
         }
 
         .winner-card.newly-added {
             animation: highlight-winner 1s ease;
-            border-color: #10b981;
+            border-color: #16a34a;
+            background: #f0fdf4;
         }
 
         @keyframes highlight-winner {
-            0% { background: #064e3b; transform: scale(1.03); }
-            100% { background: #1a2234; transform: scale(1); }
+            0% { background: #dcfce7; transform: scale(1.02); }
+            100% { background: #f0fdf4; transform: scale(1); }
         }
 
         .winner-info h4 {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
-            color: #ffffff;
+            color: #1a1a1a;
             margin-bottom: 4px;
         }
 
         .winner-prize-name {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
-            color: #facc15;
-            margin-bottom: 6px;
+            color: #b45309;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
 
         .winner-meta {
             font-size: 12px;
-            color: #94a3b8;
+            color: #6b7280;
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
         }
 
         .btn-delete-winner {
-            background: rgba(239, 68, 68, 0.1);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.2);
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
             border-radius: 8px;
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -565,21 +556,21 @@
 
         .empty-winners {
             text-align: center;
-            padding: 48px 16px;
-            color: #64748b;
+            padding: 40px 16px;
+            color: #9ca3af;
         }
 
         .empty-winners svg {
-            width: 48px;
-            height: 48px;
-            stroke: #475569;
-            margin-bottom: 12px;
+            width: 42px;
+            height: 42px;
+            stroke: #d1d5db;
+            margin-bottom: 10px;
         }
 
         .sidebar-footer {
-            padding: 16px 20px;
-            border-top: 1px solid #1f2937;
-            background: #131c2e;
+            padding: 14px 18px;
+            border-top: 1px solid #e5e5e5;
+            background: #fafafa;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -602,31 +593,31 @@
             border-radius: 24px !important;
             padding: 32px !important;
             background: #ffffff !important;
-            color: #0f172a !important;
-            border: 1px solid #e2e8f0 !important;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+            color: #1a1a1a !important;
+            border: 1px solid #e5e5e5 !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
         }
         .swal2-title {
-            font-size: 22px !important;
+            font-size: 20px !important;
             font-weight: 700 !important;
-            color: #0f172a !important;
+            color: #1a1a1a !important;
         }
         .swal2-html-container {
-            font-size: 15px !important;
-            color: #334155 !important;
+            font-size: 14px !important;
+            color: #4b5563 !important;
             line-height: 1.6 !important;
         }
         .swal2-confirm {
             border-radius: 9999px !important;
-            font-weight: 700 !important;
-            padding: 14px 32px !important;
-            font-size: 15px !important;
+            font-weight: 600 !important;
+            padding: 12px 28px !important;
+            font-size: 14px !important;
         }
         .swal2-cancel {
             border-radius: 9999px !important;
-            font-weight: 700 !important;
-            padding: 14px 32px !important;
-            font-size: 15px !important;
+            font-weight: 600 !important;
+            padding: 12px 28px !important;
+            font-size: 14px !important;
         }
     </style>
 </head>
@@ -645,8 +636,8 @@
         </a>
 
         <div class="nav-actions">
-            <span style="font-size:13px; color:#94a3b8; margin-right:4px;">
-                Admin: <strong style="color:#ffffff;"><?= html_escape($admin_name); ?></strong>
+            <span style="font-size:13px; color:#6b7280; margin-right:4px;">
+                Admin: <strong style="color:#1a1a1a;"><?= html_escape($admin_name); ?></strong>
             </span>
 
             <button type="button" class="btn-nav" id="btnFullscreen" title="Layar Penuh (F11)">
@@ -725,7 +716,7 @@
             <div class="stage-display">
                 <!-- Top Prize Badge -->
                 <div class="prize-tag" id="displayHadiahBadge">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76V14h2V8.76L15.38 12 17 10.83 14.92 8H20v6z"/>
                     </svg>
                     <span id="labelDisplayHadiah">Door Prize Utama</span>
@@ -741,7 +732,7 @@
                             <span class="slot-badge" id="slotRfidBadge" style="display:none;">RFID: <strong id="slotRfid">-</strong></span>
                         </div>
                         <div class="slot-hint" id="slotHint">
-                            Tersedia <strong id="counterPeserta" style="color:#60a5fa;"><?= $total_tersisa; ?></strong> peserta berhak undian
+                            Tersedia <strong id="counterPeserta" style="color:#1a1a1a; font-weight:700;"><?= $total_tersisa; ?></strong> peserta berhak undian
                         </div>
                     </div>
                 </div>
@@ -776,8 +767,8 @@
                         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
                         </svg>
-                        <p style="font-size:14px; font-weight:600; color:#94a3b8;">Belum ada pemenang undian</p>
-                        <p style="font-size:12px; margin-top:4px;">Putar undian untuk menentukan pemenang door prize RAT.</p>
+                        <p style="font-size:14px; font-weight:600; color:#4b5563;">Belum ada pemenang undian</p>
+                        <p style="font-size:12px; margin-top:4px; color:#9ca3af;">Putar undian untuk menentukan pemenang door prize RAT.</p>
                     </div>
                 <?php else: ?>
                     <?php foreach ($daftar_pemenang as $w): ?>
@@ -805,10 +796,10 @@
             </div>
 
             <div class="sidebar-footer">
-                <span style="font-size:12px; color:#94a3b8;">
-                    Total Hadiah Diberikan: <strong style="color:#ffffff;" id="footerCount"><?= count($daftar_pemenang); ?></strong>
+                <span style="font-size:12px; color:#6b7280;">
+                    Total Hadiah Diberikan: <strong style="color:#1a1a1a;" id="footerCount"><?= count($daftar_pemenang); ?></strong>
                 </span>
-                <a href="<?= site_url('laporan/peserta_undian'); ?>" target="_blank" style="font-size:12px; color:#60a5fa; text-decoration:none; font-weight:600;">
+                <a href="<?= site_url('laporan/peserta_undian'); ?>" target="_blank" style="font-size:12px; color:#1a1a1a; text-decoration:none; font-weight:600;">
                     Laporan Undian ↗
                 </a>
             </div>
@@ -985,8 +976,8 @@
             text: 'Layar undian akan dikunci dan memerlukan password admin untuk dibuka kembali.',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#0f172a',
-            cancelButtonColor: '#e2e8f0',
+            confirmButtonColor: '#1a1a1a',
+            cancelButtonColor: '#e5e5e5',
             confirmButtonText: 'Ya, Kunci Layar',
             cancelButtonText: 'Batal'
         }).then(function(result) {
@@ -1006,7 +997,7 @@
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#dc2626',
-                cancelButtonColor: '#e2e8f0',
+                cancelButtonColor: '#e5e5e5',
                 confirmButtonText: 'Ya, Reset Semua',
                 cancelButtonText: 'Batal'
             }).then(function(result) {
@@ -1025,7 +1016,7 @@
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#dc2626',
-            cancelButtonColor: '#e2e8f0',
+            cancelButtonColor: '#e5e5e5',
             confirmButtonText: 'Ya, Batalkan',
             cancelButtonText: 'Kembali'
         }).then(function(result) {
@@ -1079,7 +1070,7 @@
                 icon: 'info',
                 title: 'Tidak Ada Peserta Tersisa',
                 text: 'Seluruh peserta yang memenuhi syarat telah memenangkan undian.',
-                confirmButtonColor: '#0f172a'
+                confirmButtonColor: '#1a1a1a'
             });
             return;
         }
@@ -1109,7 +1100,7 @@
                         icon: 'warning',
                         title: 'Perhatian',
                         text: response.message,
-                        confirmButtonColor: '#0f172a'
+                        confirmButtonColor: '#1a1a1a'
                     });
                     return;
                 }
@@ -1120,7 +1111,6 @@
                 // Visual Rolling Animation (Rapid slot deceleration effect for 3.2 seconds)
                 var duration = 3200;
                 var startTime = performance.now();
-                var rollIndex = 0;
 
                 function rollFrame(currentTime) {
                     var elapsed = currentTime - startTime;
@@ -1157,7 +1147,7 @@
                     icon: 'error',
                     title: 'Kesalahan Sistem',
                     text: 'Tidak dapat menghubungi server untuk mengacak undian.',
-                    confirmButtonColor: '#0f172a'
+                    confirmButtonColor: '#1a1a1a'
                 });
             });
     });
@@ -1216,11 +1206,11 @@
                 Swal.fire({
                     icon: 'success',
                     title: 'Selamat Kepada Pemenang!',
-                    html: '<div style="font-size:18px; font-weight:700; color:#0f172a; margin:10px 0;">' + winner.nama + '</div>' +
-                          '<div style="font-size:14px; color:#64748b; margin-bottom:12px;">NIK: ' + winner.nik + ' &bull; Dept: ' + (winner.dept || '-') + '</div>' +
+                    html: '<div style="font-size:18px; font-weight:700; color:#1a1a1a; margin:10px 0;">' + winner.nama + '</div>' +
+                          '<div style="font-size:14px; color:#6b7280; margin-bottom:12px;">NIK: ' + winner.nik + ' &bull; Dept: ' + (winner.dept || '-') + '</div>' +
                           '<div style="padding:10px 16px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; color:#15803d; font-weight:700;">' + hadiah + '</div>' +
-                          '<p style="font-size:13px; color:#64748b; margin-top:14px;">(Status: Sah Otomatis & Terdata)</p>',
-                    confirmButtonColor: '#0f172a',
+                          '<p style="font-size:13px; color:#6b7280; margin-top:14px;">(Status: Sah Otomatis & Terdata)</p>',
+                    confirmButtonColor: '#1a1a1a',
                     confirmButtonText: 'Selesai & Lanjutkan'
                 });
             } else {
@@ -1240,12 +1230,12 @@
         Swal.fire({
             title: 'Konfirmasi Kehadiran Pemenang',
             html: '<div style="margin-top:12px;">' +
-                    '<div style="font-size:22px; font-weight:800; color:#0f172a; margin-bottom:6px;">' + winner.nama + '</div>' +
-                    '<div style="font-size:14px; color:#64748b; margin-bottom:16px;">NIK: <b>' + winner.nik + '</b> &bull; Departemen: <b>' + (winner.dept || '-') + '</b></div>' +
-                    '<div style="padding:12px 18px; background:#fef9c3; border:1px dashed #ca8a04; border-radius:12px; color:#854d0e; font-weight:700; margin-bottom:18px;">' +
+                    '<div style="font-size:22px; font-weight:800; color:#1a1a1a; margin-bottom:6px;">' + winner.nama + '</div>' +
+                    '<div style="font-size:14px; color:#6b7280; margin-bottom:16px;">NIK: <b>' + winner.nik + '</b> &bull; Departemen: <b>' + (winner.dept || '-') + '</b></div>' +
+                    '<div style="padding:12px 18px; background:#fef3c7; border:1px solid #fde68a; border-radius:12px; color:#b45309; font-weight:700; margin-bottom:18px;">' +
                         'Hadiah: ' + hadiah +
                     '</div>' +
-                    '<div style="font-size:15px; font-weight:600; color:#1e293b;">Apakah anggota yang bersangkutan hadir di ruangan RAT?</div>' +
+                    '<div style="font-size:15px; font-weight:600; color:#1a1a1a;">Apakah anggota yang bersangkutan hadir di ruangan RAT?</div>' +
                   '</div>',
             icon: 'question',
             showCancelButton: true,
@@ -1285,7 +1275,7 @@
                             icon: 'success',
                             title: 'Undian Sah & Diterima!',
                             text: 'Data pemenang ' + winner.nama + ' berhasil disimpan permanen.',
-                            confirmButtonColor: '#0f172a',
+                            confirmButtonColor: '#1a1a1a',
                             timer: 2000
                         });
                     } else {
@@ -1298,14 +1288,14 @@
                 btnSpin.disabled = false;
                 btnSpinText.textContent = 'PUTAR ULANG UNDIAN';
                 slotBox.className = 'slot-box';
-                slotHint.innerHTML = '<span style="color:#ef4444; font-weight:600;">Undian Dibatalkan (Tidak Hadir). Silakan klik putar ulang.</span>';
+                slotHint.innerHTML = '<span style="color:#dc2626; font-weight:600;">Undian Dibatalkan (Tidak Hadir). Silakan klik putar ulang.</span>';
                 slotHint.style.display = 'block';
 
                 Swal.fire({
                     icon: 'warning',
                     title: 'Undian Dibatalkan / Hangus',
                     html: 'Peserta <b>' + winner.nama + '</b> dinyatakan tidak hadir/tidak valid.<br>Hadiah <b>' + hadiah + '</b> tetap tersedia untuk diundi kembali.',
-                    confirmButtonColor: '#0f172a',
+                    confirmButtonColor: '#1a1a1a',
                     confirmButtonText: 'Siap Undi Ulang'
                 });
             }
