@@ -631,11 +631,6 @@
         centerSpot.position.set(0, 14, 10);
         scene.add(centerSpot);
 
-        // 3D Floor Subtle Grid
-        var gridHelper = new THREE.GridHelper(50, 50, 0xcbd5e1, 0xe2e8f0);
-        gridHelper.position.y = -2.8;
-        scene.add(gridHelper);
-
         // Floating Background Subtle Particles
         initParticles();
 
