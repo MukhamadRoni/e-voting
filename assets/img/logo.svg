@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Background Gradient: Deep Ink & Black Slate -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="100%" stop-color="#09090b"/>
+    </linearGradient>
+
+    <!-- Brand Coral / Gradient Accent for Checkmark per design.md -->
+    <linearGradient id="coralAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b4a"/>
+      <stop offset="100%" stop-color="#ff451a"/>
+    </linearGradient>
+
+    <!-- Subtle glow behind checkmark -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Squircle Container (rounded-hero / 28px radius) -->
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#bgGrad)" stroke="rgba(255, 255, 255, 0.12)" stroke-width="1.5"/>
+
+  <!-- Inner subtle ambient shine -->
+  <rect x="5.5" y="5.5" width="117" height="58" rx="26" fill="url(#bgGrad)" opacity="0.3"/>
+
+  <!-- Ballot Box Base (Geometric minimalist lines) -->
+  <!-- Box Top Flange / Slot Horizon -->
+  <path d="M34 76 L94 76" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.25"/>
+  
+  <!-- Box Body Structure -->
+  <path d="M38 76 L44 100 C44.5 102 46.5 103.5 48.5 103.5 L79.5 103.5 C81.5 103.5 83.5 102 84 100 L90 76" 
+        fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.35"/>
+
+  <!-- Digital Ballot Slot Glowing Line -->
+  <rect x="48" y="74" width="32" height="4" rx="2" fill="#ffffff" opacity="0.9"/>
+
+  <!-- Ballot Paper / Digital Vote Card entering the slot -->
+  <path d="M46 36 C46 33.8 47.8 32 50 32 L78 32 C80.2 32 82 33.8 82 36 L82 72 L46 72 Z" 
+        fill="#ffffff" opacity="0.96"/>
+
+  <!-- Ballot Card Fold / Header bar on card -->
+  <rect x="52" y="38" width="24" height="4" rx="2" fill="#e4e4e7"/>
+  <rect x="52" y="46" width="16" height="3" rx="1.5" fill="#f4f4f5"/>
+
+  <!-- Signature VOTE Checkmark (Brand Coral high-impact accent from design.md) -->
+  <path d="M50 56 L60 66 L86 40" 
+        fill="none" 
+        stroke="url(#coralAccent)" 
+        stroke-width="7" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        filter="url(#glow)"/>
+</svg>

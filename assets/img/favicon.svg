@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="favBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="100%" stop-color="#09090b"/>
+    </linearGradient>
+    <linearGradient id="favCoral" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b4a"/>
+      <stop offset="100%" stop-color="#ff451a"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="8" fill="url(#favBg)"/>
+  <!-- Minimalist High-Legibility Ballot & Check for micro size -->
+  <path d="M8 20 L24 20" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+  <rect x="11" y="8" width="10" height="11" rx="1.5" fill="#ffffff"/>
+  <path d="M12 14 L15 17 L22 10" fill="none" stroke="url(#favCoral)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
