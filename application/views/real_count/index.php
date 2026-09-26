@@ -555,37 +555,43 @@
 
     var rankThemes = [
         { 
-            color: 0xd97706, 
-            hex: '#d97706', 
+            color: 0xf59e0b, 
+            hex: '#f59e0b', 
             label: '★ PERINGKAT 1 (LEADER) ★', 
-            badgeBg: '#fef3c7', 
-            badgeText: '#b45309',
-            badgeBorder: '#fde68a',
-            barColor: '#d97706',
-            accent: '#f59e0b',
-            ledColor: 0xd97706
+            badgeBg: '#78350f', 
+            badgeText: '#fde047',
+            badgeBorder: '#f59e0b',
+            barColor: '#f59e0b',
+            accent: '#fbbf24',
+            cardBgTop: 'rgba(245, 158, 11, 0.22)',
+            cardBgBottom: '#0b1120',
+            ledColor: 0xf59e0b
         }, // Rank 1: Gold / Amber
         { 
-            color: 0x0284c7, 
-            hex: '#0284c7', 
+            color: 0x38bdf8, 
+            hex: '#38bdf8', 
             label: '★ PERINGKAT 2 ★', 
-            badgeBg: '#f0f9ff', 
-            badgeText: '#0369a1',
-            badgeBorder: '#bae6fd',
-            barColor: '#0284c7',
-            accent: '#38bdf8',
-            ledColor: 0x0284c7
+            badgeBg: '#075985', 
+            badgeText: '#7dd3fc',
+            badgeBorder: '#38bdf8',
+            barColor: '#38bdf8',
+            accent: '#7dd3fc',
+            cardBgTop: 'rgba(56, 189, 248, 0.20)',
+            cardBgBottom: '#0b1120',
+            ledColor: 0x38bdf8
         }, // Rank 2: Silver / Sky Blue
         { 
-            color: 0x7c3aed, 
-            hex: '#7c3aed', 
+            color: 0xa855f7, 
+            hex: '#a855f7', 
             label: '★ PERINGKAT 3 ★', 
-            badgeBg: '#faf5ff', 
-            badgeText: '#6d28d9',
-            badgeBorder: '#e9d5ff',
-            barColor: '#7c3aed',
-            accent: '#a855f7',
-            ledColor: 0x7c3aed
+            badgeBg: '#581c87', 
+            badgeText: '#e9d5ff',
+            badgeBorder: '#a855f7',
+            barColor: '#a855f7',
+            accent: '#c084fc',
+            cardBgTop: 'rgba(168, 85, 247, 0.20)',
+            cardBgBottom: '#0b1120',
+            ledColor: 0xa855f7
         }  // Rank 3: Bronze / Purple
     ];
 
@@ -605,19 +611,19 @@
         renderer.setSize(width, height);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.1;
+        renderer.toneMappingExposure = 1.15;
 
         // Ambient & Directional Lighting for Bright Studio Look
-        var ambientLight = new THREE.AmbientLight(0xffffff, 1.1);
+        var ambientLight = new THREE.AmbientLight(0xffffff, 1.15);
         scene.add(ambientLight);
 
         // Center Spotlight for Podium
-        var centerSpot = new THREE.SpotLight(0xffffff, 1.2, 40, Math.PI / 3, 0.4);
+        var centerSpot = new THREE.SpotLight(0xffffff, 1.4, 40, Math.PI / 3, 0.4);
         centerSpot.position.set(0, 14, 10);
         scene.add(centerSpot);
 
         // 3D Floor Subtle Grid
-        var gridHelper = new THREE.GridHelper(50, 50, 0xd1d5db, 0xe5e7eb);
+        var gridHelper = new THREE.GridHelper(50, 50, 0xcbd5e1, 0xe2e8f0);
         gridHelper.position.y = -2.8;
         scene.add(gridHelper);
 
@@ -665,7 +671,7 @@
         scene.add(particlesMesh);
     }
 
-    // ── 3. High-Resolution Texture Generator (Clean Light Apple/MiniMax Design) ──
+    // ── 3. High-Resolution Texture Generator (High-Contrast Rich Dark 3D Cards) ──
     function createCardTexture(candidate, rankIndex, callback) {
         var cardCanvas = document.createElement('canvas');
         cardCanvas.width = 800;
@@ -675,32 +681,36 @@
         var theme = rankThemes[rankIndex] || rankThemes[2];
         var isRank1 = (rankIndex === 0);
 
-        // Clean White Card Background
-        ctx.fillStyle = '#ffffff';
-        roundRect(ctx, 16, 16, 768, 1068, 40, true, false);
+        // Base Dark Rounded Card
+        ctx.fillStyle = '#0f172a';
+        roundRect(ctx, 16, 16, 768, 1068, 42, true, false);
 
-        // Subtle Soft Card Header Gradient
+        // Inner Card Gradient with Saturated Rank Tint
         var innerGrad = ctx.createLinearGradient(0, 0, 0, 1100);
-        innerGrad.addColorStop(0, isRank1 ? 'rgba(254, 243, 199, 0.35)' : 'rgba(248, 249, 250, 0.8)');
-        innerGrad.addColorStop(0.3, '#ffffff');
-        innerGrad.addColorStop(1, '#ffffff');
+        innerGrad.addColorStop(0, theme.cardBgTop);
+        innerGrad.addColorStop(0.35, '#1e293b');
+        innerGrad.addColorStop(1, '#0b0f19');
         ctx.fillStyle = innerGrad;
-        roundRect(ctx, 16, 16, 768, 1068, 40, true, false);
+        roundRect(ctx, 16, 16, 768, 1068, 42, true, false);
 
-        // Card Outer Border
-        ctx.lineWidth = isRank1 ? 8 : 4;
-        ctx.strokeStyle = isRank1 ? theme.accent : '#e5e5e5';
-        roundRect(ctx, 16, 16, 768, 1068, 40, false, true);
+        // Crisp Glowing Dual-Tone Outer Border Rim
+        ctx.lineWidth = isRank1 ? 10 : 7;
+        var borderGrad = ctx.createLinearGradient(0, 0, 800, 1100);
+        borderGrad.addColorStop(0, theme.accent);
+        borderGrad.addColorStop(0.5, '#475569');
+        borderGrad.addColorStop(1, theme.hex);
+        ctx.strokeStyle = borderGrad;
+        roundRect(ctx, 16, 16, 768, 1068, 42, false, true);
 
         // ── Header Rank Badge (Pill Shaped per design.md) ──
         ctx.fillStyle = theme.badgeBg;
-        roundRect(ctx, 180, 48, 440, 54, 27, true, false);
+        roundRect(ctx, 160, 46, 480, 56, 28, true, false);
         ctx.strokeStyle = theme.badgeBorder;
-        ctx.lineWidth = 2;
-        roundRect(ctx, 180, 48, 440, 54, 27, false, true);
+        ctx.lineWidth = 3;
+        roundRect(ctx, 160, 46, 480, 56, 28, false, true);
 
         ctx.fillStyle = theme.badgeText;
-        ctx.font = 'bold 22px "DM Sans", sans-serif';
+        ctx.font = 'bold 23px "DM Sans", sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(theme.label, 400, 83);
 
@@ -723,7 +733,7 @@
             try {
                 ctx.drawImage(img, photoCenterX - photoRadius, photoCenterY - photoRadius, photoRadius * 2, photoRadius * 2);
             } catch(e) {
-                ctx.fillStyle = '#f3f4f6';
+                ctx.fillStyle = '#1e293b';
                 ctx.fill();
             }
             ctx.restore();
@@ -731,49 +741,49 @@
             // Photo Outer Stroke
             ctx.beginPath();
             ctx.arc(photoCenterX, photoCenterY, photoRadius + 2, 0, Math.PI * 2);
-            ctx.strokeStyle = isRank1 ? theme.accent : '#e5e5e5';
-            ctx.lineWidth = isRank1 ? 6 : 4;
+            ctx.strokeStyle = theme.accent;
+            ctx.lineWidth = isRank1 ? 8 : 6;
             ctx.stroke();
 
-            // ── Candidate Name ──
-            ctx.fillStyle = '#1a1a1a';
-            ctx.font = 'bold 36px "DM Sans", sans-serif';
+            // ── Candidate Name (Pure Crisp White) ──
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 38px "DM Sans", sans-serif';
             ctx.textAlign = 'center';
             var name = candidate.nama.length > 24 ? candidate.nama.substring(0, 22) + '...' : candidate.nama;
             ctx.fillText(name, 400, 480);
 
             // ── NIK Pill ──
-            ctx.fillStyle = '#f5f5f7';
-            roundRect(ctx, 270, 506, 260, 38, 19, true, false);
-            ctx.strokeStyle = '#e5e5e5';
-            ctx.lineWidth = 1;
-            roundRect(ctx, 270, 506, 260, 38, 19, false, true);
+            ctx.fillStyle = '#1e293b';
+            roundRect(ctx, 260, 506, 280, 40, 20, true, false);
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 1.5;
+            roundRect(ctx, 260, 506, 280, 40, 20, false, true);
 
-            ctx.fillStyle = '#6b7280';
-            ctx.font = '600 18px "DM Sans", sans-serif';
-            ctx.fillText('NIK: ' + candidate.nik, 400, 531);
+            ctx.fillStyle = '#cbd5e1';
+            ctx.font = '600 19px "DM Sans", sans-serif';
+            ctx.fillText('NIK: ' + candidate.nik, 400, 532);
 
             // ── Giant Vote Percentage (DM Sans 800) ──
-            ctx.fillStyle = isRank1 ? theme.accent : '#1a1a1a';
+            ctx.fillStyle = theme.accent;
             ctx.font = '800 96px "DM Sans", sans-serif';
             ctx.fillText(candidate.persentase + '%', 400, 650);
 
-            // ── Vote Count Badge ──
-            ctx.fillStyle = '#1a1a1a';
-            ctx.font = 'bold 32px "DM Sans", sans-serif';
+            // ── Vote Count Badge (Crisp White) ──
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 34px "DM Sans", sans-serif';
             ctx.fillText(candidate.total_suara + ' Suara Masuk', 400, 720);
 
             // ── Progress Bar Track & Fill (Pill Shaped) ──
-            ctx.fillStyle = '#f1f2f4';
-            roundRect(ctx, 70, 770, 660, 32, 16, true, false);
+            ctx.fillStyle = '#1e293b';
+            roundRect(ctx, 70, 770, 660, 34, 17, true, false);
 
-            var barWidth = Math.max(32, (candidate.persentase / 100) * 660);
+            var barWidth = Math.max(34, (candidate.persentase / 100) * 660);
             ctx.fillStyle = theme.barColor;
-            roundRect(ctx, 70, 770, barWidth, 32, 16, true, false);
+            roundRect(ctx, 70, 770, barWidth, 34, 17, true, false);
 
             // ── Card Footer Subtitle ──
-            ctx.fillStyle = '#9ca3af';
-            ctx.font = '600 18px "DM Sans", sans-serif';
+            ctx.fillStyle = '#64748b';
+            ctx.font = '600 19px "DM Sans", sans-serif';
             ctx.fillText('E-VOTING KOPERASI REAL COUNT', 400, 875);
 
             var texture = new THREE.CanvasTexture(cardCanvas);
@@ -825,12 +835,12 @@
                 group.currentRank = rankIndex + 1;
                 group.jumpOffset = 0;
 
-                // Base 3D Pedestal Cylinder (Clean Light Metallic)
+                // Base 3D Pedestal Cylinder (Crisp Slate Metallic)
                 var baseGeo = new THREE.CylinderGeometry(2.1, 2.3, 0.45, 36);
                 var baseMat = new THREE.MeshStandardMaterial({
-                    color: 0xffffff,
-                    metalness: 0.1,
-                    roughness: 0.8
+                    color: 0x1e293b,
+                    metalness: 0.8,
+                    roughness: 0.25
                 });
                 var baseMesh = new THREE.Mesh(baseGeo, baseMat);
                 baseMesh.position.y = -2.6;
