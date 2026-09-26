@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # ─── Web Application (CodeIgniter 3 + Apache + PHP 8.1) ─────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: evoting_app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
+    environment:
+      - BASE_URL=${BASE_URL:-http://localhost:8080/}
+      - DB_HOST=db
+      - DB_USER=${DB_USER:-root}
+      - DB_PASS=${DB_PASS:-rootpassword}
+      - DB_NAME=${DB_NAME:-db_evoting}
+      - CI_ENV=${CI_ENV:-development}
+    volumes:
+      - ./assets/uploads:/var/www/html/assets/uploads
+      - ./application/logs:/var/www/html/application/logs
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - evoting_network
+
+  # ─── Database (MySQL 8.0 / MariaDB) ─────────────────────────────────
+  db:
+    image: mysql:8.0
+    container_name: evoting_db
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "${DB_PORT:-3307}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS:-rootpassword}
+      MYSQL_DATABASE: ${DB_NAME:-db_evoting}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/evoting_full_dump.sql:/docker-entrypoint-initdb.d/01_init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASS:-rootpassword}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - evoting_network
+
+networks:
+  evoting_network:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local

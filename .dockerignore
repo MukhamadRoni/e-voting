@@ -1,0 +1,16 @@
+.git
+.github
+.gemini
+.agents
+.vscode
+.idea
+*.log
+*.pdf
+assets/docs/tmp_profile
+assets/docs/*.pdf
+Dockerfile
+docker-compose.yml
+.env
+.env.example
+README.md
+MIGRATION_GUIDE.md
