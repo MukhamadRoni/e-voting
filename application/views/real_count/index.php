@@ -565,8 +565,11 @@
             accent: '#fbbf24',
             cardBgTop: 'rgba(245, 158, 11, 0.22)',
             cardBgBottom: '#0b1120',
-            ledColor: 0xf59e0b
-        }, // Rank 1: Gold / Amber
+            podiumColor: 0xd4af37, // Polished Metallic Gold
+            podiumMetalness: 0.90,
+            podiumRoughness: 0.18,
+            ledColor: 0xfbbf24     // Luminous Gold LED
+        }, // Rank 1: Gold / Emas
         { 
             color: 0x38bdf8, 
             hex: '#38bdf8', 
@@ -578,8 +581,11 @@
             accent: '#7dd3fc',
             cardBgTop: 'rgba(56, 189, 248, 0.20)',
             cardBgBottom: '#0b1120',
-            ledColor: 0x38bdf8
-        }, // Rank 2: Silver / Sky Blue
+            podiumColor: 0xc4cbd4, // Polished Metallic Silver / Platinum
+            podiumMetalness: 0.92,
+            podiumRoughness: 0.16,
+            ledColor: 0x38bdf8     // Luminous Silver / Cyan LED
+        }, // Rank 2: Silver / Perak
         { 
             color: 0xa855f7, 
             hex: '#a855f7', 
@@ -591,8 +597,11 @@
             accent: '#c084fc',
             cardBgTop: 'rgba(168, 85, 247, 0.20)',
             cardBgBottom: '#0b1120',
-            ledColor: 0xa855f7
-        }  // Rank 3: Bronze / Purple
+            podiumColor: 0xcd7f32, // Polished Metallic Bronze / Perunggu
+            podiumMetalness: 0.88,
+            podiumRoughness: 0.22,
+            ledColor: 0xf97316     // Luminous Bronze / Amber LED
+        }  // Rank 3: Bronze / Perunggu
     ];
 
     // ── 1. Init Three.js Scene ──
@@ -835,16 +844,17 @@
                 group.currentRank = rankIndex + 1;
                 group.jumpOffset = 0;
 
-                // Base 3D Pedestal Cylinder (Crisp Slate Metallic)
+                // Base 3D Pedestal Cylinder (Polished Gold / Silver / Bronze per Peringkat)
                 var baseGeo = new THREE.CylinderGeometry(2.1, 2.3, 0.45, 36);
                 var baseMat = new THREE.MeshStandardMaterial({
-                    color: 0x1e293b,
-                    metalness: 0.8,
-                    roughness: 0.25
+                    color: rankThemes[rankIndex].podiumColor,
+                    metalness: rankThemes[rankIndex].podiumMetalness,
+                    roughness: rankThemes[rankIndex].podiumRoughness
                 });
                 var baseMesh = new THREE.Mesh(baseGeo, baseMat);
                 baseMesh.position.y = -2.6;
                 group.add(baseMesh);
+                group.baseMesh = baseMesh;
 
                 // LED Ring Torus pada Base
                 var ringGeo = new THREE.TorusGeometry(2.15, 0.07, 16, 48);
@@ -879,6 +889,12 @@
                 group.targetZ = targetSlot.z;
                 group.targetScale = targetSlot.scale;
                 group.currentRank = rankIndex + 1;
+
+                if (group.baseMesh && group.baseMesh.material) {
+                    group.baseMesh.material.color.setHex(rankThemes[rankIndex].podiumColor);
+                    group.baseMesh.material.metalness = rankThemes[rankIndex].podiumMetalness;
+                    group.baseMesh.material.roughness = rankThemes[rankIndex].podiumRoughness;
+                }
 
                 if (group.ringMesh && group.ringMesh.material) {
                     group.ringMesh.material.color.setHex(rankThemes[rankIndex].ledColor);
