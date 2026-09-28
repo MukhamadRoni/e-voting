@@ -114,5 +114,55 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<script>
+// ── Sidebar Toggle + Tooltip ──
+(function() {
+    var sidebar = document.getElementById('sidebar');
+    var mainContent = document.querySelector('.main-content');
+    var toggleBtn = document.getElementById('sidebarToggle');
+
+    // Create tooltip element
+    var tooltip = document.createElement('div');
+    tooltip.id = 'sidebar-tooltip';
+    document.body.appendChild(tooltip);
+
+    // Restore state from localStorage
+    if (localStorage.getItem('sidebarCollapsed') === 'true') {
+        sidebar.classList.add('collapsed');
+        mainContent.classList.add('collapsed');
+    }
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+            var isCollapsed = sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('collapsed', isCollapsed);
+            localStorage.setItem('sidebarCollapsed', isCollapsed);
+            // Hide tooltip when toggling
+            tooltip.classList.remove('visible');
+        });
+    }
+
+    // Tooltip on nav link hover
+    var navLinks = sidebar.querySelectorAll('.sidebar-nav li a[data-tooltip]');
+    navLinks.forEach(function(link) {
+        link.addEventListener('mouseenter', function() {
+            if (!sidebar.classList.contains('collapsed')) return;
+            var label = link.getAttribute('data-tooltip');
+            if (!label) return;
+            var rect = link.getBoundingClientRect();
+            var sidebarRect = sidebar.getBoundingClientRect();
+            tooltip.textContent = label;
+            tooltip.style.top = (rect.top + rect.height / 2) + 'px';
+            tooltip.style.left = (sidebarRect.right + 10) + 'px';
+            tooltip.style.transform = 'translateY(-50%)';
+            tooltip.classList.add('visible');
+        });
+        link.addEventListener('mouseleave', function() {
+            tooltip.classList.remove('visible');
+        });
+    });
+})();
+</script>
+
 </body>
 </html>

@@ -145,22 +145,51 @@
         }
 
         /* ── Sidebar ── */
+        :root {
+            --sidebar-width: 240px;
+            --sidebar-collapsed-width: 60px;
+        }
+
         .sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 240px;
+            width: var(--sidebar-width);
             height: 100vh;
             background: #1a1a1a;
             padding: 24px 0;
-            overflow-y: auto;
+            overflow: visible;
             z-index: 100;
+            transition: width 0.25s ease;
+            display: flex;
+            flex-direction: column;
         }
 
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+        }
+
+        /* Brand area */
         .sidebar .brand {
             padding: 0 20px 24px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            overflow: hidden;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .sidebar .brand .brand-text {
+            transition: opacity 0.2s ease, width 0.25s ease;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .brand .brand-text {
+            opacity: 0;
+            width: 0;
         }
 
         .sidebar .brand h2 {
@@ -174,52 +203,209 @@
             color: #9ca3af;
         }
 
+        /* Toggle button */
+        .sidebar-toggle {
+            position: absolute;
+            top: 16px;
+            right: -12px;
+            width: 24px;
+            height: 24px;
+            background: #252528;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 101;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+            transition: all 0.25s ease;
+        }
+
+        .sidebar-toggle:hover {
+            background: #323338;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .sidebar-toggle svg {
+            width: 12px;
+            height: 12px;
+            stroke: #94a3b8;
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform 0.25s ease, stroke 0.2s ease;
+        }
+
+        .sidebar-toggle:hover svg {
+            stroke: #ffffff;
+        }
+
+        .sidebar.collapsed .sidebar-toggle svg {
+            transform: rotate(180deg);
+        }
+
+        /* Nav list */
         .sidebar-nav {
             list-style: none;
-            padding: 0 12px;
+            padding: 0 8px;
+            overflow-y: auto;
+            overflow-x: visible;
+            flex: 1;
         }
 
         .sidebar-nav li a {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
-            font-size: 14px;
-            font-weight: 400;
-            color: #9ca3af;
-            text-decoration: none;
-            border-radius: 8px;
-            margin-bottom: 2px;
-            transition: all 0.15s ease;
-        }
-
-        .sidebar-nav li a:hover,
-        .sidebar-nav li a.active {
-            background: rgba(255,255,255,0.08);
-            color: #ffffff;
+            gap: 12px;
+            padding: 8px 10px;
+            font-size: 13.5px;
             font-weight: 500;
+            color: #94a3b8;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 3px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            overflow: visible;
+            position: relative;
         }
 
-        .sidebar-nav li a svg {
-            width: 18px;
-            height: 18px;
-            fill: currentColor;
+        .sidebar.collapsed .sidebar-nav li a {
+            justify-content: center;
+            padding: 6px 0;
+            gap: 0;
+        }
+
+        .sidebar-nav li a:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #f1f5f9;
+        }
+
+        .sidebar-nav li a.active {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* ── Modern Grey Base Icon Badge ── */
+        .sidebar-nav li a .nav-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: #252528;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
 
+        .sidebar-nav li a .nav-icon svg {
+            width: 17px;
+            height: 17px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+            transition: transform 0.2s ease, stroke 0.2s ease;
+        }
+
+        .sidebar-nav li a:hover .nav-icon {
+            background: #323338;
+            border-color: rgba(255, 255, 255, 0.16);
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+        }
+
+        .sidebar-nav li a:hover .nav-icon svg {
+            transform: scale(1.08);
+        }
+
+        .sidebar-nav li a.active .nav-icon {
+            background: #3f4046;
+            border-color: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .sidebar-nav li a.active .nav-icon svg {
+            transform: scale(1.05);
+        }
+
+        /* Label text in nav */
+        .sidebar-nav li a .nav-label {
+            transition: opacity 0.15s ease, max-width 0.25s ease;
+            overflow: hidden;
+            max-width: 200px;
+        }
+
+        .sidebar.collapsed .sidebar-nav li a .nav-label {
+            opacity: 0;
+            max-width: 0;
+            pointer-events: none;
+        }
+
+        /* Section label */
         .sidebar-nav .nav-section {
             font-size: 11px;
             font-weight: 600;
             color: #6b7280;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            padding: 16px 12px 8px;
+            padding: 16px 10px 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            transition: opacity 0.2s ease, max-height 0.25s ease, padding 0.25s ease;
+            max-height: 40px;
+        }
+
+        .sidebar.collapsed .sidebar-nav .nav-section {
+            opacity: 0;
+            max-height: 0;
+            padding: 0;
+        }
+
+        /* Tooltip on hover (collapsed mode) — rendered via JS */
+        #sidebar-tooltip {
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #333333;
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+            padding: 6px 12px;
+            border-radius: 8px;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }
+
+        #sidebar-tooltip.visible {
+            opacity: 1;
         }
 
         /* ── Top Bar ── */
         .main-content {
-            margin-left: 240px;
+            margin-left: var(--sidebar-width);
             min-height: 100vh;
+            transition: margin-left 0.25s ease;
+        }
+
+        .main-content.collapsed {
+            margin-left: var(--sidebar-collapsed-width);
         }
 
         .topbar {
@@ -505,10 +691,15 @@
 <body>
 
 <!-- Sidebar -->
-<div class="sidebar">
-    <div class="brand" style="display:flex; align-items:center; gap:12px;">
+<div class="sidebar" id="sidebar">
+    <!-- Toggle Button -->
+    <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+
+    <div class="brand">
         <img src="<?= base_url('assets/img/logo.svg'); ?>" alt="Logo" style="width:36px; height:36px; border-radius:10px; flex-shrink:0;">
-        <div>
+        <div class="brand-text">
             <h2>E-Voting</h2>
             <span>Panel Admin</span>
         </div>
@@ -516,68 +707,88 @@
 
     <ul class="sidebar-nav">
         <li>
-            <a href="<?= site_url('admin'); ?>" class="<?= ($this->uri->segment(1) == 'admin' && !$this->uri->segment(2)) ? 'active' : ''; ?>">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-                Dashboard
+            <a href="<?= site_url('admin'); ?>" data-tooltip="Dashboard" class="<?= ($this->uri->segment(1) == 'admin' && !$this->uri->segment(2)) ? 'active' : ''; ?>">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1.5"/><rect width="7" height="5" x="14" y="3" rx="1.5"/><rect width="7" height="9" x="14" y="12" rx="1.5"/><rect width="7" height="5" x="3" y="16" rx="1.5"/></svg>
+                </div>
+                <span class="nav-label">Dashboard</span>
             </a>
         </li>
 
         <li class="nav-section">Master Data</li>
         <li>
-            <a href="<?= site_url('master_user'); ?>" class="<?= ($this->uri->segment(1) == 'master_user') ? 'active' : ''; ?>">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-                Data Pemilih
+            <a href="<?= site_url('master_user'); ?>" data-tooltip="Data Pemilih" class="<?= ($this->uri->segment(1) == 'master_user') ? 'active' : ''; ?>">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <span class="nav-label">Data Pemilih</span>
             </a>
         </li>
         <li>
-            <a href="<?= site_url('master_kandidat'); ?>" class="<?= ($this->uri->segment(1) == 'master_kandidat') ? 'active' : ''; ?>">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                Data Kandidat
+            <a href="<?= site_url('master_kandidat'); ?>" data-tooltip="Data Kandidat" class="<?= ($this->uri->segment(1) == 'master_kandidat') ? 'active' : ''; ?>">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m16 11 2 2 4-4"/></svg>
+                </div>
+                <span class="nav-label">Data Kandidat</span>
             </a>
         </li>
 
         <li class="nav-section">Laporan</li>
         <li>
-            <a href="<?= site_url('laporan/pemenang_ketua'); ?>" class="<?= ($this->uri->segment(2) == 'pemenang_ketua') ? 'active' : ''; ?>">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2z"/></svg>
-                Pemenang Ketua
+            <a href="<?= site_url('laporan/pemenang_ketua'); ?>" data-tooltip="Pemenang Ketua" class="<?= ($this->uri->segment(2) == 'pemenang_ketua') ? 'active' : ''; ?>">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/><path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/><path d="M12 17v4"/><path d="M8 21h8"/><path d="M6 3h12a3 3 0 0 1 3 3v2a7 7 0 0 1-14 0V6a3 3 0 0 1 3-3Z"/></svg>
+                </div>
+                <span class="nav-label">Pemenang Ketua</span>
             </a>
         </li>
         <li>
-            <a href="<?= site_url('laporan/pemenang_pengawas'); ?>" class="<?= ($this->uri->segment(2) == 'pemenang_pengawas') ? 'active' : ''; ?>">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2z"/></svg>
-                Pemenang Pengawas
+            <a href="<?= site_url('laporan/pemenang_pengawas'); ?>" data-tooltip="Pemenang Pengawas" class="<?= ($this->uri->segment(2) == 'pemenang_pengawas') ? 'active' : ''; ?>">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                </div>
+                <span class="nav-label">Pemenang Pengawas</span>
             </a>
         </li>
         <li>
-            <a href="<?= site_url('laporan/trace_back'); ?>" class="<?= ($this->uri->segment(2) == 'trace_back') ? 'active' : ''; ?>">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-                Trace Back
+            <a href="<?= site_url('laporan/trace_back'); ?>" data-tooltip="Trace Back" class="<?= ($this->uri->segment(2) == 'trace_back') ? 'active' : ''; ?>">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                </div>
+                <span class="nav-label">Trace Back</span>
             </a>
         </li>
         <li>
-            <a href="<?= site_url('laporan/peserta_undian'); ?>" class="<?= ($this->uri->segment(2) == 'peserta_undian') ? 'active' : ''; ?>">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"/></svg>
-                Peserta Undian
+            <a href="<?= site_url('laporan/peserta_undian'); ?>" data-tooltip="Peserta Undian" class="<?= ($this->uri->segment(2) == 'peserta_undian') ? 'active' : ''; ?>">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
+                </div>
+                <span class="nav-label">Peserta Undian</span>
             </a>
         </li>
-        <li class="nav-section">Bilik & Panggung</li>
+        <li class="nav-section">Bilik &amp; Panggung</li>
         <li>
-            <a href="<?= site_url('voting'); ?>" target="_blank">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                Buka Bilik Suara ↗
-            </a>
-        </li>
-        <li>
-            <a href="<?= site_url('bilik_undian'); ?>" target="_blank" class="<?= ($this->uri->segment(1) == 'bilik_undian') ? 'active' : ''; ?>">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"/></svg>
-                Buka Bilik Undian ↗
+            <a href="<?= site_url('voting'); ?>" data-tooltip="Buka Bilik Suara" target="_blank">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 10h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10Z"/><path d="M8 10V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4"/><path d="m9 14 2 2 4-4"/></svg>
+                </div>
+                <span class="nav-label">Buka Bilik Suara ↗</span>
             </a>
         </li>
         <li>
-            <a href="<?= site_url('real_count'); ?>" target="_blank" class="<?= ($this->uri->segment(1) == 'real_count') ? 'active' : ''; ?>">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
-                Real Count 3D ↗
+            <a href="<?= site_url('bilik_undian'); ?>" data-tooltip="Buka Bilik Undian" target="_blank" class="<?= ($this->uri->segment(1) == 'bilik_undian') ? 'active' : ''; ?>">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 4.8 0 0 1 12 7.5a4.8 4.8 0 0 1 4.5-4.5 2.5 2.5 0 0 1 0 5"/></svg>
+                </div>
+                <span class="nav-label">Buka Bilik Undian ↗</span>
+            </a>
+        </li>
+        <li>
+            <a href="<?= site_url('real_count'); ?>" data-tooltip="Real Count 3D" target="_blank" class="<?= ($this->uri->segment(1) == 'real_count') ? 'active' : ''; ?>">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                </div>
+                <span class="nav-label">Real Count 3D ↗</span>
             </a>
         </li>
     </ul>
