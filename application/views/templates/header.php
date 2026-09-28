@@ -157,7 +157,7 @@
             width: var(--sidebar-width);
             height: 100vh;
             background: #1a1a1a;
-            padding: 24px 0;
+            padding: 16px 0;
             overflow: visible;
             z-index: 100;
             transition: width 0.25s ease;
@@ -171,9 +171,9 @@
 
         /* Brand area */
         .sidebar .brand {
-            padding: 0 20px 24px;
+            padding: 0 16px 16px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -253,6 +253,43 @@
             overflow-y: auto;
             overflow-x: visible;
             flex: 1;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+        }
+
+        /* Modern Custom Scrollbar: Remove native OS/browser scrollbar buttons */
+        .sidebar-nav::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 9999px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .sidebar-nav::-webkit-scrollbar-button {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+
+        /* Hide scrollbar completely when collapsed to keep icons perfectly centered */
+        .sidebar.collapsed .sidebar-nav {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sidebar.collapsed .sidebar-nav::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
         }
 
         .sidebar-nav li a {
@@ -360,7 +397,7 @@
             color: #6b7280;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            padding: 16px 10px 8px;
+            padding: 12px 10px 6px;
             white-space: nowrap;
             overflow: hidden;
             transition: opacity 0.2s ease, max-height 0.25s ease, padding 0.25s ease;
