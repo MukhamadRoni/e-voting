@@ -23,7 +23,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = getenv('BASE_URL') ?: 'http://localhost:8080/e-voting/';
+$dynamic_base_url = '';
+if (isset($_SERVER['HTTP_HOST'])) {
+    $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://' : 'http://';
+    $script_path = str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+    $dynamic_base_url = $protocol . $_SERVER['HTTP_HOST'] . $script_path;
+}
+$config['base_url'] = getenv('BASE_URL') ?: ($dynamic_base_url ?: 'http://localhost:8080/e-voting/');
 
 /*
 |--------------------------------------------------------------------------

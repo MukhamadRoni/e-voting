@@ -384,9 +384,311 @@
             transform: translateY(0);
             opacity: 1;
         }
+
+        /* ── Top Viewport Loading Bar (Apple-style thin bar) ── */
+        .top-progress-bar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            z-index: 9999;
+            background: transparent;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .top-progress-bar-container.active {
+            opacity: 1;
+        }
+
+        .top-progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #2563eb, #3b82f6, #06b6d4);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+            transition: width 0.28s cubic-bezier(0.1, 0.7, 0.1, 1);
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* ── Stage Loading Glass Overlay (Liquid Glass Apple Style) ── */
+        .stage-loading-overlay {
+            position: fixed;
+            top: 64px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(248, 249, 250, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 90;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.32s ease;
+        }
+
+        .stage-loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .stage-loading-card {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 24px;
+            padding: 34px 38px;
+            width: 90%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.04);
+            transform: scale(0.95);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .stage-loading-overlay.active .stage-loading-card {
+            transform: scale(1);
+        }
+
+        .loading-spinner-box {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .loading-ring-svg {
+            width: 60px;
+            height: 60px;
+            transform: rotate(-90deg);
+        }
+
+        .loading-ring-svg circle {
+            cx: 30;
+            cy: 30;
+            r: 25;
+            fill: none;
+            stroke-width: 3.5;
+        }
+
+        .ring-bg {
+            stroke: rgba(0, 0, 0, 0.06);
+        }
+
+        .ring-fill {
+            stroke: #1a1a1a;
+            stroke-dasharray: 157;
+            stroke-dashoffset: 120;
+            stroke-linecap: round;
+            animation: ring-spin 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes ring-spin {
+            0% {
+                stroke-dashoffset: 140;
+                transform: rotate(0deg);
+                transform-origin: center;
+            }
+            50% {
+                stroke-dashoffset: 35;
+                transform: rotate(180deg);
+                transform-origin: center;
+            }
+            100% {
+                stroke-dashoffset: 140;
+                transform: rotate(360deg);
+                transform-origin: center;
+            }
+        }
+
+        .loading-icon-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-header {
+            margin-bottom: 22px;
+        }
+
+        .loading-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            background: #f1f2f4;
+            border: 1px solid #e2e4e8;
+            font-size: 11px;
+            font-weight: 700;
+            color: #4b5563;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #2563eb;
+            box-shadow: 0 0 6px rgba(37, 99, 235, 0.6);
+            animation: pulse-dot 1.4s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(0.8); }
+        }
+
+        .loading-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -0.3px;
+        }
+
+        .loading-track-wrapper {
+            width: 100%;
+        }
+
+        .loading-progress-track {
+            width: 100%;
+            height: 8px;
+            background: #eceef1;
+            border-radius: 9999px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loading-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #1e293b 0%, #3b82f6 50%, #0f172a 100%);
+            background-size: 200% 100%;
+            animation: progress-shimmer 2s infinite linear;
+            border-radius: 9999px;
+            transition: width 0.28s cubic-bezier(0.1, 0.7, 0.1, 1);
+        }
+
+        @keyframes progress-shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .loading-meta-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .loading-step-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .loading-percent-label {
+            color: #1a1a1a;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ── Mobile & Tablet Responsiveness ── */
+        @media (max-width: 768px) {
+            .stage-navbar {
+                padding: 10px 14px;
+                height: auto;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .stage-brand span {
+                display: none;
+            }
+            .stage-brand h1 {
+                font-size: 14px;
+            }
+            .stage-brand img {
+                width: 28px;
+                height: 28px;
+            }
+            .segmented-control {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+            .segment-btn {
+                flex: 1;
+                justify-content: center;
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            .stage-controls {
+                gap: 6px;
+            }
+            .btn-action-icon span {
+                display: none;
+            }
+            .btn-action-icon {
+                padding: 7px 10px;
+            }
+            .pill-widget {
+                padding: 5px 10px;
+                font-size: 11px;
+            }
+            .stage-stats-banner {
+                padding: 0 14px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            .stat-glass-card {
+                padding: 10px 14px;
+                border-radius: 14px;
+            }
+            .stat-glass-card .value {
+                font-size: 18px;
+            }
+            .stat-glass-card .label {
+                font-size: 10px;
+            }
+            .canvas-3d-wrapper {
+                min-height: 440px;
+            }
+            .stage-loading-overlay {
+                top: 0;
+            }
+            .stage-loading-card {
+                padding: 24px 20px;
+                width: 92%;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <!-- Top Loading Progress Bar (Apple-style thin bar) -->
+    <div class="top-progress-bar-container active" id="topProgressBarContainer">
+        <div class="top-progress-bar-fill" id="topProgressBarFill" style="width: 15%;"></div>
+    </div>
 
     <!-- Topbar Stage Header -->
     <header class="stage-navbar">
@@ -403,11 +705,11 @@
 
         <!-- Kategori Switcher: Ketua vs Pengawas -->
         <div class="segmented-control">
-            <button type="button" class="segment-btn <?= ($kategori === 'ketua') ? 'active' : ''; ?>" onclick="switchKategori('ketua')">
+            <button type="button" class="segment-btn <?= ($kategori === 'ketua') ? 'active' : ''; ?>" data-kategori="ketua" onclick="switchKategori('ketua')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                 <span>Calon Ketua</span>
             </button>
-            <button type="button" class="segment-btn <?= ($kategori === 'pengawas') ? 'active' : ''; ?>" onclick="switchKategori('pengawas')">
+            <button type="button" class="segment-btn <?= ($kategori === 'pengawas') ? 'active' : ''; ?>" data-kategori="pengawas" onclick="switchKategori('pengawas')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2z"/></svg>
                 <span>Calon Pengawas</span>
             </button>
@@ -422,7 +724,7 @@
             </div>
 
             <!-- Manual Refresh -->
-            <button type="button" class="btn-action-icon" onclick="fetchRealCountData(true)" title="Segarkan Data Sekarang">
+            <button type="button" class="btn-action-icon" onclick="fetchRealCountData(true, true)" title="Segarkan Data Sekarang">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0020 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 004 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
                 <span>Refresh</span>
             </button>
@@ -442,6 +744,44 @@
 
     <!-- Main Real Count Stage -->
     <main class="realcount-stage">
+        
+        <!-- Stage Loading Glass Overlay (Apple-style frosted glass) -->
+        <div class="stage-loading-overlay active" id="stageLoadingOverlay">
+            <div class="stage-loading-card">
+                <!-- Animated Spinner Ring -->
+                <div class="loading-spinner-box">
+                    <svg class="loading-ring-svg" viewBox="0 0 60 60">
+                        <circle class="ring-bg" cx="30" cy="30" r="25"></circle>
+                        <circle class="ring-fill" cx="30" cy="30" r="25"></circle>
+                    </svg>
+                    <div class="loading-icon-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Title & Category Badge -->
+                <div class="loading-header">
+                    <div class="loading-badge-pill" id="loadingCategoryBadge">
+                        <span class="badge-dot"></span>
+                        <span id="loadingCategoryName">Calon <?= ($kategori === 'pengawas') ? 'Pengawas' : 'Ketua'; ?></span>
+                    </div>
+                    <h3 class="loading-title">Memuat Real Count 3D</h3>
+                </div>
+
+                <!-- Progress Bar & Labels -->
+                <div class="loading-track-wrapper">
+                    <div class="loading-progress-track">
+                        <div class="loading-progress-fill" id="loadingProgressFill" style="width: 15%;"></div>
+                    </div>
+                    <div class="loading-meta-info">
+                        <span class="loading-step-label" id="loadingStepLabel">Menyiapkan panggung visual...</span>
+                        <span class="loading-percent-label" id="loadingPercentLabel">15%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <!-- Stats Bar Banner -->
         <div class="stage-stats-banner">
@@ -606,47 +946,68 @@
 
     // ── 1. Init Three.js Scene ──
     function init3DScene() {
-        scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0xf8f9fa, 0.02);
+        if (typeof THREE === 'undefined') {
+            console.warn('Three.js library is not loaded!');
+            return false;
+        }
 
-        var width = canvasWrapper.clientWidth;
-        var height = canvasWrapper.clientHeight;
+        try {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0xf8f9fa, 0.02);
 
-        camera = new THREE.PerspectiveCamera(46, width / height, 0.1, 1000);
-        camera.position.set(0, 1.4, 16.2);
-        camera.lookAt(0, 0.3, 0);
+            var width = canvasWrapper ? (canvasWrapper.clientWidth || window.innerWidth) : window.innerWidth;
+            var height = canvasWrapper ? (canvasWrapper.clientHeight || 540) : 540;
 
-        renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-        renderer.setSize(width, height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.15;
+            camera = new THREE.PerspectiveCamera(46, width / height, 0.1, 1000);
+            var initZ = (width < 600) ? 24.5 : ((width < 900) ? 19.5 : 16.2);
+            camera.position.set(0, 1.4, initZ);
+            camera.lookAt(0, 0.3, 0);
 
-        // Ambient & Directional Lighting for Bright Studio Look
-        var ambientLight = new THREE.AmbientLight(0xffffff, 1.15);
-        scene.add(ambientLight);
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.15;
 
-        // Center Spotlight for Podium
-        var centerSpot = new THREE.SpotLight(0xffffff, 1.4, 40, Math.PI / 3, 0.4);
-        centerSpot.position.set(0, 14, 10);
-        scene.add(centerSpot);
+            // Ambient & Directional Lighting for Bright Studio Look
+            var ambientLight = new THREE.AmbientLight(0xffffff, 1.15);
+            scene.add(ambientLight);
 
-        // Floating Background Subtle Particles
-        initParticles();
+            // Center Spotlight for Podium
+            var centerSpot = new THREE.SpotLight(0xffffff, 1.4, 40, Math.PI / 3, 0.4);
+            centerSpot.position.set(0, 14, 10);
+            scene.add(centerSpot);
 
-        // Window resize
-        window.addEventListener('resize', onWindowResize);
+            // Floating Background Subtle Particles
+            initParticles();
 
-        // Mouse Parallax Effect
-        document.addEventListener('mousemove', function(e) {
-            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-            targetCameraX = mouseX * 1.5;
-            targetCameraY = 1.4 + mouseY * 0.7;
-        });
+            // Window resize
+            window.addEventListener('resize', onWindowResize);
 
-        // Start render loop
-        animate();
+            // Mouse & Touch Parallax Effect
+            document.addEventListener('mousemove', function(e) {
+                mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+                targetCameraX = mouseX * 1.5;
+                targetCameraY = 1.4 + mouseY * 0.7;
+            });
+
+            document.addEventListener('touchmove', function(e) {
+                if (e.touches && e.touches.length > 0) {
+                    mouseX = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
+                    mouseY = -(e.touches[0].clientY / window.innerHeight) * 2 + 1;
+                    targetCameraX = mouseX * 1.2;
+                    targetCameraY = 1.4 + mouseY * 0.5;
+                }
+            }, { passive: true });
+
+            // Start render loop
+            animate();
+            return true;
+        } catch (err) {
+            console.error('Error initializing 3D scene:', err);
+            return false;
+        }
     }
 
     // ── 2. Background Floating Particles ──
@@ -817,6 +1178,13 @@
 
     // ── 4. Build or Update 3D Candidate Cards (Peringkat 1 di Tengah, 2 di Kiri, 3 di Kanan) ──
     function update3DStage(candidates) {
+        if (!candidates || !Array.isArray(candidates)) return;
+
+        if (typeof THREE === 'undefined' || !scene) {
+            updateBottomTray(candidates);
+            return;
+        }
+
         var top3 = candidates.slice(0, 3);
         var activeIds = {};
 
@@ -1017,31 +1385,127 @@
     }
 
     function onWindowResize() {
-        if (!canvasWrapper) return;
-        var width = canvasWrapper.clientWidth;
-        var height = canvasWrapper.clientHeight;
+        if (!canvasWrapper || !camera || !renderer) return;
+        var width = canvasWrapper.clientWidth || window.innerWidth;
+        var height = canvasWrapper.clientHeight || 540;
         camera.aspect = width / height;
+        if (width < 600) {
+            camera.position.z = 24.5;
+        } else if (width < 900) {
+            camera.position.z = 19.5;
+        } else {
+            camera.position.z = 16.2;
+        }
         camera.updateProjectionMatrix();
         renderer.setSize(width, height);
     }
 
-    // ── 7. Auto-Polling Data Engine (Every 10 Seconds) ──
+    // ── 7. Auto-Polling Data Engine (Every 10 Seconds) & Loading Progress Manager ──
     var countdown = 10;
     var countdownText = document.getElementById('countdownText');
     var isFetching = false;
+    var currentRequestId = 0;
 
-    function fetchRealCountData(isManual) {
-        if (isFetching) return;
-        isFetching = true;
+    // Loading Progress Manager (Apple-style smooth progress)
+    var loadingTimer = null;
+    var currentProgress = 0;
+    var isLoadingActive = false;
+    var loadingStartTime = 0;
 
+    function setProgressState(percent, stepText) {
+        currentProgress = percent;
+        var topBar = document.getElementById('topProgressBarFill');
+        var stageBar = document.getElementById('loadingProgressFill');
+        var percentLabel = document.getElementById('loadingPercentLabel');
+        var stepLabel = document.getElementById('loadingStepLabel');
+
+        if (topBar) topBar.style.width = percent + '%';
+        if (stageBar) stageBar.style.width = percent + '%';
+        if (percentLabel) percentLabel.textContent = Math.round(percent) + '%';
+        if (stepLabel && stepText) stepLabel.textContent = stepText;
+    }
+
+    function startLoadingProgress(categoryName) {
+        if (loadingTimer) clearInterval(loadingTimer);
+        isLoadingActive = true;
+        loadingStartTime = Date.now();
+
+        var overlay = document.getElementById('stageLoadingOverlay');
+        var topContainer = document.getElementById('topProgressBarContainer');
+        var catBadge = document.getElementById('loadingCategoryName');
+
+        if (catBadge) {
+            catBadge.textContent = categoryName || (activeKategori === 'pengawas' ? 'Calon Pengawas' : 'Calon Ketua');
+        }
+
+        if (overlay) overlay.classList.add('active');
+        if (topContainer) topContainer.classList.add('active');
+
+        setProgressState(15, 'Menghubungkan ke server...');
+
+        var step = 0;
+        loadingTimer = setInterval(function() {
+            step++;
+            if (step === 1) {
+                setProgressState(38, 'Mengambil data suara real count...');
+            } else if (step === 2) {
+                setProgressState(62, 'Menghitung persentase & tabulasi...');
+            } else if (step === 3) {
+                setProgressState(82, 'Menyiapkan panggung 3D...');
+            } else if (step >= 4 && currentProgress < 92) {
+                setProgressState(Math.min(92, currentProgress + 2), 'Merender tekstur kandidat...');
+            }
+        }, 110);
+    }
+
+    function finishLoadingProgress(callback) {
+        if (!isLoadingActive) return;
+
+        var elapsed = Date.now() - loadingStartTime;
+        var minDisplayTime = 420;
+        var delayRemaining = Math.max(0, minDisplayTime - elapsed);
+
+        setTimeout(function() {
+            if (loadingTimer) clearInterval(loadingTimer);
+            setProgressState(100, 'Panggung siap ditampilkan!');
+
+            setTimeout(function() {
+                var overlay = document.getElementById('stageLoadingOverlay');
+                var topContainer = document.getElementById('topProgressBarContainer');
+
+                if (overlay) overlay.classList.remove('active');
+                if (topContainer) topContainer.classList.remove('active');
+
+                isLoadingActive = false;
+
+                setTimeout(function() {
+                    if (!isLoadingActive) {
+                        setProgressState(0, 'Menunggu...');
+                    }
+                    if (callback) callback();
+                }, 350);
+            }, 250);
+        }, delayRemaining);
+    }
+
+    function fetchRealCountData(isManual, showProgress, categoryName) {
         if (isManual) {
             countdown = 10;
         }
 
+        if (showProgress) {
+            startLoadingProgress(categoryName || (activeKategori === 'pengawas' ? 'Calon Pengawas' : 'Calon Ketua'));
+        }
+
+        var requestId = ++currentRequestId;
+        isFetching = true;
+
         fetch(ajaxUrl + '?kategori=' + encodeURIComponent(activeKategori))
             .then(function(res) { return res.json(); })
             .then(function(response) {
+                if (requestId !== currentRequestId) return;
                 isFetching = false;
+
                 if (response.status === 'success') {
                     // Update Header Stats
                     document.getElementById('displayTotalSuara').innerHTML = response.total_suara + ' <span style="font-size:14px; color:#6b7280; font-weight:500;">Suara</span>';
@@ -1052,10 +1516,22 @@
                     // Update 3D Stage & Bottom Tray
                     update3DStage(response.kandidat);
                 }
+
+                if (showProgress) {
+                    finishLoadingProgress();
+                }
             })
             .catch(function(err) {
+                if (requestId !== currentRequestId) return;
                 isFetching = false;
                 console.error('Error fetching real count:', err);
+
+                if (showProgress) {
+                    setProgressState(100, 'Koneksi terganggu');
+                    setTimeout(function() {
+                        finishLoadingProgress();
+                    }, 400);
+                }
             });
     }
 
@@ -1064,7 +1540,7 @@
         countdown--;
         if (countdown <= 0) {
             countdown = 10;
-            fetchRealCountData(false);
+            fetchRealCountData(false, false);
         }
         countdownText.textContent = countdown + 's';
     }, 1000);
@@ -1073,6 +1549,8 @@
     window.switchKategori = function(kat) {
         if (activeKategori === kat) return;
         activeKategori = kat;
+
+        var categoryLabel = (kat === 'pengawas') ? 'Calon Pengawas' : 'Calon Ketua';
 
         // Reset and clean 3D scene meshes for clean category transition
         Object.keys(cardMeshes).forEach(function(nik) {
@@ -1089,12 +1567,13 @@
         document.querySelectorAll('.segment-btn').forEach(function(btn) {
             btn.classList.remove('active');
         });
-        if (event && event.currentTarget) {
-            event.currentTarget.classList.add('active');
+        var activeBtn = document.querySelector('.segment-btn[data-kategori="' + kat + '"]');
+        if (activeBtn) {
+            activeBtn.classList.add('active');
         }
 
         countdown = 10;
-        fetchRealCountData(true);
+        fetchRealCountData(true, true, categoryLabel);
     };
 
     // ── 9. Rank Shift Toast Notification ──
@@ -1128,7 +1607,8 @@
     // ── Initialize on Page Load ──
     document.addEventListener('DOMContentLoaded', function() {
         init3DScene();
-        fetchRealCountData(true);
+        var initialLabel = (activeKategori === 'pengawas') ? 'Calon Pengawas' : 'Calon Ketua';
+        fetchRealCountData(true, true, initialLabel);
     });
     </script>
 </body>
