@@ -144,7 +144,7 @@
             min-height: 100vh;
         }
 
-        /* ── Sidebar ── */
+        /* ── Apple Liquid Glass Sidebar ── */
         :root {
             --sidebar-width: 240px;
             --sidebar-collapsed-width: 60px;
@@ -156,13 +156,61 @@
             left: 0;
             width: var(--sidebar-width);
             height: 100vh;
-            background: #1a1a1a;
-            padding: 16px 0;
+            background: linear-gradient(
+                175deg,
+                rgba(32, 34, 44, 0.78) 0%,
+                rgba(20, 22, 29, 0.85) 45%,
+                rgba(12, 13, 19, 0.92) 100%
+            );
+            -webkit-backdrop-filter: blur(25px) saturate(190%) contrast(105%);
+            backdrop-filter: blur(25px) saturate(190%) contrast(105%);
+            border-right: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 
+                inset -1px 0 0 rgba(255, 255, 255, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+                10px 0 36px rgba(0, 0, 0, 0.24);
+            padding: 18px 0;
             overflow: visible;
             z-index: 100;
-            transition: width 0.25s ease;
+            transform: translateZ(0);
+            transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
+        }
+
+        /* Apple Liquid Glass Ambient Refraction Sheen */
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 180px;
+            background: radial-gradient(
+                ellipse 120% 100% at 50% -20%,
+                rgba(255, 255, 255, 0.16) 0%,
+                rgba(255, 255, 255, 0.03) 65%,
+                transparent 100%
+            );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 180px;
+            background: radial-gradient(
+                ellipse 100% 100% at 50% 120%,
+                rgba(99, 102, 241, 0.08) 0%,
+                transparent 75%
+            );
+            pointer-events: none;
+            z-index: 0;
         }
 
         .sidebar.collapsed {
@@ -171,15 +219,28 @@
 
         /* Brand area */
         .sidebar .brand {
+            position: relative;
+            z-index: 2;
             padding: 0 16px 16px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 12px;
             overflow: hidden;
             white-space: nowrap;
             flex-shrink: 0;
+        }
+
+        .sidebar .brand img {
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .sidebar .brand:hover img {
+            transform: scale(1.04);
         }
 
         .sidebar .brand .brand-text {
@@ -193,49 +254,59 @@
         }
 
         .sidebar .brand h2 {
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 15.5px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
             color: #ffffff;
+            line-height: 1.25;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .sidebar .brand span {
-            font-size: 12px;
-            color: #9ca3af;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.4px;
+            color: rgba(255, 255, 255, 0.52);
+            text-transform: uppercase;
         }
 
-        /* Toggle button */
+        /* Apple Liquid Glass Toggle Button */
         .sidebar-toggle {
             position: absolute;
-            top: 16px;
-            right: -12px;
-            width: 24px;
-            height: 24px;
-            background: #252528;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            top: 18px;
+            right: -13px;
+            width: 26px;
+            height: 26px;
+            background: rgba(30, 33, 44, 0.85);
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.22);
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 101;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
-            transition: all 0.25s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+            transition: background-color 0.12s ease, border-color 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
         }
 
         .sidebar-toggle:hover {
-            background: #323338;
-            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(45, 50, 68, 0.95);
+            border-color: rgba(255, 255, 255, 0.45);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+            transform: scale(1.08);
         }
 
         .sidebar-toggle svg {
             width: 12px;
             height: 12px;
-            stroke: #94a3b8;
+            stroke: rgba(255, 255, 255, 0.8);
             fill: none;
             stroke-width: 2.5;
             stroke-linecap: round;
             stroke-linejoin: round;
-            transition: transform 0.25s ease, stroke 0.2s ease;
+            transition: transform 0.25s ease, stroke 0.12s ease;
         }
 
         .sidebar-toggle:hover svg {
@@ -248,16 +319,18 @@
 
         /* Nav list */
         .sidebar-nav {
+            position: relative;
+            z-index: 2;
             list-style: none;
             padding: 0 8px;
             overflow-y: auto;
             overflow-x: visible;
             flex: 1;
             scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+            scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
         }
 
-        /* Modern Custom Scrollbar: Remove native OS/browser scrollbar buttons */
+        /* Apple Liquid Glass Scrollbar */
         .sidebar-nav::-webkit-scrollbar {
             width: 4px;
         }
@@ -267,12 +340,13 @@
         }
 
         .sidebar-nav::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.16);
             border-radius: 9999px;
+            transition: background 0.2s ease;
         }
 
         .sidebar-nav::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.35);
         }
 
         .sidebar-nav::-webkit-scrollbar-button {
@@ -292,18 +366,20 @@
             width: 0 !important;
         }
 
+        /* Apple Liquid Glass Nav Links */
         .sidebar-nav li a {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 8px 10px;
+            padding: 7px 10px;
             font-size: 13.5px;
             font-weight: 500;
-            color: #94a3b8;
+            color: rgba(241, 245, 249, 0.72);
             text-decoration: none;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-bottom: 3px;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
             white-space: nowrap;
             overflow: visible;
             position: relative;
@@ -316,17 +392,21 @@
         }
 
         .sidebar-nav li a:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #f1f5f9;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.12);
         }
 
         .sidebar-nav li a.active {
-            background: rgba(255, 255, 255, 0.08);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.06) 100%);
+            border-color: rgba(255, 255, 255, 0.18);
             color: #ffffff;
             font-weight: 600;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.28);
         }
 
-        /* ── Modern Grey Base Icon Badge ── */
+        /* ── Modern Grey Base Icon Badge (Preserved) ── */
         .sidebar-nav li a .nav-icon {
             width: 34px;
             height: 34px;
@@ -338,7 +418,7 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
 
@@ -351,7 +431,7 @@
             stroke-linecap: round;
             stroke-linejoin: round;
             flex-shrink: 0;
-            transition: transform 0.2s ease, stroke 0.2s ease;
+            transition: transform 0.12s ease, stroke 0.12s ease;
         }
 
         .sidebar-nav li a:hover .nav-icon {
@@ -392,12 +472,12 @@
 
         /* Section label */
         .sidebar-nav .nav-section {
-            font-size: 11px;
-            font-weight: 600;
-            color: #6b7280;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.4);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 12px 10px 6px;
+            letter-spacing: 0.8px;
+            padding: 14px 10px 6px;
             white-space: nowrap;
             overflow: hidden;
             transition: opacity 0.2s ease, max-height 0.25s ease, padding 0.25s ease;
@@ -410,24 +490,27 @@
             padding: 0;
         }
 
-        /* Tooltip on hover (collapsed mode) — rendered via JS */
+        /* Apple Liquid Glass Tooltip on hover (collapsed mode) */
         #sidebar-tooltip {
             position: fixed;
             left: 0;
             top: 0;
-            background: #333333;
+            background: rgba(22, 24, 33, 0.88);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             color: #ffffff;
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 500;
             font-family: 'DM Sans', sans-serif;
-            padding: 6px 12px;
-            border-radius: 8px;
+            padding: 6px 14px;
+            border-radius: 10px;
             white-space: nowrap;
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.15s ease;
             z-index: 9999;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
         }
 
         #sidebar-tooltip.visible {
@@ -446,8 +529,11 @@
         }
 
         .topbar {
-            background: #ffffff;
-            border-bottom: 1px solid #e5e5e5;
+            background: rgba(255, 255, 255, 0.85);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
             padding: 0 32px;
             height: 56px;
             display: flex;
