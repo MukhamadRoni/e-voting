@@ -156,12 +156,7 @@
             left: 0;
             width: var(--sidebar-width);
             height: 100vh;
-            background: linear-gradient(
-                175deg,
-                rgba(32, 34, 44, 0.78) 0%,
-                rgba(20, 22, 29, 0.85) 45%,
-                rgba(12, 13, 19, 0.92) 100%
-            );
+            background: rgba(0, 0, 0, 0.85);
             -webkit-backdrop-filter: blur(25px) saturate(190%) contrast(105%);
             backdrop-filter: blur(25px) saturate(190%) contrast(105%);
             border-right: 1px solid rgba(255, 255, 255, 0.12);
@@ -177,40 +172,6 @@
             transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-        }
-
-        /* Apple Liquid Glass Ambient Refraction Sheen */
-        .sidebar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 180px;
-            background: radial-gradient(
-                ellipse 120% 100% at 50% -20%,
-                rgba(255, 255, 255, 0.16) 0%,
-                rgba(255, 255, 255, 0.03) 65%,
-                transparent 100%
-            );
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .sidebar::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 180px;
-            background: radial-gradient(
-                ellipse 100% 100% at 50% 120%,
-                rgba(99, 102, 241, 0.08) 0%,
-                transparent 75%
-            );
-            pointer-events: none;
-            z-index: 0;
         }
 
         .sidebar.collapsed {
@@ -399,7 +360,7 @@
         }
 
         .sidebar-nav li a.active {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.06) 100%);
+            background: rgba(255, 255, 255, 0.12);
             border-color: rgba(255, 255, 255, 0.18);
             color: #ffffff;
             font-weight: 600;

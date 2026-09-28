@@ -1,33 +1,29 @@
 <style>
-.search-bar {
+.top-controls {
     display: flex;
-    gap: 12px;
+    justify-content: space-between;
     align-items: center;
-    max-width: 400px;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
 }
-.search-input {
-    width: 100%;
-    height: 40px;
-    padding: 0 14px;
-    border-radius: 8px;
-    border: 1px solid #e5e5e5;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    outline: none;
-    transition: border 0.15s ease;
-}
-.search-input:focus {
-    border: 2px solid #1a1a1a;
+.bottom-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
 }
 @media print {
-    .sidebar, .topbar, .btn-print, .search-bar { display: none !important; }
+    .sidebar, .topbar, .btn-print, .dataTables_length, .dataTables_filter, .dataTables_info, .dataTables_paginate { display: none !important; }
     .main-content { margin-left: 0 !important; }
     .content-area { padding: 0 !important; }
 }
 </style>
 
 <!-- Header & Action -->
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
     <div>
         <h2 style="font-size:22px; font-weight:700; color:#1a1a1a;">Laporan Trace Back (Audit Trail)</h2>
         <span style="font-size:14px; color:#6b7280;">Log audit seluruh data suara masuk untuk verifikasi integritas pemilu.</span>
@@ -41,25 +37,22 @@
 </div>
 
 <div class="card">
-    <div class="card-header" style="flex-wrap:wrap; gap:16px;">
+    <div class="card-header">
         <div>
             <h3>Daftar Log Suara Masuk</h3>
             <span style="font-size:13px; color:#6b7280;">Total <strong><?= number_format($total_suara); ?></strong> catatan suara terekam</span>
         </div>
-        <div class="search-bar">
-            <input type="text" id="searchInput" class="search-input" placeholder="Cari NIK, Nama, Departemen..." onkeyup="filterTable()">
-        </div>
     </div>
 
     <div class="table-responsive">
-        <table id="traceTable">
+        <table id="traceTable" class="dataTable" style="width:100%;">
             <thead>
                 <tr>
-                    <th width="50">No</th>
-                    <th>Waktu Voting</th>
-                    <th>NIK Pemilih</th>
+                    <th style="width:50px; text-align:center;">No</th>
+                    <th style="width:160px;">Waktu Voting</th>
+                    <th style="width:120px;">NIK Pemilih</th>
                     <th>Nama Pemilih</th>
-                    <th>Departemen</th>
+                    <th style="width:140px;">Departemen</th>
                     <th>Pilihan Ketua</th>
                     <th>Pilihan Pengawas</th>
                 </tr>
@@ -69,35 +62,31 @@
                     <?php $no = 1; ?>
                     <?php foreach ($trace as $row): ?>
                         <tr>
-                            <td><?= $no++; ?></td>
-                            <td style="color:#6b7280; font-size:13px; white-space:nowrap;">
+                            <td style="text-align:center;"><?= $no++; ?></td>
+                            <td data-order="<?= strtotime($row->created_at); ?>" style="color:#6b7280; font-size:13px; white-space:nowrap;">
                                 <?= date('d M Y, H:i:s', strtotime($row->created_at)); ?>
                             </td>
-                            <td><code><?= $row->pemilih_nik; ?></code></td>
-                            <td><strong><?= html_escape($row->nama_pemilih ?: '-'); ?></strong></td>
+                            <td><code style="background:#f3f4f6; padding:3px 8px; border-radius:6px; font-size:12.5px; font-weight:600; color:#1a1a1a;"><?= $row->pemilih_nik; ?></code></td>
+                            <td><strong style="color:#1a1a1a; font-size:14px;"><?= html_escape($row->nama_pemilih ?: '-'); ?></strong></td>
                             <td><span class="badge badge-warning"><?= html_escape($row->dept_pemilih ?: '-'); ?></span></td>
                             <td>
                                 <?php if ($row->nama_ketua): ?>
-                                    <strong><?= html_escape($row->nama_ketua); ?></strong>
-                                    <div style="font-size:11px; color:#6b7280;">NIK: <?= $row->ketua_nik; ?></div>
+                                    <strong style="color:#1a1a1a; font-size:13.5px;"><?= html_escape($row->nama_ketua); ?></strong>
+                                    <div style="font-size:11px; color:#6b7280; margin-top:2px;">NIK: <?= $row->ketua_nik; ?></div>
                                 <?php else: ?>
-                                    <span style="color:#9ca3af;">Tidak memilih</span>
+                                    <span style="color:#9ca3af; font-size:13px; font-style:italic;">Tidak memilih</span>
                                 <?php endif; ?>
                             </td>
                             <td>
                                 <?php if ($row->nama_pengawas): ?>
-                                    <strong><?= html_escape($row->nama_pengawas); ?></strong>
-                                    <div style="font-size:11px; color:#6b7280;">NIK: <?= $row->pengawas_nik; ?></div>
+                                    <strong style="color:#1a1a1a; font-size:13.5px;"><?= html_escape($row->nama_pengawas); ?></strong>
+                                    <div style="font-size:11px; color:#6b7280; margin-top:2px;">NIK: <?= $row->pengawas_nik; ?></div>
                                 <?php else: ?>
-                                    <span style="color:#9ca3af;">Tidak memilih</span>
+                                    <span style="color:#9ca3af; font-size:13px; font-style:italic;">Tidak memilih</span>
                                 <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="7" style="text-align:center; color:#6b7280; padding:32px;">Belum ada data suara masuk yang terekam.</td>
-                    </tr>
                 <?php endif; ?>
             </tbody>
         </table>
@@ -105,19 +94,56 @@
 </div>
 
 <script>
-function filterTable() {
-    var input = document.getElementById("searchInput");
-    var filter = input.value.toLowerCase();
-    var table = document.getElementById("traceTable");
-    var tr = table.getElementsByTagName("tr");
-
-    for (var i = 1; i < tr.length; i++) {
-        var tdText = tr[i].textContent || tr[i].innerText;
-        if (tdText.toLowerCase().indexOf(filter) > -1) {
-            tr[i].style.display = "";
-        } else {
-            tr[i].style.display = "none";
+(function() {
+    function initDataTable() {
+        if (typeof jQuery === 'undefined' || typeof jQuery.fn.DataTable === 'undefined') {
+            setTimeout(initDataTable, 50);
+            return;
         }
+
+        var table = $('#traceTable').DataTable({
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Cari NIK, Nama, Dept, Pilihan...",
+                lengthMenu: "Tampilkan _MENU_ log suara",
+                info: "Menampilkan _START_ s/d _END_ dari _TOTAL_ log suara",
+                infoEmpty: "Menampilkan 0 s/d 0 dari 0 log suara",
+                infoFiltered: "(disaring dari _MAX_ total data)",
+                zeroRecords: "Tidak ditemukan log suara yang sesuai pencarian",
+                emptyTable: "Belum ada data suara masuk yang terekam",
+                paginate: {
+                    first: "«",
+                    previous: "‹ Sebelumnya",
+                    next: "Selanjutnya ›",
+                    last: "»"
+                }
+            },
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Semua"]],
+            order: [[ 1, 'desc' ]], // Default sort by Waktu Voting descending
+            columnDefs: [
+                {
+                    targets: 0,
+                    searchable: false,
+                    orderable: false,
+                    className: 'text-center'
+                }
+            ],
+            dom: '<"top-controls"lf>rt<"bottom-controls"ip>',
+            drawCallback: function(settings) {
+                var api = this.api();
+                var start = api.page.info().start;
+                api.column(0, {page: 'current'}).nodes().each(function(cell, i) {
+                    cell.innerHTML = start + i + 1;
+                });
+            }
+        });
     }
-}
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initDataTable);
+    } else {
+        initDataTable();
+    }
+})();
 </script>

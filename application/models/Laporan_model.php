@@ -89,16 +89,19 @@ class Laporan_model extends CI_Model {
 
     /**
      * Daftar pemilih yang berhak ikut undian / doorprize (pilih = 'T')
+     * Dilengkapi informasi doorprize yang berhasil dimenangkan
      */
     public function get_peserta_undian($dept = null)
     {
-        $this->db->select('nik, rfid, nama, dept, pilih');
-        $this->db->from('pemilih');
-        $this->db->where('pilih', 'T');
+        $this->db->select("p.nik, p.rfid, p.nama, p.dept, p.pilih, GROUP_CONCAT(u.nama_hadiah SEPARATOR ', ') AS nama_hadiah, MAX(u.created_at) AS tanggal_menang");
+        $this->db->from('pemilih p');
+        $this->db->join('pemenang_undian u', "p.nik = u.pemilih_nik AND u.status = 'valid'", 'left');
+        $this->db->where('p.pilih', 'T');
         if (!empty($dept)) {
-            $this->db->where('dept', $dept);
+            $this->db->where('p.dept', $dept);
         }
-        $this->db->order_by('nama', 'ASC');
+        $this->db->group_by(array('p.nik', 'p.rfid', 'p.nama', 'p.dept', 'p.pilih'));
+        $this->db->order_by('p.nama', 'ASC');
         return $this->db->get()->result();
     }
 

@@ -1,66 +1,108 @@
+<!-- Daftar Peserta Sah Undian Door Prize -->
+
 <style>
-.doorprize-box {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-    color: #ffffff;
-    border-radius: 20px;
-    padding: 32px;
-    margin-bottom: 28px;
-    text-align: center;
-    position: relative;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-.doorprize-box h3 {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 8px;
-}
-.doorprize-box p {
-    font-size: 14px;
-    color: #9ca3af;
-    max-width: 500px;
-    margin: 0 auto 20px;
-}
-.spin-winner-card {
-    background: rgba(255, 255, 255, 0.08);
-    border: 2px dashed rgba(255, 255, 255, 0.2);
-    border-radius: 16px;
-    padding: 24px;
-    max-width: 480px;
-    margin: 0 auto 24px;
-    min-height: 100px;
+.filter-pills-bar {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-.winner-name-display {
-    font-size: 26px;
-    font-weight: 700;
-    color: #f59e0b;
-    margin-bottom: 4px;
-}
-.winner-detail-display {
-    font-size: 14px;
-    color: #d1d5db;
-}
-.btn-spin {
-    background: #f59e0b;
-    color: #1a1a1a;
-    font-size: 15px;
-    font-weight: 700;
-    padding: 12px 32px;
-    border-radius: 9999px;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.15s ease, background 0.15s ease;
-    display: inline-flex;
     align-items: center;
     gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
 }
-.btn-spin:hover {
-    background: #d97706;
-    transform: translateY(-2px);
+.filter-pill {
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4b5563;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
 }
+.filter-pill:hover {
+    background: #e5e7eb;
+    color: #1a1a1a;
+}
+.filter-pill.active {
+    background: #1a1a1a;
+    color: #ffffff;
+    border-color: #1a1a1a;
+}
+.filter-pill .pill-count {
+    font-size: 11px;
+    padding: 1px 7px;
+    border-radius: 9999px;
+    background: rgba(0, 0, 0, 0.08);
+}
+.filter-pill.active .pill-count {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Doorprize Badge Styling ── */
+.doorprize-badge-card {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.doorprize-badge-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    color: #92400e;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    border: 1px solid #fcd34d;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    width: fit-content;
+}
+.doorprize-badge-time {
+    font-size: 11px;
+    color: #6b7280;
+    padding-left: 4px;
+}
+.badge-belum-menang {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 11px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #6b7280;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+}
+.badge-belum-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #9ca3af;
+}
+
+.top-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.bottom-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
+}
+
 .filter-row {
     display: flex;
     justify-content: space-between;
@@ -69,8 +111,11 @@
     flex-wrap: wrap;
     margin-bottom: 20px;
 }
+
 @media print {
-    .sidebar, .topbar, .btn-print, .doorprize-box, .filter-row { display: none !important; }
+    .sidebar, .topbar, .btn-print, .filter-row, .filter-pills-bar, .dataTables_length, .dataTables_filter, .dataTables_info, .dataTables_paginate { 
+        display: none !important; 
+    }
     .main-content { margin-left: 0 !important; }
     .content-area { padding: 0 !important; }
 }
@@ -94,43 +139,39 @@
     </div>
 </div>
 
-<!-- Doorprize Lucky Draw Interactive Box -->
-<!--<div class="doorprize-box">
-    <h3>🎉 Undian Door Prize RAT Koperasi</h3>
-    <p>Sistem pengundian otomatis secara acak dari anggota yang telah terdaftar dan menggunakan hak pilihnya.</p>
-    
-    <div class="spin-winner-card" id="winnerCard">
-        <div id="initialText" style="color:#9ca3af; font-size:15px;">
-            Klik tombol di bawah untuk mengundi pemenang secara acak
-        </div>
-        <div id="winnerContent" style="display:none;">
-            <div style="font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#10b981; font-weight:700; margin-bottom:4px;">SELAMAT KEPADA PEMENANG!</div>
-            <div class="winner-name-display" id="winnerNama">-</div>
-            <div class="winner-detail-display" id="winnerDetail">-</div>
-        </div>
-    </div>
-
-    <button type="button" class="btn-spin" id="spinBtn" onclick="kocokUndian()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-        <span>Acak Pemenang Door Prize</span>
-    </button>
-</div>-->
+<?php 
+    $total_menang = 0;
+    $total_belum_menang = 0;
+    if (!empty($peserta)) {
+        foreach ($peserta as $p) {
+            if (!empty($p->nama_hadiah)) {
+                $total_menang++;
+            } else {
+                $total_belum_menang++;
+            }
+        }
+    }
+?>
 
 <!-- Stats Grid -->
 <div class="stats-grid">
     <div class="stat-card">
         <div class="stat-value"><?= number_format($total_peserta); ?></div>
-        <div class="stat-label">Anggota Berhak Ikut Undian</div>
+        <div class="stat-label">Total Peserta Sah Undian</div>
     </div>
     <div class="stat-card">
-        <div class="stat-value"><?= number_format($total_pemilih); ?></div>
-        <div class="stat-label">Total Semua Anggota (DPT)</div>
+        <div class="stat-value" style="color:#d97706;"><?= number_format($total_menang); ?></div>
+        <div class="stat-label">🎉 Pemenang Doorprize</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value"><?= number_format($total_belum_menang); ?></div>
+        <div class="stat-label">Belum Memenangkan Hadiah</div>
     </div>
     <div class="stat-card">
         <div class="stat-value">
             <?= $total_pemilih > 0 ? round(($total_peserta / $total_pemilih) * 100, 1) : 0; ?>%
         </div>
-        <div class="stat-label">Persentase Partisipasi</div>
+        <div class="stat-label">Partisipasi Hak Suara (DPT)</div>
     </div>
 </div>
 
@@ -144,7 +185,7 @@
 
         <!-- Filter Departemen -->
         <form method="get" action="<?= site_url('laporan/peserta_undian'); ?>" style="display:flex; gap:8px;">
-            <select name="dept" onchange="this.form.submit()" style="height:38px; padding:0 12px; border-radius:8px; border:1px solid #e5e5e5; font-family:'DM Sans', sans-serif; font-size:13px; outline:none;">
+            <select name="dept" onchange="this.form.submit()" style="height:38px; padding:0 12px; border-radius:8px; border:1px solid #e5e5e5; font-family:'DM Sans', sans-serif; font-size:13px; outline:none; background:#ffffff;">
                 <option value="">-- Semua Departemen --</option>
                 <?php if (!empty($daftar_dept)): ?>
                     <?php foreach ($daftar_dept as $d): ?>
@@ -160,15 +201,33 @@
         </form>
     </div>
 
+    <!-- Quick Doorprize Filter Pills -->
+    <div class="filter-pills-bar">
+        <span style="font-size:13px; font-weight:600; color:#6b7280; margin-right:4px;">Filter Doorprize:</span>
+        <button type="button" class="filter-pill active" data-filter="">
+            <span>Semua Peserta</span>
+            <span class="pill-count"><?= $total_peserta; ?></span>
+        </button>
+        <button type="button" class="filter-pill" data-filter="Sudah Menang">
+            <span>🎉 Sudah Menang</span>
+            <span class="pill-count" style="color:#d97706; font-weight:700;"><?= $total_menang; ?></span>
+        </button>
+        <button type="button" class="filter-pill" data-filter="Belum Menang">
+            <span>Belum Menang</span>
+            <span class="pill-count" style="color:#6b7280; font-weight:700;"><?= $total_belum_menang; ?></span>
+        </button>
+    </div>
+
     <div class="table-responsive">
-        <table>
+        <table id="tablePeserta" class="dataTable" style="width:100%;">
             <thead>
                 <tr>
-                    <th width="50">No</th>
-                    <th>NIK</th>
+                    <th style="width:50px; text-align:center;">No</th>
+                    <th style="width:110px;">NIK</th>
                     <th>Nama Anggota</th>
-                    <th>Departemen</th>
-                    <th>Status Hak Suara</th>
+                    <th style="width:140px;">Departemen</th>
+                    <th style="width:150px; text-align:center;">Status Hak Suara</th>
+                    <th style="min-width:220px;">Doorprize Dimenangkan</th>
                 </tr>
             </thead>
             <tbody>
@@ -176,19 +235,35 @@
                     <?php $no = 1; ?>
                     <?php foreach ($peserta as $p): ?>
                         <tr>
-                            <td><?= $no++; ?></td>
-                            <td><code><?= $p->nik; ?></code></td>
-                            <td><strong><?= html_escape($p->nama); ?></strong></td>
+                            <td style="text-align:center;"><?= $no++; ?></td>
+                            <td><code style="background:#f3f4f6; padding:3px 8px; border-radius:6px; font-size:12.5px; font-weight:600; color:#1a1a1a;"><?= html_escape($p->nik); ?></code></td>
+                            <td><strong style="color:#1a1a1a; font-size:14px;"><?= html_escape($p->nama); ?></strong></td>
                             <td><span class="badge badge-warning"><?= html_escape($p->dept); ?></span></td>
-                            <td><span class="badge badge-success">Sudah Memilih (Sah)</span></td>
+                            <td style="text-align:center;"><span class="badge badge-success">Sudah Memilih (Sah)</span></td>
+                            <td>
+                                <?php if (!empty($p->nama_hadiah)): ?>
+                                    <div class="doorprize-badge-card">
+                                        <span style="display:none;">Sudah Menang <?= html_escape($p->nama_hadiah); ?></span>
+                                        <div class="doorprize-badge-title">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect width="20" height="5" x="2" y="7"></rect><line x1="12" x2="12" y1="22" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+                                            <span><?= html_escape($p->nama_hadiah); ?></span>
+                                        </div>
+                                        <?php if (!empty($p->tanggal_menang)): ?>
+                                            <div class="doorprize-badge-time">
+                                                Dimenangkan: <?= date('d M Y, H:i', strtotime($p->tanggal_menang)); ?>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php else: ?>
+                                    <span class="badge-belum-menang">
+                                        <span style="display:none;">Belum Menang</span>
+                                        <span class="badge-belum-dot"></span>
+                                        Belum Menang
+                                    </span>
+                                <?php endif; ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="5" style="text-align:center; color:#6b7280; padding:32px;">
-                            Belum ada anggota yang memenuhi syarat undian<?= !empty($dept_terpilih) ? ' di departemen ini' : ''; ?>.
-                        </td>
-                    </tr>
                 <?php endif; ?>
             </tbody>
         </table>
@@ -196,60 +271,70 @@
 </div>
 
 <script>
-var isSpinning = false;
+(function() {
+    function initDataTable() {
+        if (typeof jQuery === 'undefined' || typeof jQuery.fn.DataTable === 'undefined') {
+            setTimeout(initDataTable, 50);
+            return;
+        }
 
-function kocokUndian() {
-    if (isSpinning) return;
-
-    var currentDept = "<?= $dept_terpilih; ?>";
-    var url = "<?= site_url('laporan/kocok_undian_ajax'); ?>" + (currentDept ? "?dept=" + encodeURIComponent(currentDept) : "");
-    var spinBtn = document.getElementById("spinBtn");
-    var initialText = document.getElementById("initialText");
-    var winnerContent = document.getElementById("winnerContent");
-    var winnerNama = document.getElementById("winnerNama");
-    var winnerDetail = document.getElementById("winnerDetail");
-
-    isSpinning = true;
-    spinBtn.disabled = true;
-    spinBtn.style.opacity = "0.7";
-    initialText.style.display = "none";
-    winnerContent.style.display = "block";
-    winnerNama.style.color = "#f59e0b";
-
-    // Efek rolling / mengacak nama
-    var dummyNames = ["Mengacak nama pemenang...", "Memilih dari peserta...", "Hampir selesai...", "Siapakah pemenangnya?"];
-    var counter = 0;
-    var rollInterval = setInterval(function() {
-        winnerNama.innerText = dummyNames[counter % dummyNames.length];
-        winnerDetail.innerText = "Harap tunggu...";
-        counter++;
-    }, 120);
-
-    fetch(url)
-        .then(response => response.json())
-        .then(res => {
-            setTimeout(function() {
-                clearInterval(rollInterval);
-                isSpinning = false;
-                spinBtn.disabled = false;
-                spinBtn.style.opacity = "1";
-
-                if (res.status === 'success') {
-                    winnerNama.innerText = res.data.nama;
-                    winnerDetail.innerText = "NIK: " + res.data.nik + " • Departemen: " + res.data.dept;
-                } else {
-                    winnerNama.innerText = "Tidak Ada Peserta";
-                    winnerDetail.innerText = res.message || "Belum ada anggota yang berhak ikut undian.";
+        var table = $('#tablePeserta').DataTable({
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Cari NIK, Nama, Dept, Hadiah...",
+                lengthMenu: "Tampilkan _MENU_ peserta",
+                info: "Menampilkan _START_ s/d _END_ dari _TOTAL_ peserta",
+                infoEmpty: "Menampilkan 0 s/d 0 dari 0 peserta",
+                infoFiltered: "(disaring dari _MAX_ total data)",
+                zeroRecords: "Tidak ditemukan data peserta yang sesuai",
+                emptyTable: "Belum ada anggota yang memenuhi syarat undian<?= !empty($dept_terpilih) ? ' di departemen ' . html_escape($dept_terpilih) : ''; ?>",
+                paginate: {
+                    first: "«",
+                    previous: "‹ Sebelumnya",
+                    next: "Selanjutnya ›",
+                    last: "»"
                 }
-            }, 1800);
-        })
-        .catch(err => {
-            clearInterval(rollInterval);
-            isSpinning = false;
-            spinBtn.disabled = false;
-            spinBtn.style.opacity = "1";
-            winnerNama.innerText = "Gagal Mengundi";
-            winnerDetail.innerText = "Terjadi kesalahan koneksi.";
+            },
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Semua"]],
+            order: [[ 0, 'asc' ]],
+            columnDefs: [
+                {
+                    targets: 0,
+                    searchable: false,
+                    orderable: false,
+                    className: 'text-center'
+                },
+                {
+                    targets: 4,
+                    className: 'text-center'
+                }
+            ],
+            dom: '<"top-controls"lf>rt<"bottom-controls"ip>',
+            drawCallback: function(settings) {
+                var api = this.api();
+                var start = api.page.info().start;
+                api.column(0, {page: 'current'}).nodes().each(function(cell, i) {
+                    cell.innerHTML = start + i + 1;
+                });
+            }
         });
-}
+
+        // Quick Doorprize Filter Pills interaction
+        $('.filter-pill').on('click', function() {
+            $('.filter-pill').removeClass('active');
+            $(this).addClass('active');
+
+            var filterValue = $(this).data('filter');
+            // Column 5 is "Doorprize Dimenangkan"
+            table.column(5).search(filterValue ? filterValue : '').draw();
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initDataTable);
+    } else {
+        initDataTable();
+    }
+})();
 </script>
