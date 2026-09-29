@@ -95,7 +95,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 reverseButtons: true
             }).then(function(result) {
                 if (result.isConfirmed) {
-                    window.location.href = href;
+                    Swal.fire({
+                        title: 'Membatalkan Sesi...',
+                        text: 'Mohon tunggu sebentar...',
+                        allowOutsideClick: false,
+                        didOpen: function() {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    fetch(href, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(function(r) { return r.json(); })
+                    .then(function(res) {
+                        if (res.status === 'success' && res.data && res.data.redirect) {
+                            window.location.href = res.data.redirect;
+                        } else {
+                            window.location.href = href;
+                        }
+                    })
+                    .catch(function() {
+                        window.location.href = href;
+                    });
                 }
             });
         });

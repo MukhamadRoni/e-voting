@@ -10,11 +10,30 @@ class Voting extends CI_Controller {
     }
 
     /**
-     * Halaman Awal Bilik Suara: Standby Layar Tap RFID / Input NIK
+     * Helper standard JSON response
+     */
+    private function _json_response($status, $message, $data = null)
+    {
+        header('Content-Type: application/json; charset=utf-8');
+        $response = array(
+            'status'  => $status, // 'success' atau 'error'
+            'message' => $message,
+        );
+
+        if ($data !== null) {
+            $response['data'] = $data;
+        }
+
+        echo json_encode($response);
+        exit;
+    }
+
+    /**
+     * Halaman Awal Bilik Suara: Standby Layar Tap RFID / Input NIK (View Shell)
      */
     public function index()
     {
-        // Jika pemilih sedang dalam proses voting, arahkan ke halaman pemilihan
+        // Jika pemilih sedang dalam proses voting aktif, arahkan langsung ke bilik pemilihan
         if ($this->session->userdata('voter')) {
             redirect('voting/pilih');
             return;
@@ -27,50 +46,48 @@ class Voting extends CI_Controller {
     }
 
     /**
-     * Proses Identifikasi Pemilih via RFID atau NIK
+     * AJAX: Proses Identifikasi Pemilih via RFID atau NIK (JSON)
      */
     public function identifikasi()
     {
         $input = trim($this->input->post('input_identitas', TRUE));
 
         if (empty($input)) {
-            $this->session->set_flashdata('error', 'Silakan tempelkan kartu RFID atau ketikkan NIK Anda.');
-            redirect('voting');
-            return;
+            $this->_json_response('error', 'Silakan tempelkan kartu RFID atau ketikkan NIK Anda.');
         }
 
         $pemilih = $this->Voting_model->find_pemilih($input);
 
         if (!$pemilih) {
-            $this->session->set_flashdata('error', 'Kartu RFID atau NIK <strong>' . html_escape($input) . '</strong> tidak terdaftar dalam Daftar Pemilih Tetap (DPT).');
-            redirect('voting');
-            return;
+            $this->_json_response('error', 'Kartu RFID atau NIK <strong>' . html_escape($input) . '</strong> tidak terdaftar dalam Daftar Pemilih Tetap (DPT).');
         }
 
         // Cek apakah sudah pernah voting
         if ($pemilih->pilih === 'T') {
-            $this->session->set_flashdata('error', 'Anggota <strong>' . html_escape($pemilih->nama) . '</strong> (NIK: ' . $pemilih->nik . ') sudah menggunakan hak suara sebelumnya. Hak suara hanya dapat digunakan 1 kali.');
-            redirect('voting');
-            return;
+            $this->_json_response('error', 'Anggota <strong>' . html_escape($pemilih->nama) . '</strong> (NIK: ' . $pemilih->nik . ') sudah menggunakan hak suara sebelumnya. Hak suara hanya dapat digunakan 1 kali.');
         }
 
         // Set session pemilih
-        $this->session->set_userdata('voter', array(
+        $voterData = array(
             'nik'  => $pemilih->nik,
             'nama' => $pemilih->nama,
             'dept' => $pemilih->dept,
             'rfid' => $pemilih->rfid
-        ));
+        );
+        $this->session->set_userdata('voter', $voterData);
 
-        // Bersihkan riwayat pilihan sebelumnya
+        // Bersihkan riwayat pilihan sebelumnya jika ada
         $this->session->unset_userdata('pilihan_ketua');
         $this->session->unset_userdata('pilihan_pengawas');
 
-        redirect('voting/pilih');
+        $this->_json_response('success', 'Identifikasi berhasil. Selamat datang, <strong>' . html_escape($pemilih->nama) . '</strong>.', array(
+            'redirect' => site_url('voting/pilih'),
+            'voter'    => $voterData
+        ));
     }
 
     /**
-     * Menu Utama Pemilihan: 1 Page untuk Memilih Ketua (Row 1) & Pengawas (Row 2)
+     * Menu Utama Pemilihan: Halaman Pemilihan Ketua & Pengawas (View Shell)
      */
     public function pilih()
     {
@@ -94,31 +111,28 @@ class Voting extends CI_Controller {
     }
 
     /**
-     * Backward-compatible alias untuk ketua -> arahkan ke halaman pilih
+     * AJAX: Ambil Seluruh Data Kandidat (JSON)
      */
-    public function ketua()
+    public function get_kandidat()
     {
-        redirect('voting/pilih');
+        $ketua    = $this->Voting_model->get_all_ketua();
+        $pengawas = $this->Voting_model->get_all_pengawas();
+
+        $this->_json_response('success', 'Data kandidat berhasil dimuat.', array(
+            'ketua'    => $ketua,
+            'pengawas' => $pengawas
+        ));
     }
 
     /**
-     * Backward-compatible alias untuk pengawas -> arahkan ke halaman pilih
+     * Backward-compatible aliases
      */
-    public function pengawas()
-    {
-        redirect('voting/pilih');
-    }
+    public function ketua()      { redirect('voting/pilih'); }
+    public function pengawas()   { redirect('voting/pilih'); }
+    public function konfirmasi() { redirect('voting/pilih'); }
 
     /**
-     * Backward-compatible alias untuk konfirmasi -> arahkan ke halaman pilih
-     */
-    public function konfirmasi()
-    {
-        redirect('voting/pilih');
-    }
-
-    /**
-     * Final Submit: Kirim Suara ke Database
+     * AJAX: Simpan Suara ke Database (JSON)
      */
     public function kirim_suara()
     {
@@ -126,10 +140,14 @@ class Voting extends CI_Controller {
         $nik_ketua    = $this->input->post('ketua_nik', TRUE) ?: $this->session->userdata('pilihan_ketua');
         $nik_pengawas = $this->input->post('pengawas_nik', TRUE) ?: $this->session->userdata('pilihan_pengawas');
 
-        if (!$voter || !$nik_ketua || !$nik_pengawas) {
-            $this->session->set_flashdata('error', 'Silakan tentukan 1 Calon Ketua dan 1 Calon Pengawas sebelum mengirim suara.');
-            redirect('voting/pilih');
-            return;
+        if (!$voter) {
+            $this->_json_response('error', 'Sesi pemilihan Anda telah berakhir atau belum terdaftar. Silakan scan kartu kembali.', array(
+                'redirect' => site_url('voting')
+            ));
+        }
+
+        if (!$nik_ketua || !$nik_pengawas) {
+            $this->_json_response('error', 'Silakan tentukan 1 Calon Ketua dan 1 Calon Pengawas sebelum mengirim suara.');
         }
 
         // Validasi keberadaan kandidat
@@ -137,9 +155,7 @@ class Voting extends CI_Controller {
         $pengawas = $this->Voting_model->get_pengawas_by_nik($nik_pengawas);
 
         if (!$ketua || !$pengawas) {
-            $this->session->set_flashdata('error', 'Kandidat yang Anda pilih tidak valid.');
-            redirect('voting/pilih');
-            return;
+            $this->_json_response('error', 'Kandidat yang Anda pilih tidak valid atau tidak terdaftar.');
         }
 
         $sukses = $this->Voting_model->simpan_suara($voter['nik'], $nik_ketua, $nik_pengawas);
@@ -147,25 +163,29 @@ class Voting extends CI_Controller {
         if ($sukses) {
             $nama_pemilih = $voter['nama'];
 
-            // Bersihkan session voting
+            // Bersihkan session voting setelah sukses
             $this->session->unset_userdata('voter');
             $this->session->unset_userdata('pilihan_ketua');
             $this->session->unset_userdata('pilihan_pengawas');
-
             $this->session->set_flashdata('nama_selesai', $nama_pemilih);
-            redirect('voting/selesai');
+
+            $this->_json_response('success', 'Suara Anda berhasil dicatat secara resmi ke dalam sistem!', array(
+                'redirect' => site_url('voting/selesai'),
+                'nama'     => $nama_pemilih
+            ));
         } else {
             $this->session->unset_userdata('voter');
             $this->session->unset_userdata('pilihan_ketua');
             $this->session->unset_userdata('pilihan_pengawas');
 
-            $this->session->set_flashdata('error', 'Gagal memproses suara. Hak suara mungkin telah digunakan.');
-            redirect('voting');
+            $this->_json_response('error', 'Gagal memproses suara. Hak suara mungkin telah digunakan sebelumnya.', array(
+                'redirect' => site_url('voting')
+            ));
         }
     }
 
     /**
-     * Halaman Sukses: Terima Kasih & Auto Countdown
+     * Halaman Sukses: Terima Kasih & Auto Countdown (View Shell)
      */
     public function selesai()
     {
@@ -179,13 +199,21 @@ class Voting extends CI_Controller {
     }
 
     /**
-     * Batal Sesi Pemilih (Reset)
+     * AJAX: Batal Sesi Pemilih (JSON)
      */
     public function batal()
     {
         $this->session->unset_userdata('voter');
         $this->session->unset_userdata('pilihan_ketua');
         $this->session->unset_userdata('pilihan_pengawas');
+
+        // Jika request via AJAX
+        if ($this->input->is_ajax_request() || $this->input->method() === 'post') {
+            $this->_json_response('success', 'Sesi pemilihan berhasil dibatalkan.', array(
+                'redirect' => site_url('voting')
+            ));
+        }
+
         redirect('voting');
     }
 }

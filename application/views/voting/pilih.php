@@ -992,18 +992,67 @@ function handleKirimSuara() {
         if (result.isConfirmed) {
             Swal.fire({
                 title: 'Menyimpan Suara...',
-                text: 'Mohon tunggu, suara Anda sedang dicatat ke sistem.',
+                text: 'Mohon tunggu, suara Anda sedang dicatat dan dienkripsi ke sistem.',
                 allowOutsideClick: false,
                 didOpen: function() {
                     Swal.showLoading();
                 }
             });
-            document.getElementById('formKirimSuara').submit();
+
+            var form = document.getElementById('formKirimSuara');
+            var formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            })
+            .then(function(response) {
+                if (!response.ok) throw new Error('Network error');
+                return response.json();
+            })
+            .then(function(res) {
+                if (res.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Suara Berhasil Dicatat!',
+                        text: res.message,
+                        timer: 1200,
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    }).then(function() {
+                        window.location.href = res.data.redirect;
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal Menyimpan Suara',
+                        html: res.message,
+                        confirmButtonColor: '#1a1a1a',
+                        confirmButtonText: 'Saya Mengerti'
+                    }).then(function() {
+                        if (res.data && res.data.redirect) {
+                            window.location.href = res.data.redirect;
+                        }
+                    });
+                }
+            })
+            .catch(function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Koneksi Terputus',
+                    text: 'Gagal menghubungi server bilik suara. Silakan periksa jaringan dan coba lagi.',
+                    confirmButtonColor: '#1a1a1a',
+                    confirmButtonText: 'Coba Lagi'
+                });
+            });
         }
     });
 }
 
-// Konfirmasi pembatalan sesi
+// Konfirmasi pembatalan sesi via AJAX
 function handleBatalClick(e, url) {
     e.preventDefault();
     Swal.fire({
@@ -1018,7 +1067,32 @@ function handleBatalClick(e, url) {
         reverseButtons: true
     }).then(function(result) {
         if (result.isConfirmed) {
-            window.location.href = url;
+            Swal.fire({
+                title: 'Membatalkan Sesi...',
+                text: 'Mohon tunggu sebentar...',
+                allowOutsideClick: false,
+                didOpen: function() {
+                    Swal.showLoading();
+                }
+            });
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
+                if (res.status === 'success' && res.data && res.data.redirect) {
+                    window.location.href = res.data.redirect;
+                } else {
+                    window.location.href = url;
+                }
+            })
+            .catch(function() {
+                window.location.href = url;
+            });
         }
     });
     return false;

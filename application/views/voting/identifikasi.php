@@ -8,6 +8,7 @@
     margin: 40px auto;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    position: relative;
 }
 
 .rfid-icon-circle {
@@ -81,6 +82,28 @@
     font-size: 13px;
     margin-top: 20px;
 }
+
+.spinner-sm {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2.5px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: dtSpin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+@keyframes dtSpin {
+    to { transform: rotate(360deg); }
+}
+
+.btn-loading {
+    opacity: 0.85;
+    pointer-events: none;
+    cursor: not-allowed;
+}
 </style>
 
 <div class="kiosk-welcome-card">
@@ -107,7 +130,7 @@
             required
         >
 
-        <button type="submit" class="btn btn-primary" style="width: 100%; height: 52px; font-size: 16px;">
+        <button type="submit" class="btn btn-primary" id="btnSubmitIdentitas" style="width: 100%; height: 52px; font-size: 16px;">
             Mulai Memilih →
         </button>
     </form>
@@ -118,11 +141,110 @@
 </div>
 
 <script>
-// Auto focus kembali ke input RFID jika pemilih klik di luar
-document.addEventListener('click', function(e) {
+document.addEventListener('DOMContentLoaded', function() {
+    var form  = document.getElementById('formIdentifikasi');
     var input = document.getElementById('inputIdentitas');
-    if (input && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A') {
-        input.focus();
-    }
+    var btn   = document.getElementById('btnSubmitIdentitas');
+
+    if (!form || !input || !btn) return;
+
+    // Auto-focus kembali ke input RFID jika pemilih klik di luar
+    document.addEventListener('click', function(e) {
+        if (input && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A' && !btn.disabled) {
+            input.focus();
+        }
+    });
+
+    // Handle Submit via AJAX (Fetch API) tanpa reload browser
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var val = input.value.trim();
+        if (!val) {
+            input.focus();
+            return;
+        }
+
+        var origBtnText = btn.innerHTML;
+        btn.disabled = true;
+        btn.classList.add('btn-loading');
+        btn.innerHTML = '<span class="spinner-sm"></span> Memverifikasi Data...';
+
+        var formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+        .then(function(response) {
+            if (!response.ok) throw new Error('Network error');
+            return response.json();
+        })
+        .then(function(res) {
+            if (res.status === 'success') {
+                btn.innerHTML = '<span class="spinner-sm"></span> Menyiapkan Bilik Suara...';
+                btn.style.background = '#15803d';
+
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Identitas Ditemukan',
+                        html: res.message,
+                        timer: 1000,
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    }).then(function() {
+                        window.location.href = res.data.redirect;
+                    });
+                } else {
+                    window.location.href = res.data.redirect;
+                }
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('btn-loading');
+                btn.innerHTML = origBtnText;
+                input.value = '';
+                input.focus();
+
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Perhatian Pemilih',
+                        html: res.message,
+                        confirmButtonColor: '#1a1a1a',
+                        confirmButtonText: 'Saya Mengerti'
+                    }).then(function() {
+                        input.focus();
+                    });
+                } else {
+                    alert(res.message);
+                    input.focus();
+                }
+            }
+        })
+        .catch(function() {
+            btn.disabled = false;
+            btn.classList.remove('btn-loading');
+            btn.innerHTML = origBtnText;
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Koneksi Terputus',
+                    text: 'Gagal menghubungi server bilik suara. Silakan coba kembali beberapa saat lagi.',
+                    confirmButtonColor: '#1a1a1a',
+                    confirmButtonText: 'Coba Lagi'
+                }).then(function() {
+                    input.focus();
+                });
+            } else {
+                alert('Gagal menghubungi server.');
+                input.focus();
+            }
+        });
+    });
 });
 </script>
