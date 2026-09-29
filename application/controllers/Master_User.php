@@ -17,13 +17,32 @@ class Master_User extends Admin_Controller {
     }
 
     /**
-     * Halaman Daftar (Read) seluruh data Pemilih
+     * Helper standard JSON response
+     */
+    private function _json_response($status, $message, $data = null)
+    {
+        header('Content-Type: application/json; charset=utf-8');
+        $response = array(
+            'status'  => $status, // 'success' atau 'error'
+            'message' => $message,
+        );
+
+        if ($data !== null) {
+            $response['data'] = $data;
+        }
+
+        echo json_encode($response);
+        exit;
+    }
+
+    /**
+     * Halaman Utama (SPA View Shell)
+     * Hanya me-render kerangka tampilan. Seluruh data pemilih diisi secara asinkron via AJAX.
      */
     public function index()
     {
         $data['title']    = 'Data Pemilih';
         $data['username'] = $this->session->userdata('admin_username');
-        $data['pemilih']  = $this->Pemilih_model->get_all();
 
         $this->load->view('templates/header', $data);
         $this->load->view('master_user/index', $data);
@@ -31,93 +50,137 @@ class Master_User extends Admin_Controller {
     }
 
     /**
-     * Halaman & Proses Tambah (Create) Pemilih
+     * AJAX: Ambil seluruh data pemilih beserta ringkasan status voting (JSON)
+     */
+    public function get_data()
+    {
+        $pemilih = $this->Pemilih_model->get_all();
+        $total   = count($pemilih);
+        $sudah   = 0;
+        $belum   = 0;
+
+        foreach ($pemilih as $p) {
+            if ($p->pilih === 'T') {
+                $sudah++;
+            } else {
+                $belum++;
+            }
+        }
+
+        $this->_json_response('success', 'Data pemilih berhasil dimuat.', array(
+            'pemilih' => $pemilih,
+            'summary' => array(
+                'total' => $total,
+                'sudah' => $sudah,
+                'belum' => $belum
+            )
+        ));
+    }
+
+    /**
+     * AJAX: Ambil detail 1 pemilih berdasarkan NIK (JSON)
+     */
+    public function get_pemilih($nik)
+    {
+        $pemilih = $this->Pemilih_model->get_by_nik($nik);
+        if (!$pemilih) {
+            $this->_json_response('error', 'Data pemilih tidak ditemukan.');
+        }
+
+        $this->_json_response('success', 'Data pemilih ditemukan.', $pemilih);
+    }
+
+    /**
+     * AJAX: Tambah Pemilih Baru (POST -> JSON)
      */
     public function tambah()
     {
-        $data['title']    = 'Tambah Pemilih';
-        $data['username'] = $this->session->userdata('admin_username');
-
-        $this->form_validation->set_rules('nik', 'NIK', 'required|trim|is_unique[pemilih.nik]',
-            array('is_unique' => 'NIK sudah terdaftar dalam sistem.')
-        );
-        $this->form_validation->set_rules('rfid', 'RFID', 'required|trim|is_unique[pemilih.rfid]',
-            array('is_unique' => 'Nomor RFID sudah terdaftar dalam sistem.')
-        );
-        $this->form_validation->set_rules('nama', 'Nama', 'required|trim');
-        $this->form_validation->set_rules('dept', 'Department', 'required|trim');
+        $this->form_validation->set_rules('nik', 'NIK', 'required|trim|is_unique[pemilih.nik]', array(
+            'required'  => 'NIK wajib diisi.',
+            'is_unique' => 'NIK sudah terdaftar dalam sistem.'
+        ));
+        $this->form_validation->set_rules('rfid', 'RFID', 'required|trim|is_unique[pemilih.rfid]', array(
+            'required'  => 'Nomor RFID wajib diisi.',
+            'is_unique' => 'Nomor RFID sudah terdaftar dalam sistem.'
+        ));
+        $this->form_validation->set_rules('nama', 'Nama', 'required|trim', array(
+            'required' => 'Nama lengkap wajib diisi.'
+        ));
+        $this->form_validation->set_rules('dept', 'Department', 'required|trim', array(
+            'required' => 'Department wajib diisi.'
+        ));
 
         if ($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('master_user/tambah', $data);
-            $this->load->view('templates/footer');
-        } else {
-            $insert = array(
-                'nik'   => $this->input->post('nik', TRUE),
-                'rfid'  => $this->input->post('rfid', TRUE),
-                'nama'  => $this->input->post('nama', TRUE),
-                'dept'  => $this->input->post('dept', TRUE),
-                'pilih' => 'F'
-            );
-
-            $this->Pemilih_model->insert($insert);
-            $this->session->set_flashdata('success', 'Data pemilih berhasil ditambahkan.');
-            redirect('master_user');
+            $this->_json_response('error', validation_errors('<div>', '</div>'));
         }
+
+        $insert = array(
+            'nik'   => $this->input->post('nik', TRUE),
+            'rfid'  => $this->input->post('rfid', TRUE),
+            'nama'  => $this->input->post('nama', TRUE),
+            'dept'  => $this->input->post('dept', TRUE),
+            'pilih' => 'F'
+        );
+
+        $this->Pemilih_model->insert($insert);
+        $this->_json_response('success', 'Data pemilih baru berhasil ditambahkan.');
     }
 
     /**
-     * Halaman & Proses Edit (Update) Pemilih
+     * AJAX: Edit/Update Pemilih (POST -> JSON)
      */
     public function edit($nik)
     {
-        $data['title']    = 'Edit Pemilih';
-        $data['username'] = $this->session->userdata('admin_username');
-        $data['pemilih']  = $this->Pemilih_model->get_by_nik($nik);
-
-        if (!$data['pemilih']) {
-            $this->session->set_flashdata('error', 'Data pemilih tidak ditemukan.');
-            redirect('master_user');
-            return;
+        $pemilih = $this->Pemilih_model->get_by_nik($nik);
+        if (!$pemilih) {
+            $this->_json_response('error', 'Data pemilih tidak ditemukan.');
         }
 
-        $this->form_validation->set_rules('rfid', 'RFID', 'required|trim');
-        $this->form_validation->set_rules('nama', 'Nama', 'required|trim');
-        $this->form_validation->set_rules('dept', 'Department', 'required|trim');
+        $rfid_rule = 'required|trim';
+        if ($this->input->post('rfid') !== $pemilih->rfid) {
+            $rfid_rule .= '|is_unique[pemilih.rfid]';
+        }
+
+        $this->form_validation->set_rules('rfid', 'RFID', $rfid_rule, array(
+            'required'  => 'Nomor RFID wajib diisi.',
+            'is_unique' => 'Nomor RFID sudah digunakan oleh pemilih lain.'
+        ));
+        $this->form_validation->set_rules('nama', 'Nama', 'required|trim', array(
+            'required' => 'Nama lengkap wajib diisi.'
+        ));
+        $this->form_validation->set_rules('dept', 'Department', 'required|trim', array(
+            'required' => 'Department wajib diisi.'
+        ));
 
         if ($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('master_user/edit', $data);
-            $this->load->view('templates/footer');
-        } else {
-            $update = array(
-                'rfid' => $this->input->post('rfid', TRUE),
-                'nama' => $this->input->post('nama', TRUE),
-                'dept' => $this->input->post('dept', TRUE),
-            );
-
-            $this->Pemilih_model->update($nik, $update);
-            $this->session->set_flashdata('success', 'Data pemilih berhasil diperbarui.');
-            redirect('master_user');
+            $this->_json_response('error', validation_errors('<div>', '</div>'));
         }
+
+        $update = array(
+            'rfid' => $this->input->post('rfid', TRUE),
+            'nama' => $this->input->post('nama', TRUE),
+            'dept' => $this->input->post('dept', TRUE),
+        );
+
+        $this->Pemilih_model->update($nik, $update);
+        $this->_json_response('success', 'Data pemilih berhasil diperbarui.');
     }
 
     /**
-     * Proses Hapus (Delete) Pemilih
+     * AJAX: Hapus Pemilih (POST -> JSON)
      */
     public function hapus($nik)
     {
         $pemilih = $this->Pemilih_model->get_by_nik($nik);
-
         if (!$pemilih) {
-            $this->session->set_flashdata('error', 'Data pemilih tidak ditemukan.');
-        } else {
-            $this->Pemilih_model->delete($nik);
-            $this->session->set_flashdata('success', 'Data pemilih berhasil dihapus.');
+            $this->_json_response('error', 'Data pemilih tidak ditemukan.');
         }
 
-        redirect('master_user');
+        $this->Pemilih_model->delete($nik);
+        $this->_json_response('success', 'Data pemilih berhasil dihapus.');
     }
+
+    // ─── FITUR IMPORT EXCEL ─────────────────────────────────────────
 
     /**
      * Halaman Form Import & Pratinjau Data Pemilih dari Excel
@@ -162,14 +225,12 @@ class Master_User extends Admin_Controller {
      */
     public function proses_import()
     {
-        // 1. Validasi Keberadaan File
         if (empty($_FILES['file_excel']['name'])) {
             $this->session->set_flashdata('error', 'Silakan pilih file Excel (.xlsx) terlebih dahulu.');
             redirect('master_user/import');
             return;
         }
 
-        // 2. Validasi Ekstensi File (Wajib .xlsx)
         $ext = strtolower(pathinfo($_FILES['file_excel']['name'], PATHINFO_EXTENSION));
         if ($ext !== 'xlsx') {
             $this->session->set_flashdata('error', 'Format file tidak diizinkan. Sistem hanya menerima file berekstensi <strong>.xlsx</strong>.');
@@ -177,7 +238,6 @@ class Master_User extends Admin_Controller {
             return;
         }
 
-        // 3. Validasi Ukuran File (Maksimal 5MB)
         $maxSize = 5 * 1024 * 1024;
         if ($_FILES['file_excel']['size'] > $maxSize) {
             $this->session->set_flashdata('error', 'Ukuran file melebihi batas maksimal 5MB.');
@@ -185,7 +245,6 @@ class Master_User extends Admin_Controller {
             return;
         }
 
-        // 4. Parsing File Excel dengan SimpleXLSX
         $tmpPath = $_FILES['file_excel']['tmp_name'];
         $xlsx = SimpleXLSX::parse($tmpPath);
 
@@ -196,15 +255,12 @@ class Master_User extends Admin_Controller {
         }
 
         $rows = $xlsx->rows();
-
-        // 5. Cek Apakah File Memiliki Data (Minimal Header + 1 Baris)
         if (count($rows) < 2) {
             $this->session->set_flashdata('error', 'File Excel kosong atau tidak memiliki baris data pemilih.');
             redirect('master_user/import');
             return;
         }
 
-        // 6. Validasi Ketat Header Kolom (Baris 1)
         $actualHeaders = array_map(function($val) {
             return strtolower(trim((string)$val));
         }, array_slice($rows[0], 0, 4));
@@ -223,7 +279,6 @@ class Master_User extends Admin_Controller {
             return;
         }
 
-        // 7. Ambil Data Referensi Database untuk Validasi Duplikasi
         $existingNiks  = $this->Pemilih_model->get_all_niks();
         $existingRfids = $this->Pemilih_model->get_all_rfids();
 
@@ -232,7 +287,6 @@ class Master_User extends Admin_Controller {
         $seenNiksInFile  = array();
         $seenRfidsInFile = array();
 
-        // 8. Iterasi Validasi Setiap Baris Data (Mulai Baris Index 1)
         for ($i = 1; $i < count($rows); $i++) {
             $excelRowNumber = $i + 1;
             $row = $rows[$i];
@@ -242,14 +296,12 @@ class Master_User extends Admin_Controller {
             $nama  = isset($row[2]) ? trim((string)$row[2]) : '';
             $dept  = isset($row[3]) ? trim((string)$row[3]) : '';
 
-            // Abaikan jika seluruh kolom pada baris kosong
             if ($nik === '' && $rfid === '' && $nama === '' && $dept === '') {
                 continue;
             }
 
             $rowErrors = array();
 
-            // Validasi NIK
             if ($nik === '') {
                 $rowErrors[] = 'NIK wajib diisi';
             } elseif (strlen($nik) > 20) {
@@ -261,7 +313,6 @@ class Master_User extends Admin_Controller {
                 $rowErrors[] = 'NIK sudah ada di database';
             }
 
-            // Validasi RFID
             if ($rfid === '') {
                 $rowErrors[] = 'RFID wajib diisi';
             } elseif (strlen($rfid) > 50) {
@@ -273,14 +324,12 @@ class Master_User extends Admin_Controller {
                 $rowErrors[] = 'RFID sudah ada di database';
             }
 
-            // Validasi Nama
             if ($nama === '') {
                 $rowErrors[] = 'Nama wajib diisi';
             } elseif (strlen($nama) > 100) {
                 $rowErrors[] = 'Nama melebihi 100 karakter';
             }
 
-            // Validasi Departemen
             if ($dept === '') {
                 $rowErrors[] = 'Departemen wajib diisi';
             } elseif (strlen($dept) > 50) {
@@ -323,7 +372,6 @@ class Master_User extends Admin_Controller {
             return;
         }
 
-        // 9. Simpan ke Session untuk Halaman Pratinjau
         $summary = array(
             'total'   => count($previewRows),
             'valid'   => count($validData),
@@ -351,7 +399,6 @@ class Master_User extends Admin_Controller {
             return;
         }
 
-        // Eksekusi Batch Insert ke Database
         $this->db->trans_start();
         $this->Pemilih_model->insert_batch($validData);
         $this->db->trans_complete();
@@ -363,8 +410,6 @@ class Master_User extends Admin_Controller {
         }
 
         $totalInserted = count($validData);
-
-        // Bersihkan data session pratinjau
         $this->batal_import(false);
 
         $this->session->set_flashdata('success', "Berhasil mengimpor <strong>{$totalInserted} data pemilih</strong> baru ke dalam sistem!");
