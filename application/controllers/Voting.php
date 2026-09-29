@@ -14,18 +14,10 @@ class Voting extends CI_Controller {
      */
     public function index()
     {
-        // Jika pemilih sedang dalam proses voting, arahkan ke step berikutnya
+        // Jika pemilih sedang dalam proses voting, arahkan ke halaman pemilihan
         if ($this->session->userdata('voter')) {
-            if (!$this->session->userdata('pilihan_ketua')) {
-                redirect('voting/ketua');
-                return;
-            } elseif (!$this->session->userdata('pilihan_pengawas')) {
-                redirect('voting/pengawas');
-                return;
-            } else {
-                redirect('voting/konfirmasi');
-                return;
-            }
+            redirect('voting/pilih');
+            return;
         }
 
         $data['title'] = 'Bilik Suara - E-Voting Koperasi';
@@ -74,129 +66,55 @@ class Voting extends CI_Controller {
         $this->session->unset_userdata('pilihan_ketua');
         $this->session->unset_userdata('pilihan_pengawas');
 
-        redirect('voting/ketua');
+        redirect('voting/pilih');
     }
 
     /**
-     * Step 1: Pemilihan Calon Ketua
+     * Menu Utama Pemilihan: 1 Page untuk Memilih Ketua (Row 1) & Pengawas (Row 2)
+     */
+    public function pilih()
+    {
+        $voter = $this->session->userdata('voter');
+        if (!$voter) {
+            redirect('voting');
+            return;
+        }
+
+        $data['title']            = 'Bilik Suara - Pilih Calon Ketua & Calon Pengawas';
+        $data['voter']            = $voter;
+        $data['kandidat_ketua']    = $this->Voting_model->get_all_ketua();
+        $data['kandidat_pengawas'] = $this->Voting_model->get_all_pengawas();
+        $data['step']             = 1;
+        $data['terpilih_ketua']    = $this->session->userdata('pilihan_ketua') ?: '';
+        $data['terpilih_pengawas'] = $this->session->userdata('pilihan_pengawas') ?: '';
+
+        $this->load->view('voting/template_header', $data);
+        $this->load->view('voting/pilih', $data);
+        $this->load->view('voting/template_footer');
+    }
+
+    /**
+     * Backward-compatible alias untuk ketua -> arahkan ke halaman pilih
      */
     public function ketua()
     {
-        $voter = $this->session->userdata('voter');
-        if (!$voter) {
-            redirect('voting');
-            return;
-        }
-
-        $data['title']     = 'Pilih Calon Ketua - E-Voting';
-        $data['voter']     = $voter;
-        $data['kandidat']  = $this->Voting_model->get_all_ketua();
-        $data['step']      = 1;
-        $data['terpilih']  = $this->session->userdata('pilihan_ketua');
-
-        $this->load->view('voting/template_header', $data);
-        $this->load->view('voting/pilih_ketua', $data);
-        $this->load->view('voting/template_footer');
+        redirect('voting/pilih');
     }
 
     /**
-     * Proses Simpan Pilihan Ketua ke Session
-     */
-    public function pilih_ketua_proses()
-    {
-        $voter = $this->session->userdata('voter');
-        if (!$voter) {
-            redirect('voting');
-            return;
-        }
-
-        $nik_ketua = $this->input->post('ketua_nik', TRUE);
-        $kandidat  = $this->Voting_model->get_ketua_by_nik($nik_ketua);
-
-        if (!$kandidat) {
-            $this->session->set_flashdata('error', 'Kandidat ketua tidak valid.');
-            redirect('voting/ketua');
-            return;
-        }
-
-        $this->session->set_userdata('pilihan_ketua', $nik_ketua);
-        redirect('voting/pengawas');
-    }
-
-    /**
-     * Step 2: Pemilihan Calon Pengawas
+     * Backward-compatible alias untuk pengawas -> arahkan ke halaman pilih
      */
     public function pengawas()
     {
-        $voter = $this->session->userdata('voter');
-        if (!$voter) {
-            redirect('voting');
-            return;
-        }
-
-        if (!$this->session->userdata('pilihan_ketua')) {
-            redirect('voting/ketua');
-            return;
-        }
-
-        $data['title']     = 'Pilih Calon Pengawas - E-Voting';
-        $data['voter']     = $voter;
-        $data['kandidat']  = $this->Voting_model->get_all_pengawas();
-        $data['step']      = 2;
-        $data['terpilih']  = $this->session->userdata('pilihan_pengawas');
-
-        $this->load->view('voting/template_header', $data);
-        $this->load->view('voting/pilih_pengawas', $data);
-        $this->load->view('voting/template_footer');
+        redirect('voting/pilih');
     }
 
     /**
-     * Proses Simpan Pilihan Pengawas ke Session
-     */
-    public function pilih_pengawas_proses()
-    {
-        $voter = $this->session->userdata('voter');
-        if (!$voter || !$this->session->userdata('pilihan_ketua')) {
-            redirect('voting');
-            return;
-        }
-
-        $nik_pengawas = $this->input->post('pengawas_nik', TRUE);
-        $kandidat     = $this->Voting_model->get_pengawas_by_nik($nik_pengawas);
-
-        if (!$kandidat) {
-            $this->session->set_flashdata('error', 'Kandidat pengawas tidak valid.');
-            redirect('voting/pengawas');
-            return;
-        }
-
-        $this->session->set_userdata('pilihan_pengawas', $nik_pengawas);
-        redirect('voting/konfirmasi');
-    }
-
-    /**
-     * Step 3: Konfirmasi Pilihan Sebelum Kirim
+     * Backward-compatible alias untuk konfirmasi -> arahkan ke halaman pilih
      */
     public function konfirmasi()
     {
-        $voter = $this->session->userdata('voter');
-        $nik_ketua = $this->session->userdata('pilihan_ketua');
-        $nik_pengawas = $this->session->userdata('pilihan_pengawas');
-
-        if (!$voter || !$nik_ketua || !$nik_pengawas) {
-            redirect('voting');
-            return;
-        }
-
-        $data['title']    = 'Konfirmasi Pilihan Suara - E-Voting';
-        $data['voter']    = $voter;
-        $data['ketua']    = $this->Voting_model->get_ketua_by_nik($nik_ketua);
-        $data['pengawas'] = $this->Voting_model->get_pengawas_by_nik($nik_pengawas);
-        $data['step']     = 3;
-
-        $this->load->view('voting/template_header', $data);
-        $this->load->view('voting/konfirmasi', $data);
-        $this->load->view('voting/template_footer');
+        redirect('voting/pilih');
     }
 
     /**
@@ -205,11 +123,22 @@ class Voting extends CI_Controller {
     public function kirim_suara()
     {
         $voter        = $this->session->userdata('voter');
-        $nik_ketua    = $this->session->userdata('pilihan_ketua');
-        $nik_pengawas = $this->session->userdata('pilihan_pengawas');
+        $nik_ketua    = $this->input->post('ketua_nik', TRUE) ?: $this->session->userdata('pilihan_ketua');
+        $nik_pengawas = $this->input->post('pengawas_nik', TRUE) ?: $this->session->userdata('pilihan_pengawas');
 
         if (!$voter || !$nik_ketua || !$nik_pengawas) {
-            redirect('voting');
+            $this->session->set_flashdata('error', 'Silakan tentukan 1 Calon Ketua dan 1 Calon Pengawas sebelum mengirim suara.');
+            redirect('voting/pilih');
+            return;
+        }
+
+        // Validasi keberadaan kandidat
+        $ketua    = $this->Voting_model->get_ketua_by_nik($nik_ketua);
+        $pengawas = $this->Voting_model->get_pengawas_by_nik($nik_pengawas);
+
+        if (!$ketua || !$pengawas) {
+            $this->session->set_flashdata('error', 'Kandidat yang Anda pilih tidak valid.');
+            redirect('voting/pilih');
             return;
         }
 
@@ -242,6 +171,7 @@ class Voting extends CI_Controller {
     {
         $data['title'] = 'Suara Berhasil Terkirim - E-Voting';
         $data['nama']  = $this->session->flashdata('nama_selesai') ?: 'Anggota';
+        $data['step']  = 2;
 
         $this->load->view('voting/template_header', $data);
         $this->load->view('voting/selesai', $data);

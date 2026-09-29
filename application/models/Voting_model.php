@@ -33,7 +33,7 @@ class Voting_model extends CI_Model {
      */
     public function get_all_ketua()
     {
-        $this->db->order_by('nama', 'ASC');
+        $this->db->order_by('nik', 'ASC');
         return $this->db->get('kandidat_ketua')->result();
     }
 
@@ -42,7 +42,7 @@ class Voting_model extends CI_Model {
      */
     public function get_all_pengawas()
     {
-        $this->db->order_by('nama', 'ASC');
+        $this->db->order_by('nik', 'ASC');
         return $this->db->get('kandidat_pengawas')->result();
     }
 

@@ -148,10 +148,33 @@
         /* Main Container */
         .main-container {
             flex: 1;
-            padding: 32px 24px 48px;
-            max-width: 1200px;
+            padding: 32px 24px 100px;
+            max-width: 1280px;
             width: 100%;
             margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .kiosk-navbar {
+                padding: 0 16px;
+                height: 58px;
+            }
+            .kiosk-brand h1 {
+                font-size: 15px;
+            }
+            .kiosk-brand span {
+                display: none;
+            }
+            .stepper .step-item span {
+                display: none;
+            }
+            .voter-badge-pill {
+                padding: 4px 10px;
+                font-size: 12px;
+            }
+            .main-container {
+                padding: 20px 14px 100px;
+            }
         }
 
         /* Buttons & Alerts */
@@ -234,19 +257,14 @@
 
     <?php if (isset($step)): ?>
         <div class="stepper">
-            <div class="step-item <?= ($step == 1) ? 'active' : (($step > 1) ? 'done' : ''); ?>">
+            <div class="step-item <?= ($step == 1) ? 'active' : 'done'; ?>">
                 <div class="step-circle"><?= ($step > 1) ? '✓' : '1'; ?></div>
-                <span>Ketua</span>
+                <span>Pilih Ketua & Pengawas</span>
             </div>
             <span style="color:#d1d5db;">→</span>
-            <div class="step-item <?= ($step == 2) ? 'active' : (($step > 2) ? 'done' : ''); ?>">
-                <div class="step-circle"><?= ($step > 2) ? '✓' : '2'; ?></div>
-                <span>Pengawas</span>
-            </div>
-            <span style="color:#d1d5db;">→</span>
-            <div class="step-item <?= ($step == 3) ? 'active' : ''; ?>">
-                <div class="step-circle">3</div>
-                <span>Konfirmasi</span>
+            <div class="step-item <?= ($step == 2) ? 'active' : ''; ?>">
+                <div class="step-circle"><?= ($step == 2) ? '✓' : '2'; ?></div>
+                <span>Selesai</span>
             </div>
         </div>
     <?php endif; ?>
