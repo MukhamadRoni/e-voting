@@ -12,22 +12,24 @@ class Undian_model extends CI_Model {
      * Ambil peserta yang berhak ikut undian:
      * - Sudah menggunakan hak suara (pilih = 'T')
      * - BELUM PERNAH memenangkan undian yang berstatus 'valid'
+     * Menggunakan LEFT JOIN anti-pattern (u.id IS NULL) untuk early-termination index lookup.
      */
     public function get_peserta_berhak($dept = null)
     {
-        $this->db->select('p.nik, p.rfid, p.nama, p.dept, p.pilih');
-        $this->db->from('pemilih p');
-        $this->db->where('p.pilih', 'T');
-
-        // Subquery: kecualikan yang sudah memenangkan undian valid
-        $this->db->where("p.nik NOT IN (SELECT pemilih_nik FROM pemenang_undian WHERE status = 'valid')", NULL, FALSE);
-
+        $params = array();
+        $whereDept = "";
         if (!empty($dept)) {
-            $this->db->where('p.dept', $dept);
+            $whereDept = " AND p.dept = ? ";
+            $params[] = $dept;
         }
 
-        $this->db->order_by('p.nama', 'ASC');
-        return $this->db->get()->result();
+        $sql = "SELECT p.nik, p.rfid, p.nama, p.dept, p.pilih
+                FROM pemilih p
+                LEFT JOIN pemenang_undian u ON p.nik = u.pemilih_nik AND u.status = 'valid'
+                WHERE p.pilih = 'T' AND u.id IS NULL {$whereDept}
+                ORDER BY p.nama ASC";
+
+        return $this->db->query($sql, $params)->result();
     }
 
     /**
@@ -35,24 +37,33 @@ class Undian_model extends CI_Model {
      */
     public function count_peserta_tersisa($dept = null)
     {
-        $this->db->where('pilih', 'T');
-        $this->db->where("nik NOT IN (SELECT pemilih_nik FROM pemenang_undian WHERE status = 'valid')", NULL, FALSE);
+        $params = array();
+        $whereDept = "";
         if (!empty($dept)) {
-            $this->db->where('dept', $dept);
+            $whereDept = " AND p.dept = ? ";
+            $params[] = $dept;
         }
-        return $this->db->count_all_results('pemilih');
+
+        $sql = "SELECT COUNT(*) AS total
+                FROM pemilih p
+                LEFT JOIN pemenang_undian u ON p.nik = u.pemilih_nik AND u.status = 'valid'
+                WHERE p.pilih = 'T' AND u.id IS NULL {$whereDept}";
+
+        $row = $this->db->query($sql, $params)->row();
+        return $row ? (int)$row->total : 0;
     }
 
     /**
      * Ambil seluruh riwayat pemenang undian
+     * Diurutkan dari PRIMARY KEY id DESC untuk menghindari filesort
      */
     public function get_all_pemenang()
     {
-        $this->db->select('u.id, u.pemilih_nik, p.nama, p.dept, p.rfid, u.nama_hadiah, u.status, u.created_at');
-        $this->db->from('pemenang_undian u');
-        $this->db->join('pemilih p', 'u.pemilih_nik = p.nik', 'left');
-        $this->db->order_by('u.created_at', 'DESC');
-        return $this->db->get()->result();
+        $sql = "SELECT u.id, u.pemilih_nik, p.nama, p.dept, p.rfid, u.nama_hadiah, u.status, u.created_at
+                FROM pemenang_undian u
+                LEFT JOIN pemilih p ON u.pemilih_nik = p.nik
+                ORDER BY u.id DESC";
+        return $this->db->query($sql)->result();
     }
 
     /**
@@ -62,24 +73,18 @@ class Undian_model extends CI_Model {
     {
         // Pastikan tidak duplikat jika status valid
         if ($status === 'valid') {
-            $exists = $this->db->get_where('pemenang_undian', array(
-                'pemilih_nik' => $nik,
-                'status'      => 'valid'
-            ))->num_rows();
+            $check = $this->db->query(
+                "SELECT 1 FROM pemenang_undian WHERE pemilih_nik = ? AND status = 'valid' LIMIT 1",
+                array($nik)
+            )->row();
 
-            if ($exists > 0) {
+            if ($check) {
                 return false;
             }
         }
 
-        $data = array(
-            'pemilih_nik' => $nik,
-            'nama_hadiah' => $nama_hadiah,
-            'status'      => $status,
-            'created_at'  => date('Y-m-d H:i:s')
-        );
-
-        return $this->db->insert('pemenang_undian', $data);
+        $sql = "INSERT INTO pemenang_undian (pemilih_nik, nama_hadiah, status, created_at) VALUES (?, ?, ?, ?)";
+        return $this->db->query($sql, array($nik, $nama_hadiah, $status, date('Y-m-d H:i:s')));
     }
 
     /**
@@ -87,16 +92,15 @@ class Undian_model extends CI_Model {
      */
     public function hapus_pemenang($id)
     {
-        $this->db->where('id', $id);
-        return $this->db->delete('pemenang_undian');
+        return $this->db->query("DELETE FROM pemenang_undian WHERE id = ? LIMIT 1", array((int)$id));
     }
 
     /**
-     * Reset / Kosongkan seluruh daftar pemenang undian
+     * Reset / Kosongkan seluruh daftar pemenang undian secara instan
      */
     public function reset_semua_undian()
     {
-        return $this->db->empty_table('pemenang_undian');
+        return $this->db->query("TRUNCATE TABLE pemenang_undian");
     }
 
     /**
@@ -104,11 +108,7 @@ class Undian_model extends CI_Model {
      */
     public function get_daftar_departemen()
     {
-        $this->db->distinct();
-        $this->db->select('dept');
-        $this->db->from('pemilih');
-        $this->db->where('pilih', 'T');
-        $this->db->order_by('dept', 'ASC');
-        return $this->db->get()->result();
+        $sql = "SELECT DISTINCT dept FROM pemilih WHERE pilih = 'T' ORDER BY dept ASC";
+        return $this->db->query($sql)->result();
     }
 }

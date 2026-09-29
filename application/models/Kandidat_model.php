@@ -8,8 +8,7 @@ class Kandidat_model extends CI_Model {
      */
     public function get_all_ketua()
     {
-        $this->db->order_by('nama', 'ASC');
-        return $this->db->get('kandidat_ketua')->result();
+        return $this->db->query("SELECT nik, nama, foto, visi_misi FROM kandidat_ketua ORDER BY nama ASC")->result();
     }
 
     /**
@@ -17,8 +16,7 @@ class Kandidat_model extends CI_Model {
      */
     public function get_all_pengawas()
     {
-        $this->db->order_by('nama', 'ASC');
-        return $this->db->get('kandidat_pengawas')->result();
+        return $this->db->query("SELECT nik, nama, foto, visi_misi FROM kandidat_pengawas ORDER BY nama ASC")->result();
     }
 
     /**
@@ -26,7 +24,7 @@ class Kandidat_model extends CI_Model {
      */
     public function get_ketua_by_nik($nik)
     {
-        return $this->db->get_where('kandidat_ketua', array('nik' => $nik))->row();
+        return $this->db->query("SELECT nik, nama, foto, visi_misi FROM kandidat_ketua WHERE nik = ? LIMIT 1", array($nik))->row();
     }
 
     /**
@@ -34,7 +32,7 @@ class Kandidat_model extends CI_Model {
      */
     public function get_pengawas_by_nik($nik)
     {
-        return $this->db->get_where('kandidat_pengawas', array('nik' => $nik))->row();
+        return $this->db->query("SELECT nik, nama, foto, visi_misi FROM kandidat_pengawas WHERE nik = ? LIMIT 1", array($nik))->row();
     }
 
     /**
@@ -42,7 +40,8 @@ class Kandidat_model extends CI_Model {
      */
     public function insert_ketua($data)
     {
-        return $this->db->insert('kandidat_ketua', $data);
+        $sql = "INSERT INTO kandidat_ketua (nik, nama, foto, visi_misi) VALUES (?, ?, ?, ?)";
+        return $this->db->query($sql, array($data['nik'], $data['nama'], $data['foto'], $data['visi_misi']));
     }
 
     /**
@@ -50,7 +49,8 @@ class Kandidat_model extends CI_Model {
      */
     public function insert_pengawas($data)
     {
-        return $this->db->insert('kandidat_pengawas', $data);
+        $sql = "INSERT INTO kandidat_pengawas (nik, nama, foto, visi_misi) VALUES (?, ?, ?, ?)";
+        return $this->db->query($sql, array($data['nik'], $data['nama'], $data['foto'], $data['visi_misi']));
     }
 
     /**
@@ -58,8 +58,15 @@ class Kandidat_model extends CI_Model {
      */
     public function update_ketua($nik, $data)
     {
-        $this->db->where('nik', $nik);
-        return $this->db->update('kandidat_ketua', $data);
+        $fields = array();
+        $values = array();
+        foreach ($data as $col => $val) {
+            $fields[] = "`{$col}` = ?";
+            $values[] = $val;
+        }
+        $values[] = $nik;
+        $sql = "UPDATE kandidat_ketua SET " . implode(', ', $fields) . " WHERE nik = ? LIMIT 1";
+        return $this->db->query($sql, $values);
     }
 
     /**
@@ -67,8 +74,15 @@ class Kandidat_model extends CI_Model {
      */
     public function update_pengawas($nik, $data)
     {
-        $this->db->where('nik', $nik);
-        return $this->db->update('kandidat_pengawas', $data);
+        $fields = array();
+        $values = array();
+        foreach ($data as $col => $val) {
+            $fields[] = "`{$col}` = ?";
+            $values[] = $val;
+        }
+        $values[] = $nik;
+        $sql = "UPDATE kandidat_pengawas SET " . implode(', ', $fields) . " WHERE nik = ? LIMIT 1";
+        return $this->db->query($sql, $values);
     }
 
     /**
@@ -76,8 +90,7 @@ class Kandidat_model extends CI_Model {
      */
     public function delete_ketua($nik)
     {
-        $this->db->where('nik', $nik);
-        return $this->db->delete('kandidat_ketua');
+        return $this->db->query("DELETE FROM kandidat_ketua WHERE nik = ? LIMIT 1", array($nik));
     }
 
     /**
@@ -85,8 +98,7 @@ class Kandidat_model extends CI_Model {
      */
     public function delete_pengawas($nik)
     {
-        $this->db->where('nik', $nik);
-        return $this->db->delete('kandidat_pengawas');
+        return $this->db->query("DELETE FROM kandidat_pengawas WHERE nik = ? LIMIT 1", array($nik));
     }
 
     /**
@@ -94,7 +106,8 @@ class Kandidat_model extends CI_Model {
      */
     public function count_ketua()
     {
-        return $this->db->count_all('kandidat_ketua');
+        $row = $this->db->query("SELECT COUNT(*) AS total FROM kandidat_ketua")->row();
+        return $row ? (int)$row->total : 0;
     }
 
     /**
@@ -102,6 +115,7 @@ class Kandidat_model extends CI_Model {
      */
     public function count_pengawas()
     {
-        return $this->db->count_all('kandidat_pengawas');
+        $row = $this->db->query("SELECT COUNT(*) AS total FROM kandidat_pengawas")->row();
+        return $row ? (int)$row->total : 0;
     }
 }

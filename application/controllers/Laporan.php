@@ -17,7 +17,12 @@ class Laporan extends Admin_Controller {
         $data['title']         = 'Laporan Pemenang Ketua';
         $data['username']      = $this->session->userdata('admin_username');
         $data['rekap']         = $this->Laporan_model->get_rekap_ketua();
-        $data['total_suara']   = $this->Laporan_model->get_total_suara_ketua();
+        
+        $totalSuara = 0;
+        foreach ($data['rekap'] as $r) {
+            $totalSuara += (int)$r->total_suara;
+        }
+        $data['total_suara']   = $totalSuara;
         $data['total_pemilih'] = $this->Laporan_model->get_total_pemilih();
         $data['sudah_memilih'] = $this->Laporan_model->get_total_sudah_memilih();
 
@@ -34,7 +39,12 @@ class Laporan extends Admin_Controller {
         $data['title']         = 'Laporan Pemenang Pengawas';
         $data['username']      = $this->session->userdata('admin_username');
         $data['rekap']         = $this->Laporan_model->get_rekap_pengawas();
-        $data['total_suara']   = $this->Laporan_model->get_total_suara_pengawas();
+        
+        $totalSuara = 0;
+        foreach ($data['rekap'] as $r) {
+            $totalSuara += (int)$r->total_suara;
+        }
+        $data['total_suara']   = $totalSuara;
         $data['total_pemilih'] = $this->Laporan_model->get_total_pemilih();
         $data['sudah_memilih'] = $this->Laporan_model->get_total_sudah_memilih();
 

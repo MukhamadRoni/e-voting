@@ -10,30 +10,37 @@ class Laporan_model extends CI_Model {
 
     /**
      * Rekapitulasi suara kandidat ketua (diurutkan suara terbanyak)
+     * Menggunakan correlated subquery untuk menghindari GROUP BY pada tipe data TEXT (visi_misi)
+     * dan memanfaatkan index fk_hasil_ketua secara optimal tanpa temporary table on disk.
      */
     public function get_rekap_ketua()
     {
-        $this->db->select('k.nik, k.nama, k.foto, k.visi_misi, COUNT(h.id) AS total_suara');
-        $this->db->from('kandidat_ketua k');
-        $this->db->join('hasil h', 'k.nik = h.ketua_nik', 'left');
-        $this->db->group_by(array('k.nik', 'k.nama', 'k.foto', 'k.visi_misi'));
-        $this->db->order_by('total_suara', 'DESC');
-        $this->db->order_by('k.nama', 'ASC');
-        return $this->db->get()->result();
+        $sql = "SELECT 
+                    k.nik, 
+                    k.nama, 
+                    k.foto, 
+                    k.visi_misi, 
+                    (SELECT COUNT(*) FROM hasil h WHERE h.ketua_nik = k.nik) AS total_suara
+                FROM kandidat_ketua k
+                ORDER BY total_suara DESC, k.nama ASC";
+        return $this->db->query($sql)->result();
     }
 
     /**
      * Rekapitulasi suara kandidat pengawas (diurutkan suara terbanyak)
+     * Menggunakan correlated subquery dengan index fk_hasil_pengawas tanpa disk temporary table.
      */
     public function get_rekap_pengawas()
     {
-        $this->db->select('k.nik, k.nama, k.foto, k.visi_misi, COUNT(h.id) AS total_suara');
-        $this->db->from('kandidat_pengawas k');
-        $this->db->join('hasil h', 'k.nik = h.pengawas_nik', 'left');
-        $this->db->group_by(array('k.nik', 'k.nama', 'k.foto', 'k.visi_misi'));
-        $this->db->order_by('total_suara', 'DESC');
-        $this->db->order_by('k.nama', 'ASC');
-        return $this->db->get()->result();
+        $sql = "SELECT 
+                    k.nik, 
+                    k.nama, 
+                    k.foto, 
+                    k.visi_misi, 
+                    (SELECT COUNT(*) FROM hasil h WHERE h.pengawas_nik = k.nik) AS total_suara
+                FROM kandidat_pengawas k
+                ORDER BY total_suara DESC, k.nama ASC";
+        return $this->db->query($sql)->result();
     }
 
     /**
@@ -41,9 +48,8 @@ class Laporan_model extends CI_Model {
      */
     public function get_total_suara_ketua()
     {
-        $this->db->where('ketua_nik IS NOT NULL');
-        $this->db->where('ketua_nik !=', '');
-        return $this->db->count_all_results('hasil');
+        $row = $this->db->query("SELECT COUNT(*) AS total FROM hasil WHERE ketua_nik != '' AND ketua_nik IS NOT NULL")->row();
+        return $row ? (int)$row->total : 0;
     }
 
     /**
@@ -51,9 +57,8 @@ class Laporan_model extends CI_Model {
      */
     public function get_total_suara_pengawas()
     {
-        $this->db->where('pengawas_nik IS NOT NULL');
-        $this->db->where('pengawas_nik !=', '');
-        return $this->db->count_all_results('hasil');
+        $row = $this->db->query("SELECT COUNT(*) AS total FROM hasil WHERE pengawas_nik != '' AND pengawas_nik IS NOT NULL")->row();
+        return $row ? (int)$row->total : 0;
     }
 
     /**
@@ -61,60 +66,80 @@ class Laporan_model extends CI_Model {
      */
     public function get_total_pemilih()
     {
-        return $this->db->count_all('pemilih');
+        $row = $this->db->query("SELECT COUNT(*) AS total FROM pemilih")->row();
+        return $row ? (int)$row->total : 0;
     }
 
     /**
      * Total pemilih yang sudah menggunakan hak suara (pilih = 'T')
+     * Memanfaatkan indeks idx_pemilih_pilih untuk pencarian instan
      */
     public function get_total_sudah_memilih()
     {
-        $this->db->where('pilih', 'T');
-        return $this->db->count_all_results('pemilih');
+        $row = $this->db->query("SELECT COUNT(*) AS total FROM pemilih WHERE pilih = 'T'")->row();
+        return $row ? (int)$row->total : 0;
     }
 
     /**
      * Trace Back data voting (audit trail lengkap)
+     * Memanfaatkan urutan PRIMARY KEY id DESC untuk mencegah filesort
      */
     public function get_trace_back()
     {
-        $this->db->select('h.id, h.pemilih_nik, p.nama AS nama_pemilih, p.dept AS dept_pemilih, h.ketua_nik, kk.nama AS nama_ketua, h.pengawas_nik, kp.nama AS nama_pengawas, h.created_at');
-        $this->db->from('hasil h');
-        $this->db->join('pemilih p', 'h.pemilih_nik = p.nik', 'left');
-        $this->db->join('kandidat_ketua kk', 'h.ketua_nik = kk.nik', 'left');
-        $this->db->join('kandidat_pengawas kp', 'h.pengawas_nik = kp.nik', 'left');
-        $this->db->order_by('h.created_at', 'DESC');
-        return $this->db->get()->result();
+        $sql = "SELECT 
+                    h.id, 
+                    h.pemilih_nik, 
+                    p.nama AS nama_pemilih, 
+                    p.dept AS dept_pemilih, 
+                    h.ketua_nik, 
+                    kk.nama AS nama_ketua, 
+                    h.pengawas_nik, 
+                    kp.nama AS nama_pengawas, 
+                    h.created_at
+                FROM hasil h
+                INNER JOIN pemilih p ON h.pemilih_nik = p.nik
+                LEFT JOIN kandidat_ketua kk ON h.ketua_nik = kk.nik
+                LEFT JOIN kandidat_pengawas kp ON h.pengawas_nik = kp.nik
+                ORDER BY h.id DESC";
+        return $this->db->query($sql)->result();
     }
 
     /**
      * Daftar pemilih yang berhak ikut undian / doorprize (pilih = 'T')
-     * Dilengkapi informasi doorprize yang berhasil dimenangkan
+     * Menggunakan direct index-backed LEFT JOIN ke pemenang_undian tanpa agregasi berat
      */
     public function get_peserta_undian($dept = null)
     {
-        $this->db->select("p.nik, p.rfid, p.nama, p.dept, p.pilih, GROUP_CONCAT(u.nama_hadiah SEPARATOR ', ') AS nama_hadiah, MAX(u.created_at) AS tanggal_menang");
-        $this->db->from('pemilih p');
-        $this->db->join('pemenang_undian u', "p.nik = u.pemilih_nik AND u.status = 'valid'", 'left');
-        $this->db->where('p.pilih', 'T');
+        $params = array();
+        $whereDept = "";
         if (!empty($dept)) {
-            $this->db->where('p.dept', $dept);
+            $whereDept = " AND p.dept = ? ";
+            $params[] = $dept;
         }
-        $this->db->group_by(array('p.nik', 'p.rfid', 'p.nama', 'p.dept', 'p.pilih'));
-        $this->db->order_by('p.nama', 'ASC');
-        return $this->db->get()->result();
+
+        $sql = "SELECT 
+                    p.nik, 
+                    p.rfid, 
+                    p.nama, 
+                    p.dept, 
+                    p.pilih, 
+                    u.nama_hadiah, 
+                    u.created_at AS tanggal_menang
+                FROM pemilih p
+                LEFT JOIN pemenang_undian u ON p.nik = u.pemilih_nik AND u.status = 'valid'
+                WHERE p.pilih = 'T' {$whereDept}
+                ORDER BY p.nama ASC";
+
+        return $this->db->query($sql, $params)->result();
     }
 
     /**
      * Daftar unik departemen untuk filter peserta undian
+     * Memanfaatkan indeks komposit idx_pemilih_pilih_dept
      */
     public function get_daftar_departemen()
     {
-        $this->db->distinct();
-        $this->db->select('dept');
-        $this->db->from('pemilih');
-        $this->db->where('pilih', 'T');
-        $this->db->order_by('dept', 'ASC');
-        return $this->db->get()->result();
+        $sql = "SELECT DISTINCT dept FROM pemilih WHERE pilih = 'T' ORDER BY dept ASC";
+        return $this->db->query($sql)->result();
     }
 }

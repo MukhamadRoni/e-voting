@@ -43,10 +43,14 @@ class Real_Count extends CI_Controller {
 
         if ($kategori === 'ketua') {
             $rawKandidat = $this->Laporan_model->get_rekap_ketua();
-            $totalSuara  = (int)$this->Laporan_model->get_total_suara_ketua();
         } else {
             $rawKandidat = $this->Laporan_model->get_rekap_pengawas();
-            $totalSuara  = (int)$this->Laporan_model->get_total_suara_pengawas();
+        }
+
+        // Hitung total suara langsung dari agregasi kandidat tanpa perlu query hitung ulang
+        $totalSuara = 0;
+        foreach ($rawKandidat as $k) {
+            $totalSuara += (int)$k->total_suara;
         }
 
         $kandidatList = array();

@@ -12,14 +12,8 @@ class Auth_model extends CI_Model {
      */
     public function login($username, $password)
     {
-        $this->db->where('username', $username);
-        $this->db->where('password', md5($password));
-        $query = $this->db->get('admin');
-
-        if ($query->num_rows() == 1) {
-            return $query->row();
-        }
-
-        return null;
+        $sql = "SELECT id, username FROM admin WHERE username = ? AND password = ? LIMIT 1";
+        $query = $this->db->query($sql, array($username, md5($password)));
+        return $query->row();
     }
 }

@@ -17,7 +17,10 @@ CREATE TABLE IF NOT EXISTS `pemilih` (
   `nama` VARCHAR(100) NOT NULL,
   `dept` VARCHAR(50) NOT NULL,
   `pilih` ENUM('T','F') NOT NULL DEFAULT 'F',
-  PRIMARY KEY (`nik`)
+  PRIMARY KEY (`nik`),
+  UNIQUE KEY `idx_pemilih_rfid` (`rfid`),
+  KEY `idx_pemilih_pilih` (`pilih`),
+  KEY `idx_pemilih_pilih_dept` (`pilih`, `dept`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------
@@ -55,13 +58,28 @@ CREATE TABLE IF NOT EXISTS `hasil` (
   KEY `fk_hasil_pemilih` (`pemilih_nik`),
   KEY `fk_hasil_ketua` (`ketua_nik`),
   KEY `fk_hasil_pengawas` (`pengawas_nik`),
+  KEY `idx_hasil_created_at` (`created_at`),
   CONSTRAINT `fk_hasil_pemilih` FOREIGN KEY (`pemilih_nik`) REFERENCES `pemilih` (`nik`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_hasil_ketua` FOREIGN KEY (`ketua_nik`) REFERENCES `kandidat_ketua` (`nik`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_hasil_pengawas` FOREIGN KEY (`pengawas_nik`) REFERENCES `kandidat_pengawas` (`nik`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------
--- 5. Tabel Admin (untuk autentikasi)
+-- 5. Tabel Pemenang Undian (Door Prize)
+-- --------------------------------------------
+CREATE TABLE IF NOT EXISTS `pemenang_undian` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `pemilih_nik` VARCHAR(20) NOT NULL,
+  `nama_hadiah` VARCHAR(150) NOT NULL DEFAULT 'Door Prize Utama',
+  `status` ENUM('valid','tidak_valid') NOT NULL DEFAULT 'valid',
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `pemilih_nik` (`pemilih_nik`),
+  KEY `idx_pemenang_status_nik` (`status`, `pemilih_nik`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------
+-- 6. Tabel Admin (untuk autentikasi)
 -- --------------------------------------------
 CREATE TABLE IF NOT EXISTS `admin` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,

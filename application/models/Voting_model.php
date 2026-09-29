@@ -13,11 +13,11 @@ class Voting_model extends CI_Model {
      */
     public function find_pemilih($keyword)
     {
-        $this->db->group_start();
-        $this->db->where('nik', $keyword);
-        $this->db->or_where('rfid', $keyword);
-        $this->db->group_end();
-        return $this->db->get('pemilih')->row();
+        $sql = "SELECT nik, rfid, nama, dept, pilih 
+                FROM pemilih 
+                WHERE nik = ? OR rfid = ? 
+                LIMIT 1";
+        return $this->db->query($sql, array($keyword, $keyword))->row();
     }
 
     /**
@@ -25,7 +25,11 @@ class Voting_model extends CI_Model {
      */
     public function get_pemilih_by_nik($nik)
     {
-        return $this->db->get_where('pemilih', array('nik' => $nik))->row();
+        $sql = "SELECT nik, rfid, nama, dept, pilih 
+                FROM pemilih 
+                WHERE nik = ? 
+                LIMIT 1";
+        return $this->db->query($sql, array($nik))->row();
     }
 
     /**
@@ -33,8 +37,10 @@ class Voting_model extends CI_Model {
      */
     public function get_all_ketua()
     {
-        $this->db->order_by('nik', 'ASC');
-        return $this->db->get('kandidat_ketua')->result();
+        $sql = "SELECT nik, nama, foto, visi_misi 
+                FROM kandidat_ketua 
+                ORDER BY nik ASC";
+        return $this->db->query($sql)->result();
     }
 
     /**
@@ -42,8 +48,10 @@ class Voting_model extends CI_Model {
      */
     public function get_all_pengawas()
     {
-        $this->db->order_by('nik', 'ASC');
-        return $this->db->get('kandidat_pengawas')->result();
+        $sql = "SELECT nik, nama, foto, visi_misi 
+                FROM kandidat_pengawas 
+                ORDER BY nik ASC";
+        return $this->db->query($sql)->result();
     }
 
     /**
@@ -51,7 +59,11 @@ class Voting_model extends CI_Model {
      */
     public function get_ketua_by_nik($nik)
     {
-        return $this->db->get_where('kandidat_ketua', array('nik' => $nik))->row();
+        $sql = "SELECT nik, nama, foto, visi_misi 
+                FROM kandidat_ketua 
+                WHERE nik = ? 
+                LIMIT 1";
+        return $this->db->query($sql, array($nik))->row();
     }
 
     /**
@@ -59,12 +71,16 @@ class Voting_model extends CI_Model {
      */
     public function get_pengawas_by_nik($nik)
     {
-        return $this->db->get_where('kandidat_pengawas', array('nik' => $nik))->row();
+        $sql = "SELECT nik, nama, foto, visi_misi 
+                FROM kandidat_pengawas 
+                WHERE nik = ? 
+                LIMIT 1";
+        return $this->db->query($sql, array($nik))->row();
     }
 
     /**
      * Simpan hasil suara voting dengan database transaction
-     * 1. Validasi pemilih belum pernah voting (pilih = 'F')
+     * 1. Validasi pemilih belum pernah voting (pilih = 'F') dengan lock row
      * 2. Insert ke tabel hasil
      * 3. Update status pemilih menjadi pilih = 'T'
      */
@@ -72,25 +88,29 @@ class Voting_model extends CI_Model {
     {
         $this->db->trans_start();
 
-        // 1. Cek ulang status pemilih
-        $pemilih = $this->db->get_where('pemilih', array('nik' => $pemilih_nik))->row();
+        // 1. Cek ulang status pemilih dengan FOR UPDATE untuk mencegah double vote
+        $pemilih = $this->db->query(
+            "SELECT pilih FROM pemilih WHERE nik = ? LIMIT 1 FOR UPDATE", 
+            array($pemilih_nik)
+        )->row();
+
         if (!$pemilih || $pemilih->pilih === 'T') {
             $this->db->trans_rollback();
             return false;
         }
 
         // 2. Insert ke tabel hasil
-        $data_hasil = array(
-            'pemilih_nik'  => $pemilih_nik,
-            'ketua_nik'    => $ketua_nik,
-            'pengawas_nik' => $pengawas_nik,
-            'created_at'   => date('Y-m-d H:i:s')
+        $now = date('Y-m-d H:i:s');
+        $this->db->query(
+            "INSERT INTO hasil (pemilih_nik, ketua_nik, pengawas_nik, created_at) VALUES (?, ?, ?, ?)",
+            array($pemilih_nik, $ketua_nik, $pengawas_nik, $now)
         );
-        $this->db->insert('hasil', $data_hasil);
 
         // 3. Update status pemilih
-        $this->db->where('nik', $pemilih_nik);
-        $this->db->update('pemilih', array('pilih' => 'T'));
+        $this->db->query(
+            "UPDATE pemilih SET pilih = 'T' WHERE nik = ? AND pilih = 'F'",
+            array($pemilih_nik)
+        );
 
         $this->db->trans_complete();
 

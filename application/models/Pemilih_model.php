@@ -10,8 +10,8 @@ class Pemilih_model extends CI_Model {
      */
     public function get_all()
     {
-        $this->db->order_by('nama', 'ASC');
-        return $this->db->get($this->table)->result();
+        $sql = "SELECT nik, rfid, nama, dept, pilih FROM {$this->table} ORDER BY nama ASC";
+        return $this->db->query($sql)->result();
     }
 
     /**
@@ -19,7 +19,8 @@ class Pemilih_model extends CI_Model {
      */
     public function get_by_nik($nik)
     {
-        return $this->db->get_where($this->table, array('nik' => $nik))->row();
+        $sql = "SELECT nik, rfid, nama, dept, pilih FROM {$this->table} WHERE nik = ? LIMIT 1";
+        return $this->db->query($sql, array($nik))->row();
     }
 
     /**
@@ -27,7 +28,9 @@ class Pemilih_model extends CI_Model {
      */
     public function is_nik_exists($nik)
     {
-        return $this->db->get_where($this->table, array('nik' => $nik))->num_rows() > 0;
+        $sql = "SELECT 1 FROM {$this->table} WHERE nik = ? LIMIT 1";
+        $row = $this->db->query($sql, array($nik))->row();
+        return !empty($row);
     }
 
     /**
@@ -35,7 +38,14 @@ class Pemilih_model extends CI_Model {
      */
     public function insert($data)
     {
-        return $this->db->insert($this->table, $data);
+        $sql = "INSERT INTO {$this->table} (nik, rfid, nama, dept, pilih) VALUES (?, ?, ?, ?, ?)";
+        return $this->db->query($sql, array(
+            $data['nik'],
+            $data['rfid'],
+            $data['nama'],
+            $data['dept'],
+            isset($data['pilih']) ? $data['pilih'] : 'F'
+        ));
     }
 
     /**
@@ -43,8 +53,15 @@ class Pemilih_model extends CI_Model {
      */
     public function update($nik, $data)
     {
-        $this->db->where('nik', $nik);
-        return $this->db->update($this->table, $data);
+        $fields = array();
+        $values = array();
+        foreach ($data as $col => $val) {
+            $fields[] = "`{$col}` = ?";
+            $values[] = $val;
+        }
+        $values[] = $nik;
+        $sql = "UPDATE {$this->table} SET " . implode(', ', $fields) . " WHERE nik = ? LIMIT 1";
+        return $this->db->query($sql, $values);
     }
 
     /**
@@ -52,16 +69,33 @@ class Pemilih_model extends CI_Model {
      */
     public function delete($nik)
     {
-        $this->db->where('nik', $nik);
-        return $this->db->delete($this->table);
+        $sql = "DELETE FROM {$this->table} WHERE nik = ? LIMIT 1";
+        return $this->db->query($sql, array($nik));
     }
 
     /**
-     * Insert batch banyak pemilih sekaligus
+     * Insert batch banyak pemilih sekaligus dengan single multi-row raw query
      */
     public function insert_batch($data)
     {
-        return $this->db->insert_batch($this->table, $data);
+        if (empty($data)) {
+            return false;
+        }
+
+        $placeholders = array();
+        $values = array();
+
+        foreach ($data as $row) {
+            $placeholders[] = "(?, ?, ?, ?, ?)";
+            $values[] = $row['nik'];
+            $values[] = $row['rfid'];
+            $values[] = $row['nama'];
+            $values[] = $row['dept'];
+            $values[] = isset($row['pilih']) ? $row['pilih'] : 'F';
+        }
+
+        $sql = "INSERT INTO {$this->table} (nik, rfid, nama, dept, pilih) VALUES " . implode(', ', $placeholders);
+        return $this->db->query($sql, $values);
     }
 
     /**
@@ -69,11 +103,10 @@ class Pemilih_model extends CI_Model {
      */
     public function get_all_niks()
     {
-        $this->db->select('nik');
-        $query = $this->db->get($this->table);
+        $query = $this->db->query("SELECT nik FROM {$this->table}");
         $result = array();
-        foreach ($query->result() as $row) {
-            $result[$row->nik] = true;
+        foreach ($query->result_array() as $row) {
+            $result[$row['nik']] = true;
         }
         return $result;
     }
@@ -83,11 +116,10 @@ class Pemilih_model extends CI_Model {
      */
     public function get_all_rfids()
     {
-        $this->db->select('rfid');
-        $query = $this->db->get($this->table);
+        $query = $this->db->query("SELECT rfid FROM {$this->table}");
         $result = array();
-        foreach ($query->result() as $row) {
-            $result[$row->rfid] = true;
+        foreach ($query->result_array() as $row) {
+            $result[$row['rfid']] = true;
         }
         return $result;
     }
