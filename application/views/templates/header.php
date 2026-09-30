@@ -852,7 +852,7 @@
         </li>
         <li class="nav-section">Bilik &amp; Panggung</li>
         <li>
-            <a href="<?= site_url('voting'); ?>" data-tooltip="Buka Bilik Suara" target="_blank">
+            <a href="<?= site_url('voting?autofs=1'); ?>" data-tooltip="Buka Bilik Suara" target="_blank">
                 <div class="nav-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 10h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10Z"/><path d="M8 10V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4"/><path d="m9 14 2 2 4-4"/></svg>
                 </div>
@@ -887,7 +887,7 @@
             <span>Halo, <strong><?= $username; ?></strong></span>
             <a href="<?= site_url('real_count'); ?>" target="_blank" class="btn-logout" style="background:#4f46e5; color:#ffffff; border-color:#4f46e5;">Real Count 3D ↗</a>
             <a href="<?= site_url('bilik_undian'); ?>" target="_blank" class="btn-logout" style="background:#f59e0b; color:#ffffff; border-color:#f59e0b;">Bilik Undian ↗</a>
-            <a href="<?= site_url('voting'); ?>" target="_blank" class="btn-logout" style="background:#1a1a1a; color:#ffffff; border-color:#1a1a1a;">Bilik Suara ↗</a>
+            <a href="<?= site_url('voting?autofs=1'); ?>" target="_blank" class="btn-logout" style="background:#1a1a1a; color:#ffffff; border-color:#1a1a1a;">Bilik Suara ↗</a>
             <a href="<?= site_url('auth/logout'); ?>" class="btn-logout">Logout</a>
         </div>
     </div>

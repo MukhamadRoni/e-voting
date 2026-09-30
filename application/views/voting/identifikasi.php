@@ -146,12 +146,13 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var form  = document.getElementById('formIdentifikasi');
-    var input = document.getElementById('inputIdentitas');
-    var btn   = document.getElementById('btnSubmitIdentitas');
+(function() {
+    function initIdentifikasi() {
+        var form  = document.getElementById('formIdentifikasi');
+        var input = document.getElementById('inputIdentitas');
+        var btn   = document.getElementById('btnSubmitIdentitas');
 
-    if (!form || !input || !btn) return;
+        if (!form || !input || !btn) return;
 
     // Auto-focus kembali ke input RFID jika pemilih klik di luar
     document.addEventListener('click', function(e) {
@@ -168,6 +169,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!val) {
             input.focus();
             return;
+        }
+
+        // Jika mode kiosk fullscreen aktif, manfaatkan gesture submit untuk memastikan fullscreen
+        var savedFs = localStorage.getItem('voting_kiosk_fullscreen') || sessionStorage.getItem('voting_kiosk_fullscreen');
+        if (savedFs === '1' && !document.fullscreenElement) {
+            var docEl = document.documentElement;
+            var rfs = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
+            if (rfs) rfs.call(docEl).catch(function() {});
         }
 
         var origBtnText = btn.innerHTML;
@@ -193,6 +202,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 btn.innerHTML = '<span class="spinner-sm"></span> Menyiapkan Bilik Suara...';
                 btn.style.background = '#15803d';
 
+                if (document.fullscreenElement || savedFs === '1') {
+                    localStorage.setItem('voting_kiosk_fullscreen', '1');
+                    sessionStorage.setItem('voting_kiosk_fullscreen', '1');
+                }
+
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         icon: 'success',
@@ -200,12 +214,21 @@ document.addEventListener('DOMContentLoaded', function() {
                         html: res.message,
                         timer: 1000,
                         showConfirmButton: false,
-                        allowOutsideClick: false
+                        allowOutsideClick: false,
+                        heightAuto: false
                     }).then(function() {
-                        window.location.href = res.data.redirect;
+                        if (typeof navigateKiosk === 'function') {
+                            navigateKiosk(res.data.redirect);
+                        } else {
+                            window.location.href = res.data.redirect;
+                        }
                     });
                 } else {
-                    window.location.href = res.data.redirect;
+                    if (typeof navigateKiosk === 'function') {
+                        navigateKiosk(res.data.redirect);
+                    } else {
+                        window.location.href = res.data.redirect;
+                    }
                 }
             } else {
                 btn.disabled = false;
@@ -220,7 +243,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         title: 'Perhatian Pemilih',
                         html: res.message,
                         confirmButtonColor: '#1a1a1a',
-                        confirmButtonText: 'Saya Mengerti'
+                        confirmButtonText: 'Saya Mengerti',
+                        heightAuto: false
                     }).then(function() {
                         input.focus();
                     });
@@ -241,7 +265,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     title: 'Koneksi Terputus',
                     text: 'Gagal menghubungi server bilik suara. Silakan coba kembali beberapa saat lagi.',
                     confirmButtonColor: '#1a1a1a',
-                    confirmButtonText: 'Coba Lagi'
+                    confirmButtonText: 'Coba Lagi',
+                    heightAuto: false
                 }).then(function() {
                     input.focus();
                 });
@@ -251,5 +276,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-});
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initIdentifikasi);
+    } else {
+        initIdentifikasi();
+    }
+})();
 </script>

@@ -2,7 +2,11 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#f8f9fa">
     <title><?= $title; ?></title>
     <link rel="icon" type="image/svg+xml" href="<?= base_url('assets/img/favicon.svg'); ?>">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,22 +16,49 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ── Mencegah Glitch Hitam Saat Fullscreen & Modal di Tablet ── */
+        html,
+        body {
+            background-color: #f8f9fa !important;
+            background: #f8f9fa !important;
+            min-height: 100%;
+            width: 100%;
         }
 
         :fullscreen,
+        ::backdrop,
+        :fullscreen::backdrop,
         :-webkit-full-screen,
+        :-webkit-full-screen::backdrop,
         :-moz-full-screen,
-        :-ms-fullscreen {
-            background-color: #f8f9fa;
+        :-moz-full-screen::backdrop,
+        :-ms-fullscreen,
+        :-ms-fullscreen::backdrop {
+            background-color: #f8f9fa !important;
+            background: #f8f9fa !important;
+        }
+
+        /* Mencegah layer collapse & black glitch saat SweetAlert2 muncul di tablet fullscreen */
+        html.swal2-shown,
+        body.swal2-shown,
+        html.swal2-height-auto,
+        body.swal2-height-auto {
+            height: 100% !important;
+            min-height: 100% !important;
+            background-color: #f8f9fa !important;
+            background: #f8f9fa !important;
         }
 
         body {
             font-family: 'DM Sans', sans-serif;
-            background-color: #f8f9fa;
             color: #1a1a1a;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* ── Topbar Kiosk ── */
@@ -213,6 +244,39 @@
             background: #f5f5f7;
         }
 
+        /* ── Floating Resume Fullscreen Banner (Tablet / Kiosk) ── */
+        .kiosk-fs-prompt {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a1a;
+            color: #ffffff;
+            padding: 10px 22px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            z-index: 99999;
+            cursor: pointer;
+            animation: pulseFsBanner 2.2s infinite ease-in-out;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .kiosk-fs-prompt svg {
+            stroke: #ffffff;
+            flex-shrink: 0;
+        }
+
+        @keyframes pulseFsBanner {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-4px); }
+        }
+
         /* Main Container */
         .main-container {
             flex: 1;
@@ -336,6 +400,7 @@
         </div>
     </a>
 
+    <div id="kioskStepperContainer">
     <?php if (isset($step)): ?>
         <div class="stepper">
             <div class="step-item <?= ($step == 1) ? 'active' : 'done'; ?>">
@@ -349,6 +414,7 @@
             </div>
         </div>
     <?php endif; ?>
+    </div>
 
     <div class="kiosk-navbar-actions">
         <button type="button" class="btn-kiosk-fullscreen" id="btnFullscreen" title="Layar Penuh (F11)">
@@ -361,6 +427,7 @@
             <span>Fullscreen</span>
         </button>
 
+        <div id="kioskVoterBadgeContainer">
         <?php if (isset($voter)): ?>
             <div class="voter-badge-pill">
                 <span>Pemilih: <strong><?= html_escape($voter['nama']); ?></strong> (<?= html_escape($voter['dept']); ?>)</span>
@@ -369,7 +436,15 @@
         <?php else: ?>
             <a href="<?= site_url('auth'); ?>" class="btn-link-admin">Panel Admin →</a>
         <?php endif; ?>
+        </div>
     </div>
 </header>
 
-<main class="main-container">
+<div id="kioskFsPrompt" class="kiosk-fs-prompt" title="Ketuk untuk masuk ke mode layar penuh">
+    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+    </svg>
+    <span>Mode Kiosk: Ketuk layar untuk Layar Penuh ⛶</span>
+</div>
+
+<main class="main-container" id="votingMainContainer">

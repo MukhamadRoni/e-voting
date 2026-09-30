@@ -39,6 +39,18 @@ class Voting extends CI_Controller {
             return;
         }
 
+        // Jika request via AJAX untuk kiosk seamless transition
+        if ($this->input->is_ajax_request() || $this->input->get('ajax') === '1') {
+            $data['title'] = 'Bilik Suara - E-Voting Koperasi';
+            $this->_json_response('success', 'Layar standby dimuat.', array(
+                'step'  => null,
+                'voter' => null,
+                'title' => $data['title'],
+                'html'  => $this->load->view('voting/identifikasi', $data, TRUE)
+            ));
+            return;
+        }
+
         $data['title'] = 'Bilik Suara - E-Voting Koperasi';
         $this->load->view('voting/template_header', $data);
         $this->load->view('voting/identifikasi', $data);
@@ -104,6 +116,17 @@ class Voting extends CI_Controller {
         $data['step']             = 1;
         $data['terpilih_ketua']    = $this->session->userdata('pilihan_ketua') ?: '';
         $data['terpilih_pengawas'] = $this->session->userdata('pilihan_pengawas') ?: '';
+
+        // Jika request via AJAX untuk kiosk seamless transition (mencegah browser keluar fullscreen)
+        if ($this->input->is_ajax_request() || $this->input->get('ajax') === '1') {
+            $this->_json_response('success', 'Halaman bilik pemilihan dimuat.', array(
+                'voter' => $voter,
+                'step'  => 1,
+                'title' => $data['title'],
+                'html'  => $this->load->view('voting/pilih', $data, TRUE)
+            ));
+            return;
+        }
 
         $this->load->view('voting/template_header', $data);
         $this->load->view('voting/pilih', $data);
@@ -192,6 +215,17 @@ class Voting extends CI_Controller {
         $data['title'] = 'Suara Berhasil Terkirim - E-Voting';
         $data['nama']  = $this->session->flashdata('nama_selesai') ?: 'Anggota';
         $data['step']  = 2;
+
+        // Jika request via AJAX untuk kiosk seamless transition
+        if ($this->input->is_ajax_request() || $this->input->get('ajax') === '1') {
+            $this->_json_response('success', 'Halaman terima kasih dimuat.', array(
+                'step'  => 2,
+                'voter' => null,
+                'title' => $data['title'],
+                'html'  => $this->load->view('voting/selesai', $data, TRUE)
+            ));
+            return;
+        }
 
         $this->load->view('voting/template_header', $data);
         $this->load->view('voting/selesai', $data);

@@ -8,12 +8,30 @@
 
 <style>
 /* ── Custom SweetAlert2 Styling per design.md ── */
+.swal2-container {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    backdrop-filter: blur(4px) !important;
+}
+.swal2-container.swal2-backdrop-show {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+}
+html.swal2-shown,
+body.swal2-shown,
+html.swal2-height-auto,
+body.swal2-height-auto {
+    height: 100% !important;
+    min-height: 100% !important;
+    background-color: #f8f9fa !important;
+    background: #f8f9fa !important;
+}
 .swal2-popup {
     font-family: 'DM Sans', sans-serif !important;
     border-radius: 24px !important;
     padding: 32px !important;
     border: 1px solid #e5e5e5 !important;
     box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
+    background: #ffffff !important;
 }
 .swal2-title {
     font-size: 22px !important;
@@ -54,6 +72,20 @@
 </style>
 
 <script>
+// Prevent SweetAlert2 from collapsing viewport height to auto (fixes tablet black flash)
+if (typeof Swal !== 'undefined') {
+    var _origSwalFire = Swal.fire;
+    Swal.fire = function() {
+        var args = Array.prototype.slice.call(arguments);
+        if (typeof args[0] === 'object' && args[0] !== null) {
+            if (args[0].heightAuto === undefined) {
+                args[0].heightAuto = false;
+            }
+        }
+        return _origSwalFire.apply(this, args);
+    };
+}
+
 // Error Alert Handler
 <?php if ($this->session->flashdata('error')): ?>
     Swal.fire({
@@ -76,180 +108,376 @@
     });
 <?php endif; ?>
 
-// SweetAlert2 Confirmation for Cancel Voter in Header
-document.addEventListener('DOMContentLoaded', function() {
-    var cancelLinks = document.querySelectorAll('.btn-cancel-voter');
-    cancelLinks.forEach(function(link) {
-        link.removeAttribute('onclick'); // remove old confirm()
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            var href = this.getAttribute('href');
-            Swal.fire({
-                title: 'Batalkan Sesi Pemilih?',
-                text: 'Proses pemilihan akan dibatalkan dan sistem akan kembali ke layar awal standby.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#dc2626',
-                confirmButtonText: 'Ya, Batalkan',
-                cancelButtonText: 'Kembali',
-                reverseButtons: true
-            }).then(function(result) {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: 'Membatalkan Sesi...',
-                        text: 'Mohon tunggu sebentar...',
-                        allowOutsideClick: false,
-                        didOpen: function() {
-                            Swal.showLoading();
-                        }
-                    });
+    // Helper Escape HTML
+    function escapeHtmlKiosk(str) {
+        if (!str) return '';
+        var d = document.createElement('div');
+        d.textContent = str;
+        return d.innerHTML;
+    }
 
-                    fetch(href, {
-                        method: 'POST',
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    })
-                    .then(function(r) { return r.json(); })
-                    .then(function(res) {
-                        if (res.status === 'success' && res.data && res.data.redirect) {
-                            window.location.href = res.data.redirect;
-                        } else {
-                            window.location.href = href;
-                        }
-                    })
-                    .catch(function() {
-                        window.location.href = href;
-                    });
-                }
+    // Eksekusi script di dalam HTML yang dimuat secara dinamis
+    window.setContentAndRunScripts = function(container, html) {
+        if (!container) return;
+        container.innerHTML = html;
+        var scripts = container.querySelectorAll('script');
+        scripts.forEach(function(oldScript) {
+            var newScript = document.createElement('script');
+            Array.from(oldScript.attributes).forEach(function(attr) {
+                newScript.setAttribute(attr.name, attr.value);
             });
+            newScript.textContent = oldScript.textContent;
+            oldScript.parentNode.replaceChild(newScript, oldScript);
         });
-    });
+    };
+
+    // Update Stepper & Voter Badge di Navbar tanpa reload halaman
+    window.updateKioskNavbarState = function(step, voter) {
+        var stepperEl = document.getElementById('kioskStepperContainer');
+        var badgeEl   = document.getElementById('kioskVoterBadgeContainer');
+
+        if (stepperEl) {
+            if (step === 1) {
+                stepperEl.innerHTML = '<div class="stepper">' +
+                    '<div class="step-item active"><div class="step-circle">1</div><span>Pilih Ketua & Pengawas</span></div>' +
+                    '<span style="color:#d1d5db;">→</span>' +
+                    '<div class="step-item"><div class="step-circle">2</div><span>Selesai</span></div>' +
+                    '</div>';
+            } else if (step === 2) {
+                stepperEl.innerHTML = '<div class="stepper">' +
+                    '<div class="step-item done"><div class="step-circle">✓</div><span>Pilih Ketua & Pengawas</span></div>' +
+                    '<span style="color:#d1d5db;">→</span>' +
+                    '<div class="step-item active"><div class="step-circle">✓</div><span>Selesai</span></div>' +
+                    '</div>';
+            } else {
+                stepperEl.innerHTML = '';
+            }
+        }
+
+        if (badgeEl) {
+            if (voter && voter.nama) {
+                badgeEl.innerHTML = '<div class="voter-badge-pill">' +
+                    '<span>Pemilih: <strong>' + escapeHtmlKiosk(voter.nama) + '</strong> (' + escapeHtmlKiosk(voter.dept || '') + ')</span>' +
+                    '<a href="<?= site_url('voting/batal'); ?>" class="btn-cancel-voter">Batal</a>' +
+                    '</div>';
+                attachCancelVoterListeners();
+            } else {
+                badgeEl.innerHTML = '<a href="<?= site_url('auth'); ?>" class="btn-link-admin">Panel Admin →</a>';
+            }
+        }
+    };
+
+    // Navigasi Seamless Kiosk (SPA View Swap agar browser TIDAK PERNAH keluar dari Fullscreen)
+    window.navigateKiosk = function(url, onDone) {
+        var mainEl = document.getElementById('votingMainContainer');
+        if (!mainEl) {
+            window.location.href = url;
+            return;
+        }
+
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(function(res) {
+            if (!res.ok) throw new Error('Network error');
+            return res.json();
+        })
+        .then(function(data) {
+            if (data.status === 'success' && data.data && data.data.html) {
+                if (data.data.title) document.title = data.data.title;
+                try {
+                    window.history.pushState({ url: url }, '', url);
+                } catch(e) {}
+
+                updateKioskNavbarState(data.data.step, data.data.voter);
+                setContentAndRunScripts(mainEl, data.data.html);
+
+                // Pastikan fullscreen tetap aktif di tablet jika preferensi aktif
+                if (getSavedFsPref() === '1' && !isFsActive()) {
+                    requestFs(document.documentElement).catch(function() {});
+                }
+
+                if (typeof onDone === 'function') onDone(data);
+            } else if (data.data && data.data.redirect) {
+                navigateKiosk(data.data.redirect);
+            } else {
+                window.location.href = url;
+            }
+        })
+        .catch(function(err) {
+            console.warn('Seamless navigation fallback to location.href:', err);
+            window.location.href = url;
+        });
+    };
+
+    // SweetAlert2 Confirmation for Cancel Voter in Header
+    function attachCancelVoterListeners() {
+        var cancelLinks = document.querySelectorAll('.btn-cancel-voter');
+        cancelLinks.forEach(function(link) {
+            link.removeAttribute('onclick');
+            link.onclick = function(e) {
+                e.preventDefault();
+                var href = this.getAttribute('href');
+                Swal.fire({
+                    title: 'Batalkan Sesi Pemilih?',
+                    text: 'Proses pemilihan akan dibatalkan dan sistem akan kembali ke layar awal standby.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc2626',
+                    confirmButtonText: 'Ya, Batalkan',
+                    cancelButtonText: 'Kembali',
+                    reverseButtons: true,
+                    heightAuto: false
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Membatalkan Sesi...',
+                            text: 'Mohon tunggu sebentar...',
+                            allowOutsideClick: false,
+                            heightAuto: false,
+                            didOpen: function() {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        fetch(href, {
+                            method: 'POST',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(function(r) { return r.json(); })
+                        .then(function(res) {
+                            Swal.close();
+                            if (res.status === 'success' && res.data && res.data.redirect) {
+                                navigateKiosk(res.data.redirect);
+                            } else {
+                                window.location.href = href;
+                            }
+                        })
+                        .catch(function() {
+                            window.location.href = href;
+                        });
+                    }
+                });
+            };
+        });
+    }
+
+    attachCancelVoterListeners();
 
     // ── Mode Fullscreen Kiosk Pemilihan ──
-    var btnFs = document.getElementById('btnFullscreen');
-    if (btnFs) {
-        var iconEnter = btnFs.querySelector('.fs-icon-enter');
-        var iconExit  = btnFs.querySelector('.fs-icon-exit');
-        var labelFs   = btnFs.querySelector('span');
+    var btnFs    = document.getElementById('btnFullscreen');
+    var promptFs = document.getElementById('kioskFsPrompt');
 
-        function getFsElement() {
-            return document.fullscreenElement ||
-                   document.webkitFullscreenElement ||
-                   document.mozFullScreenElement ||
-                   document.msFullscreenElement || null;
+    function getFsElement() {
+        return document.fullscreenElement ||
+               document.webkitFullscreenElement ||
+               document.mozFullScreenElement ||
+               document.msFullscreenElement || null;
+    }
+
+    function isFsActive() {
+        return !!getFsElement();
+    }
+
+    function getSavedFsPref() {
+        try {
+            var val = localStorage.getItem('voting_kiosk_fullscreen');
+            if (val === null) {
+                val = sessionStorage.getItem('voting_kiosk_fullscreen');
+            }
+            return val;
+        } catch(e) {
+            return null;
         }
+    }
 
-        function isFsActive() {
-            return !!getFsElement();
+    function setSavedFsPref(val) {
+        try {
+            localStorage.setItem('voting_kiosk_fullscreen', val);
+            sessionStorage.setItem('voting_kiosk_fullscreen', val);
+        } catch(e) {}
+    }
+
+    // Auto-detect parameter URL ?autofs=1 atau ?fullscreen=1
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('autofs') === '1' || urlParams.get('fullscreen') === '1') {
+        setSavedFsPref('1');
+    }
+
+    function showPromptBanner() {
+        if (promptFs && !isFsActive() && getSavedFsPref() === '1') {
+            promptFs.style.display = 'inline-flex';
         }
+    }
 
-        function requestFs(el) {
+    function hidePromptBanner() {
+        if (promptFs) {
+            promptFs.style.display = 'none';
+        }
+    }
+
+    function requestFs(el) {
+        if (!el) el = document.documentElement;
+        try {
+            var promise = null;
             if (el.requestFullscreen) {
-                return el.requestFullscreen();
+                promise = el.requestFullscreen();
             } else if (el.webkitRequestFullscreen) {
-                return el.webkitRequestFullscreen();
+                promise = el.webkitRequestFullscreen();
             } else if (el.mozRequestFullScreen) {
-                return el.mozRequestFullScreen();
+                promise = el.mozRequestFullScreen();
             } else if (el.msRequestFullscreen) {
-                return el.msRequestFullscreen();
+                promise = el.msRequestFullscreen();
+            } else {
+                return Promise.reject(new Error('Fullscreen not supported'));
             }
-            return Promise.reject(new Error('Fullscreen not supported'));
+            if (promise && typeof promise.then === 'function') {
+                return promise;
+            }
+            return Promise.resolve();
+        } catch(err) {
+            return Promise.reject(err);
         }
+    }
 
-        function exitFs() {
+    function exitFs() {
+        try {
+            var promise = null;
             if (document.exitFullscreen) {
-                return document.exitFullscreen();
+                promise = document.exitFullscreen();
             } else if (document.webkitExitFullscreen) {
-                return document.webkitExitFullscreen();
+                promise = document.webkitExitFullscreen();
             } else if (document.mozCancelFullScreen) {
-                return document.mozCancelFullScreen();
+                promise = document.mozCancelFullScreen();
             } else if (document.msExitFullscreen) {
-                return document.msExitFullscreen();
+                promise = document.msExitFullscreen();
+            } else {
+                return Promise.reject(new Error('Exit fullscreen not supported'));
             }
-            return Promise.reject(new Error('Exit fullscreen not supported'));
+            if (promise && typeof promise.then === 'function') {
+                return promise;
+            }
+            return Promise.resolve();
+        } catch(err) {
+            return Promise.reject(err);
         }
+    }
 
-        function updateFullscreenUI() {
-            var active = isFsActive();
+    function updateFullscreenUI() {
+        var active = isFsActive();
+        var currentBtn = document.getElementById('btnFullscreen');
+        if (currentBtn) {
+            var iconEnter = currentBtn.querySelector('.fs-icon-enter');
+            var iconExit  = currentBtn.querySelector('.fs-icon-exit');
+            var labelFs   = currentBtn.querySelector('span');
+
             if (active) {
-                btnFs.classList.add('is-active');
+                currentBtn.classList.add('is-active');
                 if (iconEnter) iconEnter.style.display = 'none';
                 if (iconExit) iconExit.style.display = 'inline-block';
                 if (labelFs) labelFs.textContent = 'Exit Screen';
-                btnFs.setAttribute('title', 'Keluar dari Mode Layar Penuh (Esc)');
-                try { sessionStorage.setItem('voting_kiosk_fullscreen', '1'); } catch(e) {}
+                currentBtn.setAttribute('title', 'Keluar dari Mode Layar Penuh (Esc)');
+                setSavedFsPref('1');
+                hidePromptBanner();
             } else {
-                btnFs.classList.remove('is-active');
+                currentBtn.classList.remove('is-active');
                 if (iconEnter) iconEnter.style.display = 'inline-block';
                 if (iconExit) iconExit.style.display = 'none';
                 if (labelFs) labelFs.textContent = 'Fullscreen';
-                btnFs.setAttribute('title', 'Layar Penuh (F11)');
-                try {
-                    // Jika keluar secara manual dari fullscreen
-                    if (sessionStorage.getItem('voting_kiosk_fullscreen') === '1' && !active) {
-                        sessionStorage.setItem('voting_kiosk_fullscreen', '0');
-                    }
-                } catch(e) {}
+                currentBtn.setAttribute('title', 'Layar Penuh (F11)');
+
+                if (getSavedFsPref() === '1') {
+                    showPromptBanner();
+                }
             }
         }
+    }
 
-        function toggleFullscreen() {
+    // Event listener click delegation untuk tombol fullscreen & prompt banner
+    document.addEventListener('click', function(e) {
+        var clickedBtn = e.target.closest('#btnFullscreen');
+        if (clickedBtn) {
+            e.preventDefault();
             if (!isFsActive()) {
+                setSavedFsPref('1');
                 requestFs(document.documentElement).then(function() {
-                    try { sessionStorage.setItem('voting_kiosk_fullscreen', '1'); } catch(e) {}
                     updateFullscreenUI();
                 }).catch(function(err) {
                     console.warn('Fullscreen request rejected:', err);
                 });
             } else {
-                try { sessionStorage.setItem('voting_kiosk_fullscreen', '0'); } catch(e) {}
+                setSavedFsPref('0');
+                hidePromptBanner();
                 exitFs().then(function() {
                     updateFullscreenUI();
                 }).catch(function(err) {
                     console.warn('Exit fullscreen rejected:', err);
                 });
             }
+            return;
         }
 
-        btnFs.addEventListener('click', function(e) {
+        var clickedPrompt = e.target.closest('#kioskFsPrompt');
+        if (clickedPrompt) {
             e.preventDefault();
-            toggleFullscreen();
-        });
+            requestFs(document.documentElement).then(function() {
+                updateFullscreenUI();
+            }).catch(function(err) {
+                console.warn('Fullscreen request rejected:', err);
+            });
+            return;
+        }
+    });
 
-        // Event listener perubahan status fullscreen dari browser / tombol keyboard Esc
-        ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(function(evt) {
-            document.addEventListener(evt, updateFullscreenUI);
-        });
+    // Event listener perubahan status fullscreen dari browser / tombol keyboard Esc
+    ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(function(evt) {
+        document.addEventListener(evt, updateFullscreenUI);
+    });
 
-        // Dukungan shortcut F11
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F11') {
-                e.preventDefault();
-                toggleFullscreen();
+    // Dukungan shortcut F11
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F11') {
+            e.preventDefault();
+            if (!isFsActive()) {
+                setSavedFsPref('1');
+                requestFs(document.documentElement);
+            } else {
+                setSavedFsPref('0');
+                exitFs();
             }
+        }
+    });
+
+    // Inisialisasi awal UI
+    updateFullscreenUI();
+
+    // Pemulihan otomatis mode fullscreen antar halaman bilik suara di tablet/layar
+    if (getSavedFsPref() === '1' && !isFsActive()) {
+        requestFs(document.documentElement).catch(function() {
+            showPromptBanner();
+
+            var resumeOnFirstInteraction = function(e) {
+                if (getSavedFsPref() === '1' && !isFsActive()) {
+                    requestFs(document.documentElement).then(function() {
+                        hidePromptBanner();
+                        updateFullscreenUI();
+                    }).catch(function() {});
+                }
+                document.removeEventListener('click', resumeOnFirstInteraction, true);
+                document.removeEventListener('touchend', resumeOnFirstInteraction, true);
+                document.removeEventListener('pointerup', resumeOnFirstInteraction, true);
+            };
+
+            document.addEventListener('click', resumeOnFirstInteraction, true);
+            document.addEventListener('touchend', resumeOnFirstInteraction, true);
+            document.addEventListener('pointerup', resumeOnFirstInteraction, true);
         });
-
-        // Inisialisasi awal UI
-        updateFullscreenUI();
-
-        // Pemulihan otomatis mode fullscreen antar halaman bilik suara (RFID -> Pilih -> Selesai)
-        try {
-            if (sessionStorage.getItem('voting_kiosk_fullscreen') === '1' && !isFsActive()) {
-                // Browser memerlukan interaksi pengguna (user gesture) jika navigasi baru
-                var resumeFullscreenOnGesture = function() {
-                    if (sessionStorage.getItem('voting_kiosk_fullscreen') === '1' && !isFsActive()) {
-                        requestFs(document.documentElement).catch(function() {});
-                    }
-                    document.removeEventListener('click', resumeFullscreenOnGesture);
-                    document.removeEventListener('touchstart', resumeFullscreenOnGesture);
-                };
-                document.addEventListener('click', resumeFullscreenOnGesture, { once: true });
-                document.addEventListener('touchstart', resumeFullscreenOnGesture, { once: true });
-            }
-        } catch(e) {}
     }
-});
 </script>
 
 </body>

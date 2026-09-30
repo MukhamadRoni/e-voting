@@ -81,7 +81,7 @@
         Layar akan kembali otomatis ke halaman awal dalam <strong id="timerDisplay">6</strong> detik...
     </div>
 
-    <a href="<?= site_url('voting'); ?>" class="btn btn-primary" style="padding:12px 32px; font-size:15px;">
+    <a href="<?= site_url('voting'); ?>" class="btn btn-primary" style="padding:12px 32px; font-size:15px;" onclick="if(typeof navigateKiosk === 'function'){ clearInterval(countdownInterval); navigateKiosk(this.href); return false; }">
         Selesai &bull; Kembali Sekarang
     </a>
 </div>
@@ -98,7 +98,11 @@ var countdownInterval = setInterval(function() {
 
     if (timeLeft <= 0) {
         clearInterval(countdownInterval);
-        window.location.href = "<?= site_url('voting'); ?>";
+        if (typeof navigateKiosk === 'function') {
+            navigateKiosk("<?= site_url('voting'); ?>");
+        } else {
+            window.location.href = "<?= site_url('voting'); ?>";
+        }
     }
 }, 1000);
 </script>

@@ -739,7 +739,7 @@ var currentSelection = {
 };
 
 // Inisialisasi awal saat halaman dimuat
-document.addEventListener('DOMContentLoaded', function() {
+function initPilihUi() {
     // Cari data awal jika sudah ada di session
     <?php if (!empty($kandidat_ketua)): ?>
         <?php foreach ($kandidat_ketua as $idx => $k): ?>
@@ -762,7 +762,13 @@ document.addEventListener('DOMContentLoaded', function() {
     <?php endif; ?>
 
     updateUiState();
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPilihUi);
+} else {
+    initPilihUi();
+}
 
 // Handler saat kartu diklik
 function handleCardClick(category, nik, nama, foto, noUrut) {
@@ -1023,7 +1029,11 @@ function handleKirimSuara() {
                         showConfirmButton: false,
                         allowOutsideClick: false
                     }).then(function() {
-                        window.location.href = res.data.redirect;
+                        if (typeof navigateKiosk === 'function') {
+                            navigateKiosk(res.data.redirect);
+                        } else {
+                            window.location.href = res.data.redirect;
+                        }
                     });
                 } else {
                     Swal.fire({
@@ -1031,10 +1041,15 @@ function handleKirimSuara() {
                         title: 'Gagal Menyimpan Suara',
                         html: res.message,
                         confirmButtonColor: '#1a1a1a',
-                        confirmButtonText: 'Saya Mengerti'
+                        confirmButtonText: 'Saya Mengerti',
+                        heightAuto: false
                     }).then(function() {
                         if (res.data && res.data.redirect) {
-                            window.location.href = res.data.redirect;
+                            if (typeof navigateKiosk === 'function') {
+                                navigateKiosk(res.data.redirect);
+                            } else {
+                                window.location.href = res.data.redirect;
+                            }
                         }
                     });
                 }
@@ -1045,7 +1060,8 @@ function handleKirimSuara() {
                     title: 'Koneksi Terputus',
                     text: 'Gagal menghubungi server bilik suara. Silakan periksa jaringan dan coba lagi.',
                     confirmButtonColor: '#1a1a1a',
-                    confirmButtonText: 'Coba Lagi'
+                    confirmButtonText: 'Coba Lagi',
+                    heightAuto: false
                 });
             });
         }
@@ -1064,13 +1080,15 @@ function handleBatalClick(e, url) {
         cancelButtonColor: '#6b7280',
         confirmButtonText: 'Ya, Batalkan',
         cancelButtonText: 'Lanjutkan Memilih',
-        reverseButtons: true
+        reverseButtons: true,
+        heightAuto: false
     }).then(function(result) {
         if (result.isConfirmed) {
             Swal.fire({
                 title: 'Membatalkan Sesi...',
                 text: 'Mohon tunggu sebentar...',
                 allowOutsideClick: false,
+                heightAuto: false,
                 didOpen: function() {
                     Swal.showLoading();
                 }
@@ -1084,8 +1102,13 @@ function handleBatalClick(e, url) {
             })
             .then(function(r) { return r.json(); })
             .then(function(res) {
+                Swal.close();
                 if (res.status === 'success' && res.data && res.data.redirect) {
-                    window.location.href = res.data.redirect;
+                    if (typeof navigateKiosk === 'function') {
+                        navigateKiosk(res.data.redirect);
+                    } else {
+                        window.location.href = res.data.redirect;
+                    }
                 } else {
                     window.location.href = url;
                 }
