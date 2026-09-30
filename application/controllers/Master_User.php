@@ -221,6 +221,63 @@ class Master_User extends Admin_Controller {
     }
 
     /**
+     * Export Data Pemilih ke Excel (.xlsx) Sesuai Filter Status dan Kolom DataTable
+     */
+    public function export()
+    {
+        $statusParam = $this->input->get('status', TRUE);
+        $searchParam = $this->input->get('search', TRUE);
+
+        $dbStatus = null;
+        $fileSuffix = 'semua';
+
+        if ($statusParam !== null && $statusParam !== '') {
+            $normalizedStatus = strtolower(trim($statusParam));
+            if ($normalizedStatus === 'sudah' || $normalizedStatus === 'sudah memilih' || $normalizedStatus === 't') {
+                $dbStatus = 'T';
+                $fileSuffix = 'sudah_memilih';
+            } elseif ($normalizedStatus === 'belum' || $normalizedStatus === 'belum memilih' || $normalizedStatus === 'f') {
+                $dbStatus = 'F';
+                $fileSuffix = 'belum_memilih';
+            }
+        }
+
+        // Ambil data pemilih sesuai filter status dan/atau pencarian
+        $pemilih = $this->Pemilih_model->get_filtered($dbStatus, $searchParam);
+
+        // Susun baris untuk Excel sesuai urutan kolom DataTable (No, NIK, RFID, Nama, Department, Status Voting)
+        $excelData = array();
+
+        $excelData[] = array(
+            '<b>No</b>',
+            '<b>NIK</b>',
+            '<b>RFID</b>',
+            '<b>Nama</b>',
+            '<b>Department</b>',
+            '<b>Status Voting</b>'
+        );
+
+        $no = 1;
+        foreach ($pemilih as $p) {
+            $statusText = ($p->pilih === 'T') ? 'Sudah Memilih' : 'Belum Memilih';
+            $excelData[] = array(
+                $no++,
+                "\0" . (string)$p->nik,
+                "\0" . (string)$p->rfid,
+                (string)$p->nama,
+                (string)$p->dept,
+                $statusText
+            );
+        }
+
+        $filename = 'data_pemilih_' . $fileSuffix . '_' . date('Ymd_His') . '.xlsx';
+
+        $xlsx = SimpleXLSXGen::fromArray($excelData, 'Data Pemilih');
+        $xlsx->downloadAs($filename);
+        exit;
+    }
+
+    /**
      * Proses Upload, Parsing, dan Validasi untuk Menampilkan Pratinjau
      */
     public function proses_import()

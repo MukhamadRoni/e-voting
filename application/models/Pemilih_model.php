@@ -123,4 +123,33 @@ class Pemilih_model extends CI_Model {
         }
         return $result;
     }
+
+    /**
+     * Ambil data pemilih berdasarkan filter status dan/atau pencarian
+     *
+     * @param string|null $status 'T' (Sudah Memilih), 'F' (Belum Memilih), atau null/all (Semua)
+     * @param string|null $search Keyword pencarian
+     * @return array
+     */
+    public function get_filtered($status = null, $search = null)
+    {
+        $this->db->select('nik, rfid, nama, dept, pilih');
+        $this->db->from($this->table);
+
+        if ($status === 'T' || $status === 'F') {
+            $this->db->where('pilih', $status);
+        }
+
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('nik', $search);
+            $this->db->or_like('rfid', $search);
+            $this->db->or_like('nama', $search);
+            $this->db->or_like('dept', $search);
+            $this->db->group_end();
+        }
+
+        $this->db->order_by('nama', 'ASC');
+        return $this->db->get()->result();
+    }
 }
