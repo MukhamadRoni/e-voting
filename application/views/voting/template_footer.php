@@ -195,12 +195,15 @@ if (typeof Swal !== 'undefined') {
                 updateKioskNavbarState(data.data.step, data.data.voter);
                 setContentAndRunScripts(mainEl, data.data.html);
 
-                // Selalu fokuskan ke id inputIdentitas saat halaman voting dibuka/dimuat dinamis
+                // Selalu fokuskan ke id inputIdentitas saat halaman voting dibuka/dimuat dinamis tanpa membuka keyboard virtual tablet
                 var rfidInput = document.getElementById('inputIdentitas');
                 if (rfidInput) {
+                    if (rfidInput.getAttribute('inputmode') === 'none' && 'virtualKeyboard' in navigator) {
+                        navigator.virtualKeyboard.hide();
+                    }
                     setTimeout(function() {
                         try {
-                            rfidInput.focus();
+                            rfidInput.focus({ preventScroll: true });
                             if (rfidInput.setSelectionRange) {
                                 var len = rfidInput.value.length;
                                 rfidInput.setSelectionRange(len, len);
@@ -208,7 +211,7 @@ if (typeof Swal !== 'undefined') {
                         } catch(e) {}
                     }, 50);
                     setTimeout(function() {
-                        try { rfidInput.focus(); } catch(e) {}
+                        try { rfidInput.focus({ preventScroll: true }); } catch(e) {}
                     }, 200);
                 }
 
@@ -496,12 +499,15 @@ if (typeof Swal !== 'undefined') {
         });
     }
 
-    // Selalu fokuskan ke id inputIdentitas setiap kali halaman voting terbuka
+    // Selalu fokuskan ke id inputIdentitas setiap kali halaman voting terbuka tanpa memicu keyboard virtual tablet
     function autoFocusInputIdentitas() {
         var inputId = document.getElementById('inputIdentitas');
         if (inputId) {
             try {
-                inputId.focus();
+                if (inputId.getAttribute('inputmode') === 'none' && 'virtualKeyboard' in navigator) {
+                    navigator.virtualKeyboard.hide();
+                }
+                inputId.focus({ preventScroll: true });
                 if (inputId.setSelectionRange) {
                     var len = inputId.value.length;
                     inputId.setSelectionRange(len, len);

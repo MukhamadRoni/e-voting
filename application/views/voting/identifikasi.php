@@ -104,6 +104,36 @@
     pointer-events: none;
     cursor: not-allowed;
 }
+
+.btn-toggle-keyboard {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    user-select: none;
+}
+
+.btn-toggle-keyboard:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #1e293b;
+}
+
+.btn-toggle-keyboard.is-active {
+    background: #f0fdf4;
+    border-color: #86efac;
+    color: #166534;
+}
 </style>
 
 <div class="kiosk-welcome-card">
@@ -127,8 +157,20 @@
             placeholder="Scan RFID / Masukkan NIK..." 
             autocomplete="off" 
             autofocus 
+            inputmode="none"
+            virtualkeyboardpolicy="manual"
             required
         >
+
+        <div style="display: flex; justify-content: center; margin-top: -6px; margin-bottom: 16px;">
+            <button type="button" id="btnToggleKeyboard" class="btn-toggle-keyboard" title="Klik untuk memunculkan keyboard layar jika ingin mengetik manual NIK">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                    <path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M6 12h.001M10 12h.001M14 12h.001M18 12h.001M8 16h8"></path>
+                </svg>
+                <span id="txtToggleKeyboard">Buka Keyboard Layar (Ketik NIK)</span>
+            </button>
+        </div>
 
         <button type="submit" class="btn btn-primary" id="btnSubmitIdentitas" style="width: 100%; height: 52px; font-size: 16px;">
             Mulai Memilih →
@@ -148,23 +190,55 @@
 <script>
 (function() {
     function initIdentifikasi() {
-        var form  = document.getElementById('formIdentifikasi');
-        var input = document.getElementById('inputIdentitas');
-        var btn   = document.getElementById('btnSubmitIdentitas');
+        var form        = document.getElementById('formIdentifikasi');
+        var input       = document.getElementById('inputIdentitas');
+        var btn         = document.getElementById('btnSubmitIdentitas');
+        var btnToggleKb = document.getElementById('btnToggleKeyboard');
+        var txtToggleKb = document.getElementById('txtToggleKeyboard');
 
         if (!form || !input || !btn) return;
 
-        // Fungsi khusus untuk memastikan input identitas selalu fokus
+        // Fungsi khusus untuk memastikan input identitas selalu fokus tanpa membuka keyboard virtual di tablet
         function focusInputIdentitas() {
             if (input && !btn.disabled) {
                 try {
-                    input.focus();
+                    if (input.getAttribute('inputmode') === 'none' && 'virtualKeyboard' in navigator) {
+                        navigator.virtualKeyboard.hide();
+                    }
+                    input.focus({ preventScroll: true });
                     if (input.setSelectionRange) {
                         var len = input.value.length;
                         input.setSelectionRange(len, len);
                     }
                 } catch(e) {}
             }
+        }
+
+        // Toggle keyboard virtual jika pemilih di tablet ingin mengetik manual NIK
+        if (btnToggleKb) {
+            btnToggleKb.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var currentMode = input.getAttribute('inputmode');
+                if (currentMode === 'none') {
+                    input.setAttribute('inputmode', 'text');
+                    input.removeAttribute('virtualkeyboardpolicy');
+                    btnToggleKb.classList.add('is-active');
+                    if (txtToggleKb) txtToggleKb.textContent = 'Tutup Keyboard Layar';
+                    input.focus();
+                    if ('virtualKeyboard' in navigator) {
+                        navigator.virtualKeyboard.show();
+                    }
+                } else {
+                    input.setAttribute('inputmode', 'none');
+                    input.setAttribute('virtualkeyboardpolicy', 'manual');
+                    btnToggleKb.classList.remove('is-active');
+                    if (txtToggleKb) txtToggleKb.textContent = 'Buka Keyboard Layar (Ketik NIK)';
+                    if ('virtualKeyboard' in navigator) {
+                        navigator.virtualKeyboard.hide();
+                    }
+                    input.focus({ preventScroll: true });
+                }
+            });
         }
 
         // Fokuskan segera dan bertahap saat halaman voting dibuka
