@@ -125,6 +125,130 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
+
+    // ── Mode Fullscreen Kiosk Pemilihan ──
+    var btnFs = document.getElementById('btnFullscreen');
+    if (btnFs) {
+        var iconEnter = btnFs.querySelector('.fs-icon-enter');
+        var iconExit  = btnFs.querySelector('.fs-icon-exit');
+        var labelFs   = btnFs.querySelector('span');
+
+        function getFsElement() {
+            return document.fullscreenElement ||
+                   document.webkitFullscreenElement ||
+                   document.mozFullScreenElement ||
+                   document.msFullscreenElement || null;
+        }
+
+        function isFsActive() {
+            return !!getFsElement();
+        }
+
+        function requestFs(el) {
+            if (el.requestFullscreen) {
+                return el.requestFullscreen();
+            } else if (el.webkitRequestFullscreen) {
+                return el.webkitRequestFullscreen();
+            } else if (el.mozRequestFullScreen) {
+                return el.mozRequestFullScreen();
+            } else if (el.msRequestFullscreen) {
+                return el.msRequestFullscreen();
+            }
+            return Promise.reject(new Error('Fullscreen not supported'));
+        }
+
+        function exitFs() {
+            if (document.exitFullscreen) {
+                return document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                return document.webkitExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                return document.mozCancelFullScreen();
+            } else if (document.msExitFullscreen) {
+                return document.msExitFullscreen();
+            }
+            return Promise.reject(new Error('Exit fullscreen not supported'));
+        }
+
+        function updateFullscreenUI() {
+            var active = isFsActive();
+            if (active) {
+                btnFs.classList.add('is-active');
+                if (iconEnter) iconEnter.style.display = 'none';
+                if (iconExit) iconExit.style.display = 'inline-block';
+                if (labelFs) labelFs.textContent = 'Exit Screen';
+                btnFs.setAttribute('title', 'Keluar dari Mode Layar Penuh (Esc)');
+                try { sessionStorage.setItem('voting_kiosk_fullscreen', '1'); } catch(e) {}
+            } else {
+                btnFs.classList.remove('is-active');
+                if (iconEnter) iconEnter.style.display = 'inline-block';
+                if (iconExit) iconExit.style.display = 'none';
+                if (labelFs) labelFs.textContent = 'Fullscreen';
+                btnFs.setAttribute('title', 'Layar Penuh (F11)');
+                try {
+                    // Jika keluar secara manual dari fullscreen
+                    if (sessionStorage.getItem('voting_kiosk_fullscreen') === '1' && !active) {
+                        sessionStorage.setItem('voting_kiosk_fullscreen', '0');
+                    }
+                } catch(e) {}
+            }
+        }
+
+        function toggleFullscreen() {
+            if (!isFsActive()) {
+                requestFs(document.documentElement).then(function() {
+                    try { sessionStorage.setItem('voting_kiosk_fullscreen', '1'); } catch(e) {}
+                    updateFullscreenUI();
+                }).catch(function(err) {
+                    console.warn('Fullscreen request rejected:', err);
+                });
+            } else {
+                try { sessionStorage.setItem('voting_kiosk_fullscreen', '0'); } catch(e) {}
+                exitFs().then(function() {
+                    updateFullscreenUI();
+                }).catch(function(err) {
+                    console.warn('Exit fullscreen rejected:', err);
+                });
+            }
+        }
+
+        btnFs.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleFullscreen();
+        });
+
+        // Event listener perubahan status fullscreen dari browser / tombol keyboard Esc
+        ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(function(evt) {
+            document.addEventListener(evt, updateFullscreenUI);
+        });
+
+        // Dukungan shortcut F11
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F11') {
+                e.preventDefault();
+                toggleFullscreen();
+            }
+        });
+
+        // Inisialisasi awal UI
+        updateFullscreenUI();
+
+        // Pemulihan otomatis mode fullscreen antar halaman bilik suara (RFID -> Pilih -> Selesai)
+        try {
+            if (sessionStorage.getItem('voting_kiosk_fullscreen') === '1' && !isFsActive()) {
+                // Browser memerlukan interaksi pengguna (user gesture) jika navigasi baru
+                var resumeFullscreenOnGesture = function() {
+                    if (sessionStorage.getItem('voting_kiosk_fullscreen') === '1' && !isFsActive()) {
+                        requestFs(document.documentElement).catch(function() {});
+                    }
+                    document.removeEventListener('click', resumeFullscreenOnGesture);
+                    document.removeEventListener('touchstart', resumeFullscreenOnGesture);
+                };
+                document.addEventListener('click', resumeFullscreenOnGesture, { once: true });
+                document.addEventListener('touchstart', resumeFullscreenOnGesture, { once: true });
+            }
+        } catch(e) {}
+    }
 });
 </script>
 

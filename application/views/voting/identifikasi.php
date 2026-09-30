@@ -138,6 +138,11 @@
     <div class="badge-info-pill">
         🔒 Suara Anda bersifat LUBERJURDIL (Langsung, Umum, Bebas, Rahasia, Jujur, Adil)
     </div>
+
+    <div style="margin-top: 14px; font-size: 12px; color: #9ca3af; display: flex; align-items: center; justify-content: center; gap: 6px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+        <span>Gunakan mode <strong>Fullscreen</strong> di pojok kanan atas untuk bilik suara optimal.</span>
+    </div>
 </div>
 
 <script>

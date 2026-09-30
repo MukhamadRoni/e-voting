@@ -14,6 +14,13 @@
             box-sizing: border-box;
         }
 
+        :fullscreen,
+        :-webkit-full-screen,
+        :-moz-full-screen,
+        :-ms-fullscreen {
+            background-color: #f8f9fa;
+        }
+
         body {
             font-family: 'DM Sans', sans-serif;
             background-color: #f8f9fa;
@@ -145,6 +152,67 @@
             background: rgba(220, 38, 38, 0.15);
         }
 
+        /* ── Fullscreen Toggle & Navbar Actions ── */
+        .kiosk-navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-kiosk-fullscreen {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 15px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            color: #1a1a1a;
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            user-select: none;
+            outline: none;
+        }
+
+        .btn-kiosk-fullscreen:hover {
+            background: #f5f5f7;
+            border-color: #d1d5db;
+            transform: translateY(-1px);
+        }
+
+        .btn-kiosk-fullscreen:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn-kiosk-fullscreen.is-active {
+            background: #1a1a1a;
+            color: #ffffff;
+            border-color: #1a1a1a;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+
+        .btn-kiosk-fullscreen.is-active svg {
+            stroke: #ffffff;
+        }
+
+        .btn-link-admin {
+            font-size: 13px;
+            color: #6b7280;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-link-admin:hover {
+            color: #1a1a1a;
+            background: #f5f5f7;
+        }
+
         /* Main Container */
         .main-container {
             flex: 1;
@@ -171,6 +239,19 @@
             .voter-badge-pill {
                 padding: 4px 10px;
                 font-size: 12px;
+            }
+            .kiosk-navbar-actions {
+                gap: 8px;
+            }
+            .btn-kiosk-fullscreen {
+                padding: 6px 10px;
+            }
+            .btn-kiosk-fullscreen span {
+                display: none;
+            }
+            .btn-link-admin {
+                font-size: 12px;
+                padding: 4px 8px;
             }
             .main-container {
                 padding: 20px 14px 100px;
@@ -269,14 +350,24 @@
         </div>
     <?php endif; ?>
 
-    <div>
+    <div class="kiosk-navbar-actions">
+        <button type="button" class="btn-kiosk-fullscreen" id="btnFullscreen" title="Layar Penuh (F11)">
+            <svg class="fs-icon-enter" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+            </svg>
+            <svg class="fs-icon-exit" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
+            </svg>
+            <span>Fullscreen</span>
+        </button>
+
         <?php if (isset($voter)): ?>
             <div class="voter-badge-pill">
                 <span>Pemilih: <strong><?= html_escape($voter['nama']); ?></strong> (<?= html_escape($voter['dept']); ?>)</span>
                 <a href="<?= site_url('voting/batal'); ?>" class="btn-cancel-voter" onclick="return confirm('Batalkan sesi pemilih ini?');">Batal</a>
             </div>
         <?php else: ?>
-            <a href="<?= site_url('auth'); ?>" style="font-size:13px; color:#6b7280; text-decoration:none;">Panel Admin →</a>
+            <a href="<?= site_url('auth'); ?>" class="btn-link-admin">Panel Admin →</a>
         <?php endif; ?>
     </div>
 </header>
