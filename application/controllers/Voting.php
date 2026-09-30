@@ -193,7 +193,7 @@ class Voting extends CI_Controller {
             $this->session->set_flashdata('nama_selesai', $nama_pemilih);
 
             $this->_json_response('success', 'Suara Anda berhasil dicatat secara resmi ke dalam sistem!', array(
-                'redirect' => site_url('voting/selesai'),
+                'redirect' => site_url('voting'),
                 'nama'     => $nama_pemilih
             ));
         } else {

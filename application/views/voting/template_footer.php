@@ -195,6 +195,23 @@ if (typeof Swal !== 'undefined') {
                 updateKioskNavbarState(data.data.step, data.data.voter);
                 setContentAndRunScripts(mainEl, data.data.html);
 
+                // Selalu fokuskan ke id inputIdentitas saat halaman voting dibuka/dimuat dinamis
+                var rfidInput = document.getElementById('inputIdentitas');
+                if (rfidInput) {
+                    setTimeout(function() {
+                        try {
+                            rfidInput.focus();
+                            if (rfidInput.setSelectionRange) {
+                                var len = rfidInput.value.length;
+                                rfidInput.setSelectionRange(len, len);
+                            }
+                        } catch(e) {}
+                    }, 50);
+                    setTimeout(function() {
+                        try { rfidInput.focus(); } catch(e) {}
+                    }, 200);
+                }
+
                 // Pastikan fullscreen tetap aktif di tablet jika preferensi aktif
                 if (getSavedFsPref() === '1' && !isFsActive()) {
                     requestFs(document.documentElement).catch(function() {});
@@ -478,6 +495,28 @@ if (typeof Swal !== 'undefined') {
             document.addEventListener('pointerup', resumeOnFirstInteraction, true);
         });
     }
+
+    // Selalu fokuskan ke id inputIdentitas setiap kali halaman voting terbuka
+    function autoFocusInputIdentitas() {
+        var inputId = document.getElementById('inputIdentitas');
+        if (inputId) {
+            try {
+                inputId.focus();
+                if (inputId.setSelectionRange) {
+                    var len = inputId.value.length;
+                    inputId.setSelectionRange(len, len);
+                }
+            } catch(e) {}
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', autoFocusInputIdentitas);
+    } else {
+        autoFocusInputIdentitas();
+    }
+    setTimeout(autoFocusInputIdentitas, 80);
+    setTimeout(autoFocusInputIdentitas, 250);
 </script>
 
 </body>

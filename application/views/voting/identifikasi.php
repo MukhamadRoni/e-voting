@@ -154,12 +154,39 @@
 
         if (!form || !input || !btn) return;
 
-    // Auto-focus kembali ke input RFID jika pemilih klik di luar
-    document.addEventListener('click', function(e) {
-        if (input && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A' && !btn.disabled) {
-            input.focus();
+        // Fungsi khusus untuk memastikan input identitas selalu fokus
+        function focusInputIdentitas() {
+            if (input && !btn.disabled) {
+                try {
+                    input.focus();
+                    if (input.setSelectionRange) {
+                        var len = input.value.length;
+                        input.setSelectionRange(len, len);
+                    }
+                } catch(e) {}
+            }
         }
-    });
+
+        // Fokuskan segera dan bertahap saat halaman voting dibuka
+        focusInputIdentitas();
+        setTimeout(focusInputIdentitas, 50);
+        setTimeout(focusInputIdentitas, 150);
+        setTimeout(focusInputIdentitas, 350);
+
+        // Auto-focus kembali ke input RFID jika pemilih klik di luar tombol / link
+        document.addEventListener('click', function(e) {
+            if (input && !btn.disabled && !e.target.closest('button') && !e.target.closest('a')) {
+                focusInputIdentitas();
+            }
+        });
+
+        // Fokuskan kembali saat tab atau window browser aktif kembali
+        window.addEventListener('focus', focusInputIdentitas);
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                focusInputIdentitas();
+            }
+        });
 
     // Handle Submit via AJAX (Fetch API) tanpa reload browser
     form.addEventListener('submit', function(e) {
