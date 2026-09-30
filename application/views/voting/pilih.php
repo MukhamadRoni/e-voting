@@ -5,9 +5,9 @@ body {
 }
 
 .main-container {
-    padding: 10px 16px 78px !important;
-    max-width: 1260px;
-    width: 100%;
+    padding: 14px 28px 84px !important;
+    max-width: 1820px !important;
+    width: 96% !important;
     margin: 0 auto;
     box-sizing: border-box;
 }
@@ -17,16 +17,16 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .stepper-track-buttons {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    padding: 5px 10px;
+    padding: 6px 14px;
     border-radius: 9999px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
@@ -34,8 +34,8 @@ body {
 .stepper-btn {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
+    gap: 10px;
+    padding: 6px 16px;
     border-radius: 9999px;
     border: 1.5px solid transparent;
     background: transparent;
@@ -63,14 +63,14 @@ body {
 }
 
 .stepper-btn-num {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.07);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
 }
 
@@ -99,18 +99,18 @@ body {
 }
 
 .stepper-btn-title {
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 700;
     line-height: 1.2;
 }
 
 .stepper-btn-status {
-    font-size: 11px;
+    font-size: 11.5px;
     font-weight: 600;
-    padding: 3px 10px;
+    padding: 3.5px 12px;
     border-radius: 9999px;
     white-space: nowrap;
-    max-width: 140px;
+    max-width: 160px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -146,7 +146,7 @@ body {
     width: 100%;
     overflow: hidden;
     position: relative;
-    border-radius: 20px;
+    border-radius: 22px;
 }
 
 .voting-slider-track {
@@ -171,8 +171,8 @@ body {
 .voting-section-card {
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 20px;
-    padding: 16px 20px 18px;
+    border-radius: 22px;
+    padding: 22px 28px 24px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
 }
 
@@ -180,16 +180,16 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    padding-bottom: 12px;
-    margin-bottom: 12px;
+    gap: 16px;
+    padding-bottom: 16px;
+    margin-bottom: 18px;
     border-bottom: 1px solid #f1f5f9;
 }
 
 .section-head-left {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
 }
 
 .section-badge-pill {
@@ -199,19 +199,19 @@ body {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.6px;
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 9999px;
 }
 
 .section-title {
-    font-size: 17px;
+    font-size: 19px;
     font-weight: 700;
     color: #0f172a;
-    margin: 0 0 2px 0;
+    margin: 0 0 3px 0;
 }
 
 .section-desc {
-    font-size: 12px;
+    font-size: 13px;
     color: #64748b;
     margin: 0;
 }
@@ -219,11 +219,11 @@ body {
 .btn-slide-nav {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 7px 14px;
+    gap: 7px;
+    padding: 8px 18px;
     border-radius: 9999px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     border: 1px solid #cbd5e1;
@@ -249,18 +249,18 @@ body {
     color: #ffffff;
 }
 
-/* ── 3-Column Responsive Grid (Optimized Height for No-Scroll) ── */
+/* ── 3-Column Responsive Grid (Padat & Proporsional Sesuai voting_after.png) ── */
 .candidate-row-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
+    gap: 20px;
 }
 
 .candidate-card {
     background: #ffffff;
     border: 2px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 14px 12px 12px;
+    border-radius: 20px;
+    padding: 24px 20px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -274,29 +274,29 @@ body {
 .candidate-card:hover {
     border-color: #94a3b8;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
 }
 
 .candidate-card.is-selected {
     border-color: #16a34a;
     background: #f0fdf4;
-    box-shadow: 0 8px 22px rgba(22, 163, 74, 0.16);
+    box-shadow: 0 8px 24px rgba(22, 163, 74, 0.14);
     transform: translateY(-2px);
 }
 
 .candidate-number {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 26px;
-    height: 26px;
+    top: 14px;
+    left: 14px;
+    width: 32px;
+    height: 32px;
     background: #f1f5f9;
     color: #475569;
-    border-radius: 8px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
 }
 
@@ -307,13 +307,13 @@ body {
 
 .selected-badge-pill {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 14px;
+    right: 14px;
     background: #16a34a;
     color: #ffffff;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
-    padding: 3px 8px;
+    padding: 4px 14px;
     border-radius: 9999px;
     display: none;
     align-items: center;
@@ -325,15 +325,15 @@ body {
 }
 
 .avatar-wrap {
-    width: 92px;
-    height: 92px;
-    margin-top: 4px;
-    margin-bottom: 8px;
-    border-radius: 16px;
+    width: 132px;
+    height: 132px;
+    margin-top: 8px;
+    margin-bottom: 14px;
+    border-radius: 20px;
     overflow: hidden;
     background: #f3f4f6;
-    border: 2.5px solid #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border: 3px solid #ffffff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
     flex-shrink: 0;
 }
 
@@ -355,31 +355,31 @@ body {
     align-items: center;
     justify-content: center;
     color: #94a3b8;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     background: #f1f5f9;
 }
 
 .candidate-name {
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 700;
     color: #0f172a;
-    margin-bottom: 2px;
-    line-height: 1.25;
-    min-height: 36px;
+    margin-bottom: 4px;
+    line-height: 1.3;
+    min-height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .candidate-nik {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
     color: #64748b;
     background: #f1f5f9;
-    padding: 2px 10px;
+    padding: 3px 12px;
     border-radius: 9999px;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
 }
 
 .candidate-card.is-selected .candidate-nik {
@@ -391,16 +391,16 @@ body {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     margin-top: auto;
 }
 
 .btn-card-action {
     width: 100%;
-    height: 36px;
-    border-radius: 10px;
+    height: 42px;
+    border-radius: 12px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 600;
     display: inline-flex;
     align-items: center;
@@ -458,7 +458,8 @@ body {
 }
 
 .sticky-bar-inner {
-    max-width: 1260px;
+    max-width: 1820px;
+    width: 96%;
     margin: 0 auto;
     display: flex;
     align-items: center;
