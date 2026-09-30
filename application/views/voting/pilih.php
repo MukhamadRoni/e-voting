@@ -435,6 +435,110 @@
     transform: translateY(-1px);
 }
 
+.btn-submit-vote.btn-loading {
+    opacity: 0.9;
+    pointer-events: none;
+    cursor: not-allowed;
+    background: #15803d !important;
+}
+
+.btn-submit-vote .spinner-sm {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2.5px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: voteSpin 0.7s linear infinite;
+    vertical-align: middle;
+}
+
+/* ── Fullscreen Kiosk Vote Loader Overlay ── */
+.vote-loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    z-index: 999999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.vote-loading-overlay.show {
+    display: flex;
+}
+
+.vote-loading-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border-radius: 28px;
+    padding: 40px 32px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: voteLoaderPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes voteLoaderPop {
+    from { opacity: 0; transform: scale(0.92) translateY(16px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.vote-loading-spinner-ring {
+    width: 64px;
+    height: 64px;
+    border: 5px solid #f1f5f9;
+    border-top-color: #16a34a;
+    border-right-color: #16a34a;
+    border-radius: 50%;
+    animation: voteSpin 0.8s linear infinite;
+    margin-bottom: 24px;
+}
+
+@keyframes voteSpin {
+    to { transform: rotate(360deg); }
+}
+
+.vote-loading-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+}
+
+.vote-loading-desc {
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.6;
+    margin-bottom: 22px;
+}
+
+.vote-loading-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+    padding: 7px 16px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.vote-loading-badge svg {
+    stroke: #16a34a;
+    flex-shrink: 0;
+}
+
 /* Modal Visi Misi Styling */
 .modal-visi-body {
     text-align: left;
@@ -721,6 +825,24 @@
     </div>
 </div>
 
+<!-- ========================================================
+     VOTE LOADING OVERLAY (KIOSK SUBMIT SPINNER)
+     ======================================================== -->
+<div id="voteLoadingOverlay" class="vote-loading-overlay" aria-live="polite">
+    <div class="vote-loading-card">
+        <div class="vote-loading-spinner-ring"></div>
+        <div class="vote-loading-title">Menyimpan Suara...</div>
+        <div class="vote-loading-desc">Mohon tunggu sebentar, hak suara Anda sedang dicatat dan dienkripsi secara aman ke dalam sistem.</div>
+        <div class="vote-loading-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span>Enkripsi Suara Pemilih Aktif</span>
+        </div>
+    </div>
+</div>
+
 <script>
 // Data State Pemilihan
 var currentSelection = {
@@ -996,17 +1118,16 @@ function handleKirimSuara() {
         width: '640px'
     }).then(function(result) {
         if (result.isConfirmed) {
-            Swal.fire({
-                title: 'Menyimpan Suara...',
-                text: 'Mohon tunggu, suara Anda sedang dicatat dan dienkripsi ke sistem.',
-                allowOutsideClick: false,
-                didOpen: function() {
-                    Swal.showLoading();
-                }
-            });
+            // Tutup modal konfirmasi dan munculkan loader overlay bilik suara
+            if (typeof Swal !== 'undefined' && Swal.close) {
+                Swal.close();
+            }
+            showVoteLoader();
 
             var form = document.getElementById('formKirimSuara');
             var formData = new FormData(form);
+            var startTime = Date.now();
+            var minDisplayTime = 800; // Minimal 800ms agar animasi loader terlihat halus dan meyakinkan
 
             fetch(form.action, {
                 method: 'POST',
@@ -1020,52 +1141,100 @@ function handleKirimSuara() {
                 return response.json();
             })
             .then(function(res) {
-                if (res.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Suara Berhasil Dicatat!',
-                        text: res.message,
-                        timer: 1200,
-                        showConfirmButton: false,
-                        allowOutsideClick: false
-                    }).then(function() {
-                        if (typeof navigateKiosk === 'function') {
-                            navigateKiosk(res.data.redirect);
-                        } else {
-                            window.location.href = res.data.redirect;
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal Menyimpan Suara',
-                        html: res.message,
-                        confirmButtonColor: '#1a1a1a',
-                        confirmButtonText: 'Saya Mengerti',
-                        heightAuto: false
-                    }).then(function() {
-                        if (res.data && res.data.redirect) {
+                var elapsed = Date.now() - startTime;
+                var remaining = Math.max(0, minDisplayTime - elapsed);
+
+                setTimeout(function() {
+                    hideVoteLoader();
+
+                    if (res.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Suara Berhasil Dicatat!',
+                            text: res.message,
+                            timer: 1200,
+                            showConfirmButton: false,
+                            allowOutsideClick: false
+                        }).then(function() {
                             if (typeof navigateKiosk === 'function') {
                                 navigateKiosk(res.data.redirect);
                             } else {
                                 window.location.href = res.data.redirect;
                             }
-                        }
-                    });
-                }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal Menyimpan Suara',
+                            html: res.message,
+                            confirmButtonColor: '#1a1a1a',
+                            confirmButtonText: 'Saya Mengerti',
+                            heightAuto: false
+                        }).then(function() {
+                            if (res.data && res.data.redirect) {
+                                if (typeof navigateKiosk === 'function') {
+                                    navigateKiosk(res.data.redirect);
+                                } else {
+                                    window.location.href = res.data.redirect;
+                                }
+                            }
+                        });
+                    }
+                }, remaining);
             })
             .catch(function() {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Koneksi Terputus',
-                    text: 'Gagal menghubungi server bilik suara. Silakan periksa jaringan dan coba lagi.',
-                    confirmButtonColor: '#1a1a1a',
-                    confirmButtonText: 'Coba Lagi',
-                    heightAuto: false
-                });
+                var elapsed = Date.now() - startTime;
+                var remaining = Math.max(0, minDisplayTime - elapsed);
+
+                setTimeout(function() {
+                    hideVoteLoader();
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Koneksi Terputus',
+                        text: 'Gagal menghubungi server bilik suara. Silakan periksa jaringan dan coba lagi.',
+                        confirmButtonColor: '#1a1a1a',
+                        confirmButtonText: 'Coba Lagi',
+                        heightAuto: false
+                    });
+                }, remaining);
             });
         }
     });
+}
+
+// Helper Loader Overlay & Tombol
+function showVoteLoader() {
+    var loader = document.getElementById('voteLoadingOverlay');
+    if (loader) {
+        loader.classList.add('show');
+    }
+    var btn = document.getElementById('btnSubmitVote');
+    if (btn) {
+        btn.disabled = true;
+        btn.classList.add('btn-loading');
+        btn.innerHTML = '<span class="spinner-sm"></span> <span>Menyimpan Suara...</span>';
+    }
+}
+
+function hideVoteLoader() {
+    var loader = document.getElementById('voteLoadingOverlay');
+    if (loader) {
+        loader.classList.remove('show');
+    }
+    var btn = document.getElementById('btnSubmitVote');
+    if (btn) {
+        btn.disabled = false;
+        btn.classList.remove('btn-loading');
+        var totalSelected = (currentSelection.ketua.nik ? 1 : 0) + (currentSelection.pengawas.nik ? 1 : 0);
+        if (totalSelected === 2) {
+            btn.classList.add('ready');
+            btn.innerHTML = '<span>✓ Kirim Suara Saya</span> <span id="counterPilihan">(2/2 Selesai)</span>';
+        } else {
+            btn.classList.remove('ready');
+            btn.innerHTML = '<span>Kirim Suara</span> <span id="counterPilihan">(' + totalSelected + '/2)</span>';
+        }
+    }
 }
 
 // Konfirmasi pembatalan sesi via AJAX
