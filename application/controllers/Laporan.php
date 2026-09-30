@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+require_once APPPATH . 'libraries/SimpleXLSXGen.php';
+
+use Shuchkin\SimpleXLSXGen;
+
 class Laporan extends Admin_Controller {
 
     public function __construct()
@@ -56,16 +60,61 @@ class Laporan extends Admin_Controller {
     /**
      * Halaman Trace Back (Audit Trail Suara)
      */
-    public function trace_back()
-    {
-        $data['title']         = 'Trace Back Suara';
-        $data['username']      = $this->session->userdata('admin_username');
-        $data['trace']         = $this->Laporan_model->get_trace_back();
-        $data['total_suara']   = count($data['trace']);
+     public function trace_back()
+     {
+         $data['title']         = 'Trace Back Suara';
+         $data['username']      = $this->session->userdata('admin_username');
+         $data['trace']         = $this->Laporan_model->get_trace_back();
+         $data['total_suara']   = count($data['trace']);
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('laporan/trace_back', $data);
-        $this->load->view('templates/footer');
+         $this->load->view('templates/header', $data);
+         $this->load->view('laporan/trace_back', $data);
+         $this->load->view('templates/footer');
+     }
+
+    /**
+     * Export Log Audit Trace Back ke Excel (.xlsx) Sesuai Kolom DataTable
+     */
+    public function export_trace_back()
+    {
+        $search = $this->input->get('search', TRUE);
+        $trace  = $this->Laporan_model->get_trace_back($search);
+
+        $excelData = array();
+
+        // Header kolom sesuai persis dengan tabel pada trace_back.php
+        $excelData[] = array(
+            '<b>No</b>',
+            '<b>Waktu Voting</b>',
+            '<b>NIK Pemilih</b>',
+            '<b>Nama Pemilih</b>',
+            '<b>Departemen</b>',
+            '<b>Pilihan Ketua</b>',
+            '<b>Pilihan Pengawas</b>'
+        );
+
+        $no = 1;
+        foreach ($trace as $row) {
+            $waktu = date('d M Y, H:i:s', strtotime($row->created_at));
+            $pilihanKetua = $row->nama_ketua ? $row->nama_ketua . ' (NIK: ' . $row->ketua_nik . ')' : 'Tidak memilih';
+            $pilihanPengawas = $row->nama_pengawas ? $row->nama_pengawas . ' (NIK: ' . $row->pengawas_nik . ')' : 'Tidak memilih';
+
+            $excelData[] = array(
+                $no++,
+                $waktu,
+                "\0" . (string)$row->pemilih_nik,
+                (string)($row->nama_pemilih ?: '-'),
+                (string)($row->dept_pemilih ?: '-'),
+                $pilihanKetua,
+                $pilihanPengawas
+            );
+        }
+
+        $filename = 'laporan_trace_back_' . date('Ymd_His') . '.xlsx';
+
+        $xlsx = SimpleXLSXGen::fromArray($excelData, 'Trace Back Audit');
+        $xlsx->downloadAs($filename);
+        exit;
     }
 
     /**
@@ -86,6 +135,68 @@ class Laporan extends Admin_Controller {
         $this->load->view('templates/header', $data);
         $this->load->view('laporan/peserta_undian', $data);
         $this->load->view('templates/footer');
+    }
+
+    /**
+     * Export Data Peserta Undian Door Prize ke Excel (.xlsx) Sesuai Filter
+     */
+    public function export_peserta_undian()
+    {
+        $dept   = $this->input->get('dept', TRUE);
+        $status = $this->input->get('status', TRUE);
+        $search = $this->input->get('search', TRUE);
+
+        $peserta = $this->Laporan_model->get_peserta_undian($dept, $status, $search);
+
+        $excelData = array();
+
+        // Header kolom persis sesuai urutan DataTable peserta_undian.php
+        $excelData[] = array(
+            '<b>No</b>',
+            '<b>NIK</b>',
+            '<b>Nama Anggota</b>',
+            '<b>Departemen</b>',
+            '<b>Status Hak Suara</b>',
+            '<b>Doorprize Dimenangkan</b>'
+        );
+
+        $no = 1;
+        foreach ($peserta as $p) {
+            $hadiahInfo = 'Belum Menang';
+            if (!empty($p->nama_hadiah)) {
+                $hadiahInfo = $p->nama_hadiah;
+                if (!empty($p->tanggal_menang)) {
+                    $hadiahInfo .= ' (Dimenangkan: ' . date('d M Y, H:i', strtotime($p->tanggal_menang)) . ')';
+                }
+            }
+
+            $excelData[] = array(
+                $no++,
+                "\0" . (string)$p->nik,
+                (string)$p->nama,
+                (string)$p->dept,
+                'Sudah Memilih (Sah)',
+                $hadiahInfo
+            );
+        }
+
+        // Tentukan nama file yang informatif sesuai filter yang dipilih
+        $fileParts = array('peserta_undian');
+        if (!empty($dept)) {
+            $cleanDept = preg_replace('/[^a-zA-Z0-9_-]/', '_', strtolower($dept));
+            $fileParts[] = $cleanDept;
+        }
+        if (!empty($status)) {
+            $cleanStatus = preg_replace('/[^a-zA-Z0-9_-]/', '_', strtolower($status));
+            $fileParts[] = $cleanStatus;
+        }
+        $fileParts[] = date('Ymd_His');
+
+        $filename = implode('_', $fileParts) . '.xlsx';
+
+        $xlsx = SimpleXLSXGen::fromArray($excelData, 'Peserta Undian');
+        $xlsx->downloadAs($filename);
+        exit;
     }
 
     /**

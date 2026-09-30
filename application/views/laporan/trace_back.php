@@ -16,7 +16,7 @@
     margin-top: 16px;
 }
 @media print {
-    .sidebar, .topbar, .btn-print, .dataTables_length, .dataTables_filter, .dataTables_info, .dataTables_paginate { display: none !important; }
+    .sidebar, .topbar, .btn-print, .btn-export, .dataTables_length, .dataTables_filter, .dataTables_info, .dataTables_paginate { display: none !important; }
     .main-content { margin-left: 0 !important; }
     .content-area { padding: 0 !important; }
 }
@@ -29,6 +29,10 @@
         <span style="font-size:14px; color:#6b7280;">Log audit seluruh data suara masuk untuk verifikasi integritas pemilu.</span>
     </div>
     <div style="display:flex; gap:10px;">
+        <button type="button" class="btn btn-secondary btn-export" onclick="exportTraceBack()" title="Export log audit ke file Excel (.xlsx)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Export Excel
+        </button>
         <button class="btn btn-secondary btn-print" onclick="window.print()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
             Cetak Log Audit
@@ -94,6 +98,16 @@
 </div>
 
 <script>
+var dtTraceTable = null;
+
+function exportTraceBack() {
+    var url = '<?= site_url("laporan/export_trace_back"); ?>';
+    if (dtTraceTable && dtTraceTable.search()) {
+        url += '?search=' + encodeURIComponent(dtTraceTable.search());
+    }
+    window.location.href = url;
+}
+
 (function() {
     function initDataTable() {
         if (typeof jQuery === 'undefined' || typeof jQuery.fn.DataTable === 'undefined') {
@@ -101,7 +115,7 @@
             return;
         }
 
-        var table = $('#traceTable').DataTable({
+        dtTraceTable = $('#traceTable').DataTable({
             language: {
                 search: "_INPUT_",
                 searchPlaceholder: "Cari NIK, Nama, Dept, Pilihan...",

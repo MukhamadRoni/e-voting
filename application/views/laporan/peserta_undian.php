@@ -113,7 +113,7 @@
 }
 
 @media print {
-    .sidebar, .topbar, .btn-print, .filter-row, .filter-pills-bar, .dataTables_length, .dataTables_filter, .dataTables_info, .dataTables_paginate { 
+    .sidebar, .topbar, .btn-print, .btn-export, .filter-row, .filter-pills-bar, .dataTables_length, .dataTables_filter, .dataTables_info, .dataTables_paginate { 
         display: none !important; 
     }
     .main-content { margin-left: 0 !important; }
@@ -127,7 +127,11 @@
         <h2 style="font-size:22px; font-weight:700; color:#1a1a1a;">Daftar Peserta Undian Door Prize</h2>
         <span style="font-size:14px; color:#6b7280;">Daftar anggota yang telah menggunakan hak suara dan berhak mengikuti undian door prize.</span>
     </div>
-    <div style="display:flex; gap:10px; align-items:center;">
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <button type="button" class="btn btn-secondary btn-export" id="btnExportPeserta" onclick="exportPesertaUndian()" title="Export data peserta undian ke file Excel (.xlsx) sesuai filter yang dipilih">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <span id="btnExportText">Export Excel</span>
+        </button>
         <a href="<?= site_url('bilik_undian'); ?>" target="_blank" class="btn btn-primary" style="background:#f59e0b; color:#1a1a1a; font-weight:700;">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"/></svg>
             Buka Panggung Bilik Undian ↗
@@ -271,6 +275,45 @@
 </div>
 
 <script>
+var dtTablePeserta = null;
+var currentDoorprizeFilter = '';
+
+function updateExportButtonLabel() {
+    var label = 'Export Excel';
+    var parts = [];
+    var currentDept = '<?= html_escape($dept_terpilih); ?>';
+    if (currentDept) {
+        parts.push(currentDept);
+    }
+    if (currentDoorprizeFilter) {
+        parts.push(currentDoorprizeFilter);
+    }
+    if (parts.length > 0) {
+        label += ' (' + parts.join(' - ') + ')';
+    }
+    var btnText = document.getElementById('btnExportText');
+    if (btnText) btnText.textContent = label;
+}
+
+function exportPesertaUndian() {
+    var url = '<?= site_url("laporan/export_peserta_undian"); ?>';
+    var params = [];
+    var currentDept = '<?= html_escape($dept_terpilih); ?>';
+    if (currentDept) {
+        params.push('dept=' + encodeURIComponent(currentDept));
+    }
+    if (currentDoorprizeFilter) {
+        params.push('status=' + encodeURIComponent(currentDoorprizeFilter));
+    }
+    if (dtTablePeserta && dtTablePeserta.search()) {
+        params.push('search=' + encodeURIComponent(dtTablePeserta.search()));
+    }
+    if (params.length > 0) {
+        url += '?' + params.join('&');
+    }
+    window.location.href = url;
+}
+
 (function() {
     function initDataTable() {
         if (typeof jQuery === 'undefined' || typeof jQuery.fn.DataTable === 'undefined') {
@@ -278,7 +321,7 @@
             return;
         }
 
-        var table = $('#tablePeserta').DataTable({
+        dtTablePeserta = $('#tablePeserta').DataTable({
             language: {
                 search: "_INPUT_",
                 searchPlaceholder: "Cari NIK, Nama, Dept, Hadiah...",
@@ -325,10 +368,14 @@
             $('.filter-pill').removeClass('active');
             $(this).addClass('active');
 
-            var filterValue = $(this).data('filter');
+            currentDoorprizeFilter = $(this).data('filter') || '';
+            updateExportButtonLabel();
+
             // Column 5 is "Doorprize Dimenangkan"
-            table.column(5).search(filterValue ? filterValue : '').draw();
+            dtTablePeserta.column(5).search(currentDoorprizeFilter ? currentDoorprizeFilter : '').draw();
         });
+
+        updateExportButtonLabel();
     }
 
     if (document.readyState === 'loading') {

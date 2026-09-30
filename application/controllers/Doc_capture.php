@@ -128,4 +128,10 @@ class Doc_capture extends CI_Controller {
         $this->load->view('laporan/trace_back', $data);
         $this->load->view('templates/footer');
     }
+
+    public function export_trace_back()
+    {
+        $qs = !empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : '';
+        redirect('laporan/export_trace_back' . $qs);
+    }
 }

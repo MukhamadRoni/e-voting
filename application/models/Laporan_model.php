@@ -84,37 +84,72 @@ class Laporan_model extends CI_Model {
      * Trace Back data voting (audit trail lengkap)
      * Memanfaatkan urutan PRIMARY KEY id DESC untuk mencegah filesort
      */
-    public function get_trace_back()
+    public function get_trace_back($search = null)
     {
-        $sql = "SELECT 
-                    h.id, 
-                    h.pemilih_nik, 
-                    p.nama AS nama_pemilih, 
-                    p.dept AS dept_pemilih, 
-                    h.ketua_nik, 
-                    kk.nama AS nama_ketua, 
-                    h.pengawas_nik, 
-                    kp.nama AS nama_pengawas, 
-                    h.created_at
-                FROM hasil h
-                INNER JOIN pemilih p ON h.pemilih_nik = p.nik
-                LEFT JOIN kandidat_ketua kk ON h.ketua_nik = kk.nik
-                LEFT JOIN kandidat_pengawas kp ON h.pengawas_nik = kp.nik
-                ORDER BY h.id DESC";
-        return $this->db->query($sql)->result();
+        $this->db->select('
+            h.id, 
+            h.pemilih_nik, 
+            p.nama AS nama_pemilih, 
+            p.dept AS dept_pemilih, 
+            h.ketua_nik, 
+            kk.nama AS nama_ketua, 
+            h.pengawas_nik, 
+            kp.nama AS nama_pengawas, 
+            h.created_at
+        ');
+        $this->db->from('hasil h');
+        $this->db->join('pemilih p', 'h.pemilih_nik = p.nik', 'inner');
+        $this->db->join('kandidat_ketua kk', 'h.ketua_nik = kk.nik', 'left');
+        $this->db->join('kandidat_pengawas kp', 'h.pengawas_nik = kp.nik', 'left');
+
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('h.pemilih_nik', $search);
+            $this->db->or_like('p.nama', $search);
+            $this->db->or_like('p.dept', $search);
+            $this->db->or_like('h.ketua_nik', $search);
+            $this->db->or_like('kk.nama', $search);
+            $this->db->or_like('h.pengawas_nik', $search);
+            $this->db->or_like('kp.nama', $search);
+            $this->db->group_end();
+        }
+
+        $this->db->order_by('h.id', 'DESC');
+        return $this->db->get()->result();
     }
 
     /**
      * Daftar pemilih yang berhak ikut undian / doorprize (pilih = 'T')
      * Menggunakan direct index-backed LEFT JOIN ke pemenang_undian tanpa agregasi berat
      */
-    public function get_peserta_undian($dept = null)
+    public function get_peserta_undian($dept = null, $status_menang = null, $search = null)
     {
         $params = array();
         $whereDept = "";
         if (!empty($dept)) {
             $whereDept = " AND p.dept = ? ";
             $params[] = $dept;
+        }
+
+        $whereMenang = "";
+        if (!empty($status_menang)) {
+            $norm = strtolower(trim($status_menang));
+            if ($norm === 'menang' || $norm === 'sudah menang' || $norm === 'sudah') {
+                $whereMenang = " AND (u.nama_hadiah IS NOT NULL AND u.nama_hadiah != '') ";
+            } elseif ($norm === 'belum menang' || $norm === 'belum') {
+                $whereMenang = " AND (u.nama_hadiah IS NULL OR u.nama_hadiah = '') ";
+            }
+        }
+
+        $whereSearch = "";
+        if (!empty($search)) {
+            $whereSearch = " AND (p.nik LIKE ? OR p.rfid LIKE ? OR p.nama LIKE ? OR p.dept LIKE ? OR u.nama_hadiah LIKE ?) ";
+            $searchLike = '%' . $search . '%';
+            $params[] = $searchLike;
+            $params[] = $searchLike;
+            $params[] = $searchLike;
+            $params[] = $searchLike;
+            $params[] = $searchLike;
         }
 
         $sql = "SELECT 
@@ -127,7 +162,7 @@ class Laporan_model extends CI_Model {
                     u.created_at AS tanggal_menang
                 FROM pemilih p
                 LEFT JOIN pemenang_undian u ON p.nik = u.pemilih_nik AND u.status = 'valid'
-                WHERE p.pilih = 'T' {$whereDept}
+                WHERE p.pilih = 'T' {$whereDept} {$whereMenang} {$whereSearch}
                 ORDER BY p.nama ASC";
 
         return $this->db->query($sql, $params)->result();
