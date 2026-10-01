@@ -267,166 +267,553 @@
             color: #b45309;
         }
 
-        /* ── Big Stage Display Card ── */
+        /* ── Big Stage Display Arena with Authentic MegaSpinner Casino Aesthetics ── */
         .stage-display {
-            background: #ffffff;
-            border: 2px solid #e5e5e5;
-            border-radius: 24px;
-            padding: 44px 36px;
+            background-color: #080a10;
+            background-image: 
+                radial-gradient(circle at 10% 50%, rgba(0, 220, 255, 0.18) 0%, transparent 45%),
+                radial-gradient(circle at 90% 50%, rgba(255, 90, 0, 0.22) 0%, transparent 45%),
+                radial-gradient(ellipse at 50% 50%, rgba(30, 5, 40, 0.95) 0%, #06020c 100%),
+                radial-gradient(rgba(255, 200, 50, 0.2) 1.5px, transparent 1.5px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 14px 14px;
+            border: 3px solid #ffaa00;
+            border-radius: 28px;
+            padding: 16px 20px 20px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-            min-height: 460px;
+            box-shadow: 
+                0 0 35px rgba(255, 120, 0, 0.35),
+                0 0 15px rgba(0, 220, 255, 0.25),
+                inset 0 0 40px rgba(0, 0, 0, 0.9),
+                0 20px 50px rgba(0, 0, 0, 0.6);
+            min-height: 640px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            align-items: center;
+            align-items: stretch;
+            gap: 12px;
         }
 
-        .prize-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #fef3c7;
-            border: 1px solid #fde68a;
-            color: #b45309;
-            padding: 8px 22px;
-            border-radius: 9999px;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 0.3px;
-            text-transform: uppercase;
-        }
-
-        /* Winner Visual Arena */
-        .spinner-arena {
+        /* ── TOP CASINO ARCADE HEADER HUD ── */
+        .casino-top-hud {
             width: 100%;
-            margin: 32px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            z-index: 5;
+            padding: 0 8px;
+        }
+
+        .hud-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hud-last-winner {
+            background: #000000;
+            border: 2px solid #ff9900;
+            border-radius: 14px;
+            padding: 4px 14px 6px;
+            box-shadow: 0 0 12px rgba(255, 153, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.15);
+            min-width: 190px;
+            text-align: center;
+        }
+
+        .hud-label-yellow {
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            color: #ffcc00;
+            text-shadow: 0 0 8px rgba(255, 204, 0, 0.8);
+            margin-bottom: 2px;
+        }
+
+        .hud-screen-black {
+            font-family: 'DM Sans', monospace, sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 220px;
+        }
+
+        /* Center MegaSpinner 3D Logo */
+        .hud-center-logo {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 200px;
+        }
+
+        .logo-megaspinner {
+            font-family: 'DM Sans', Impact, sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            line-height: 1;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, #ffffff 0%, #bbf2f6 30%, #00d2ff 60%, #0077aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 0 #002233) drop-shadow(0 0 15px rgba(0, 210, 255, 0.8));
             position: relative;
         }
 
-        .slot-box {
-            width: 100%;
-            max-width: 640px;
-            background: #f8f9fa;
-            border: 2px dashed #d1d5db;
-            border-radius: 24px;
-            padding: 36px 28px;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        .logo-megaspinner span {
+            font-size: 14px;
+            vertical-align: super;
+            -webkit-text-fill-color: #ffd700;
         }
 
-        .slot-box.spinning {
-            border: 2px solid #1a1a1a;
-            background: #f3f4f6;
-            box-shadow: 0 0 25px rgba(26, 26, 26, 0.08);
-            animation: pulse-glow-light 1.2s infinite alternate;
+        .logo-sub-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #000000;
+            border: 1px solid #ffaa00;
+            border-radius: 6px;
+            padding: 2px 10px;
+            margin-top: 3px;
+            box-shadow: 0 0 8px rgba(255, 170, 0, 0.5);
         }
 
-        .slot-box.winner-revealed {
-            border: 2px solid #16a34a;
-            background: #f0fdf4;
-            box-shadow: 0 10px 30px rgba(22, 163, 74, 0.12);
-            transform: scale(1.02);
-        }
-
-        @keyframes pulse-glow-light {
-            from { box-shadow: 0 0 10px rgba(26, 26, 26, 0.05); }
-            to { box-shadow: 0 0 25px rgba(26, 26, 26, 0.15); }
-        }
-
-        .slot-name {
-            font-size: 38px;
+        .logo-sub-badge .badge-text {
+            font-size: 10px;
             font-weight: 800;
-            color: #1a1a1a;
-            line-height: 1.2;
-            margin-bottom: 12px;
-            letter-spacing: -0.5px;
+            letter-spacing: 1.5px;
+            color: #ffdd44;
+            text-transform: uppercase;
+        }
+
+        .badge-dot-left, .badge-dot-right {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #ff3300;
+            box-shadow: 0 0 5px #ff3300;
+        }
+
+        /* Jackpot Marquee Screen */
+        .hud-jackpot-screen {
+            background: #000000;
+            border: 2px dashed #ffaa00;
+            border-radius: 14px;
+            padding: 4px 16px 6px;
+            box-shadow: 0 0 14px rgba(255, 170, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.15);
+            min-width: 190px;
+            text-align: center;
+            animation: marqueeBorderGlow 1.5s infinite alternate;
+        }
+
+        @keyframes marqueeBorderGlow {
+            0% { border-color: #ffaa00; box-shadow: 0 0 12px rgba(255, 170, 0, 0.4); }
+            100% { border-color: #ff3300; box-shadow: 0 0 20px rgba(255, 51, 0, 0.8); }
+        }
+
+        .hud-label-orange {
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            color: #ff7700;
+            text-shadow: 0 0 8px rgba(255, 119, 0, 0.8);
+            margin-bottom: 2px;
+        }
+
+        .hud-screen-jackpot span {
+            color: #ffe600;
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(255, 230, 0, 0.7);
+        }
+
+        /* ── MAIN CASINO ARENA WITH FLANKING PAYLINE NUMBER TILES ── */
+        .casino-main-arena {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            flex: 1;
+            gap: 10px;
+        }
+
+        /* Vertical Payline Number Tiles (Left & Right) */
+        .payline-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 390px;
+            width: 32px;
+            z-index: 4;
+            user-select: none;
+        }
+
+        .payline-tile {
+            width: 30px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 900;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .payline-left .payline-tile {
+            background: linear-gradient(135deg, #021e33 0%, #053b61 100%);
+            border: 1.5px solid #00d2ff;
+            color: #ffe600;
+            box-shadow: 0 0 8px rgba(0, 210, 255, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+            text-shadow: 0 1px 2px #000;
+        }
+
+        .payline-right .payline-tile {
+            background: linear-gradient(135deg, #380d00 0%, #6b1b00 100%);
+            border: 1.5px solid #ff6600;
+            color: #ffe600;
+            box-shadow: 0 0 8px rgba(255, 102, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+            text-shadow: 0 1px 2px #000;
+        }
+
+        .payline-tile.active-tile {
+            transform: scale(1.15);
+            animation: tilePulse 1s infinite alternate;
+        }
+
+        @keyframes tilePulse {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.4); }
+        }
+
+        /* 3D Canvas Showcase Area */
+        .slot-3d-wrapper {
+            flex: 1;
+            height: 410px;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slot-3d-canvas-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+
+        /* Celebratory Overlay: JACKPOT! with Animated Gold Gradient */
+        .jackpot-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transform: scale(0.85);
+            transition: all 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: radial-gradient(circle at center, rgba(30, 0, 45, 0.75) 0%, rgba(10, 0, 18, 0.88) 100%);
+            backdrop-filter: blur(4px);
+            padding: 20px;
+        }
+
+        .jackpot-overlay.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        .jackpot-badge-top {
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: #ffd700;
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            animation: pulse-glow 1s infinite alternate;
+        }
+
+        .jackpot-text-title {
+            font-size: 52px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            line-height: 1.1;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, #fff7ad 0%, #ffa900 25%, #ffffff 50%, #ffa900 75%, #ff4500 100%);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: goldShine 2.5s ease infinite alternate, titleBounce 0.8s ease infinite alternate;
+            filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.9));
+        }
+
+        @keyframes goldShine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        @keyframes titleBounce {
+            from { transform: scale(1); }
+            to { transform: scale(1.04); }
+        }
+
+        @keyframes pulse-glow {
+            from { opacity: 0.7; }
+            to { opacity: 1; text-shadow: 0 0 20px rgba(255, 215, 0, 1); }
+        }
+
+        .jackpot-winner-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(255, 215, 0, 0.5);
+            border-radius: 20px;
+            padding: 16px 28px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 215, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .jackpot-winner-tag span {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: #38bdf8;
+            text-transform: uppercase;
+        }
+
+        .jackpot-winner-name {
+            font-size: 26px;
+            font-weight: 900;
+            color: #ffffff;
+            margin: 6px 0 4px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
             word-break: break-word;
         }
 
-        .slot-details {
+        .jackpot-winner-meta {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 10px;
+        }
+
+        .jackpot-prize-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #15803d, #16a34a);
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 6px 18px;
+            border-radius: 9999px;
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
+        }
+
+        /* ── BOTTOM CASINO ARCADE DASHBOARD ── */
+        .casino-bottom-dashboard {
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
+            z-index: 6;
             flex-wrap: wrap;
+            padding-top: 6px;
         }
 
-        .slot-badge {
-            background: #ffffff;
-            color: #4b5563;
-            padding: 6px 16px;
-            border-radius: 9999px;
-            font-size: 13px;
-            font-weight: 600;
-            border: 1px solid #e5e5e5;
-        }
-
-        .slot-badge strong {
-            color: #1a1a1a;
-        }
-
-        .slot-hint {
-            color: #6b7280;
-            font-size: 15px;
-            font-weight: 500;
-            margin-top: 8px;
-        }
-
-        /* Giant Spin Button */
-        .btn-spin {
-            background: #1a1a1a;
+        /* Arcade Info Button */
+        .btn-arcade-info {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(180deg, #00d2ff 0%, #0077b6 100%);
+            border: 2px solid #a5f3fc;
+            box-shadow: 0 4px 12px rgba(0, 210, 255, 0.5), inset 0 2px 3px rgba(255, 255, 255, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 900;
             color: #ffffff;
-            border: none;
-            border-radius: 9999px;
-            padding: 18px 52px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
             cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+
+        .btn-arcade-info:hover {
+            transform: scale(1.06);
+        }
+
+        /* Dashboard Meter Pills (TOTAL BET, CREDITS, WIN) */
+        .dashboard-meter-pill {
+            background: #000000;
+            border: 2px solid #ffaa00;
+            border-radius: 9999px;
+            padding: 4px 16px;
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            box-shadow: 0 8px 24px rgba(26, 26, 26, 0.18);
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            gap: 10px;
+            box-shadow: 0 0 10px rgba(255, 170, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.15);
+            min-height: 46px;
         }
 
-        .btn-spin:hover:not(:disabled) {
-            background: #333333;
+        .btn-meter-circle {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #fde047 0%, #d97706 100%);
+            border: 1.5px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 900;
+            color: #000000;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+            user-select: none;
+        }
+
+        .meter-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.1;
+        }
+
+        .meter-title {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #ffaa00;
+            text-transform: uppercase;
+        }
+
+        .meter-value {
+            font-family: 'DM Sans', monospace, sans-serif;
+            font-size: 16px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        /* Arcade Auto Button */
+        .btn-arcade-auto {
+            background: linear-gradient(180deg, #ff8800 0%, #b45309 100%);
+            border: 2px solid #fde047;
+            border-radius: 12px;
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 136, 0, 0.4), inset 0 2px 3px rgba(255, 255, 255, 0.5);
+            transition: all 0.15s ease;
+            height: 46px;
+        }
+
+        .btn-arcade-auto:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(26, 26, 26, 0.25);
+            filter: brightness(1.1);
         }
 
-        .btn-spin:active:not(:disabled) {
-            transform: translateY(0);
+        .auto-light-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 8px #22c55e;
         }
 
-        .btn-spin:disabled {
-            background: #e5e5e5;
+        .auto-text {
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: #ffffff;
+            text-shadow: 0 1px 3px #000;
+        }
+
+        /* ── HERO GIANT ARCADE SPIN BUTTON (Match Reference Image) ── */
+        .btn-arcade-spin {
+            background: linear-gradient(180deg, #ff2200 0%, #ff5500 40%, #d90429 80%, #990000 100%);
+            border: 3.5px solid #ffd700;
+            border-radius: 14px;
+            padding: 8px 46px;
+            min-height: 52px;
+            font-family: 'DM Sans', Impact, sans-serif;
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #fff275;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px #000000, 0 0 14px rgba(255, 240, 100, 0.8);
+            cursor: pointer;
+            box-shadow: 
+                0 8px 25px rgba(255, 50, 0, 0.65), 
+                0 0 15px rgba(255, 215, 0, 0.5),
+                inset 0 3px 5px rgba(255, 255, 255, 0.6);
+            transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-arcade-spin:hover:not(:disabled) {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 
+                0 12px 30px rgba(255, 50, 0, 0.8), 
+                0 0 20px rgba(255, 215, 0, 0.7),
+                inset 0 3px 6px rgba(255, 255, 255, 0.8);
+            filter: brightness(1.08);
+        }
+
+        .btn-arcade-spin:active:not(:disabled) {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        .btn-arcade-spin:disabled {
+            background: #374151;
+            border-color: #6b7280;
             color: #9ca3af;
             cursor: not-allowed;
             box-shadow: none;
+            text-shadow: none;
             transform: none;
         }
 
-        .btn-spin svg {
-            width: 24px;
-            height: 24px;
-            transition: transform 0.6s ease;
+        /* WIN SCOREBOARD PANEL */
+        .meter-win {
+            background: #000000;
+            border: 2px solid #eab308;
+            border-radius: 12px;
+            padding: 4px 18px;
+            min-width: 140px;
         }
 
-        .btn-spin.spinning svg {
-            animation: spin-icon 0.8s linear infinite;
-        }
-
-        @keyframes spin-icon {
-            100% { transform: rotate(360deg); }
+        .meter-win-value {
+            color: #4ade80;
+            font-size: 20px;
+            text-shadow: 0 0 10px rgba(74, 222, 128, 0.7);
         }
 
         /* ── Right Column: Daftar Pemenang Live ── */
@@ -712,40 +1099,132 @@
                 </div>
             </div>
 
-            <!-- Big Stage Display Arena -->
-            <div class="stage-display">
-                <!-- Top Prize Badge -->
-                <div class="prize-tag" id="displayHadiahBadge">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76V14h2V8.76L15.38 12 17 10.83 14.92 8H20v6z"/>
-                    </svg>
-                    <span id="labelDisplayHadiah">Door Prize Utama</span>
-                </div>
-
-                <!-- Central Slot / Winner Showcase -->
-                <div class="spinner-arena">
-                    <div class="slot-box" id="slotBox">
-                        <div class="slot-name" id="slotName">SIAP MENGUNDI</div>
-                        <div class="slot-details" id="slotDetails" style="display:none;">
-                            <span class="slot-badge">NIK: <strong id="slotNik">-</strong></span>
-                            <span class="slot-badge">DEPARTEMEN: <strong id="slotDept">-</strong></span>
-                            <span class="slot-badge" id="slotRfidBadge" style="display:none;">RFID: <strong id="slotRfid">-</strong></span>
+            <!-- Big Stage Display Arena with Authentic MegaSpinner Casino Aesthetics -->
+            <div class="stage-display stage-display-casino">
+                
+                <!-- TOP CASINO ARCADE HEADER HUD (from reference image) -->
+                <div class="casino-top-hud">
+                    <!-- Left: LAST WINNER Screen -->
+                    <div class="hud-box hud-last-winner">
+                        <div class="hud-label-yellow">LAST WINNER</div>
+                        <div class="hud-screen-black">
+                            <span id="hudLastWinner">
+                                <?php if (!empty($daftar_pemenang)): ?>
+                                    <?= html_escape($daftar_pemenang[0]->pemilih_nik); ?> - <?= html_escape($daftar_pemenang[0]->nama ?: 'Pemenang'); ?>
+                                <?php else: ?>
+                                    SIAP MENGUNDI
+                                <?php endif; ?>
+                            </span>
                         </div>
-                        <div class="slot-hint" id="slotHint">
-                            Tersedia <strong id="counterPeserta" style="color:#1a1a1a; font-weight:700;"><?= $total_tersisa; ?></strong> peserta berhak undian
+                    </div>
+
+                    <!-- Center: 3D MEGASPINNER Logo -->
+                    <div class="hud-center-logo">
+                        <div class="logo-megaspinner">MEGASPINNER<span>&reg;</span></div>
+                        <div class="logo-sub-badge">
+                            <span class="badge-dot-left"></span>
+                            <span class="badge-text">RAT KOPERASI</span>
+                            <span class="badge-dot-right"></span>
+                        </div>
+                    </div>
+
+                    <!-- Right: JACKPOT Screen with Marquee Neon Bulbs -->
+                    <div class="hud-box hud-jackpot-screen">
+                        <div class="hud-label-orange">
+                            <span style="color:#ffcc00;">&bull;</span>
+                            JACKPOT
+                            <span style="color:#ffcc00;">&bull;</span>
+                        </div>
+                        <div class="hud-screen-black hud-screen-jackpot">
+                            <span id="labelDisplayHadiah">Door Prize Utama</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Giant Spin Action Button -->
-                <div>
-                    <button type="button" class="btn-spin" id="btnSpin">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0020 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 004 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-                        </svg>
-                        <span id="btnSpinText">PUTAR UNDIAN SEKARANG</span>
-                    </button>
+                <!-- MAIN CASINO ARENA WITH FLANKING PAYLINE NUMBER TILES -->
+                <div class="casino-main-arena">
+                    <!-- Left Payline Number Tiles (Cyan/Blue LED Glow) -->
+                    <div class="payline-column payline-left">
+                        <div class="payline-tile">4</div>
+                        <div class="payline-tile">2</div>
+                        <div class="payline-tile">9</div>
+                        <div class="payline-tile">6</div>
+                        <div class="payline-tile active-tile">1</div>
+                        <div class="payline-tile">10</div>
+                        <div class="payline-tile">7</div>
+                        <div class="payline-tile">8</div>
+                        <div class="payline-tile">3</div>
+                        <div class="payline-tile">5</div>
+                    </div>
+
+                    <!-- 3D Canvas Showcase Area -->
+                    <div class="slot-3d-wrapper">
+                        <!-- Three.js Canvas Container -->
+                        <div id="slot3dCanvasContainer" class="slot-3d-canvas-container"></div>
+
+                        <!-- Celebratory Overlay: JACKPOT! with Animated Gold Gradient -->
+                        <div id="jackpotOverlay" class="jackpot-overlay">
+                            <div class="jackpot-badge-top">★ GRAND CASINO JACKPOT ★</div>
+                            <h2 class="jackpot-text-title" id="jackpotTitleText">JACKPOT! NIK RAT</h2>
+                            
+                            <div class="jackpot-winner-card">
+                                <div class="jackpot-winner-tag">
+                                    <span>SELAMAT KEPADA PEMENANG</span>
+                                </div>
+                                <div class="jackpot-winner-name" id="jackpotWinnerName">-</div>
+                                <div class="jackpot-winner-meta" id="jackpotWinnerMeta">-</div>
+                                <div class="jackpot-prize-pill">
+                                    🏆 <span id="jackpotPrizeLabel">Door Prize Utama</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Payline Number Tiles (Fiery Amber/Red LED Glow) -->
+                    <div class="payline-column payline-right">
+                        <div class="payline-tile">15</div>
+                        <div class="payline-tile">13</div>
+                        <div class="payline-tile">18</div>
+                        <div class="payline-tile">16</div>
+                        <div class="payline-tile active-tile">11</div>
+                        <div class="payline-tile">20</div>
+                        <div class="payline-tile">17</div>
+                        <div class="payline-tile">19</div>
+                        <div class="payline-tile">12</div>
+                        <div class="payline-tile">14</div>
+                    </div>
                 </div>
+
+                <!-- BOTTOM CASINO ARCADE DASHBOARD (from reference image) -->
+                <div class="casino-bottom-dashboard">
+                    <!-- Left: Info Pill Button -->
+                    <button type="button" class="btn-arcade-info" title="Informasi Undian RAT">
+                        <span>ℹ</span>
+                    </button>
+
+                    <!-- Hidden Counter for JS Logic -->
+                    <span id="counterPeserta" style="display:none;"><?= $total_tersisa; ?></span>
+
+                    <!-- AUTO BUTTON -->
+                    <div class="btn-arcade-auto" id="btnArcadeAuto" title="Klik untuk beralih mode Auto Valid">
+                        <span class="auto-light-indicator" id="arcadeAutoIndicator"></span>
+                        <span class="auto-text">AUTO</span>
+                    </div>
+
+                    <!-- GIANT ARCADE SPIN BUTTON (Match Reference Image!) -->
+                    <button type="button" class="btn-arcade-spin" id="btnSpin">
+                        <span class="spin-text" id="btnSpinText">SPIN</span>
+                    </button>
+
+                    <!-- WIN SCOREBOARD PANEL -->
+                    <div class="dashboard-meter-pill meter-win">
+                        <div class="meter-content">
+                            <span class="meter-title">WIN (PEMENANG)</span>
+                            <span class="meter-value meter-win-value" id="meterWinCount"><?= count($daftar_pemenang); ?></span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -808,6 +1287,16 @@
 
     <!-- SweetAlert2 Scripts -->
     <script src="<?= base_url('assets/vendor/sweetalert2/sweetalert2.all.min.js'); ?>"></script>
+
+    <!-- Three.js 3D Library -->
+    <script src="<?= base_url('assets/vendor/threejs/three.min.js'); ?>"></script>
+
+    <!-- 3D Casino Slot Machine Modular Architecture Scripts -->
+    <script src="<?= base_url('assets/js/slot_3d/ThreeScene.js'); ?>"></script>
+    <script src="<?= base_url('assets/js/slot_3d/LightingManager.js'); ?>"></script>
+    <script src="<?= base_url('assets/js/slot_3d/SlotMachine.js'); ?>"></script>
+    <script src="<?= base_url('assets/js/slot_3d/ParticleSystem.js'); ?>"></script>
+    <script src="<?= base_url('assets/js/slot_3d/UIManager.js'); ?>"></script>
 
     <!-- Lightweight Pure HTML5 Canvas Confetti Engine (No CDN Needed) -->
     <script>
@@ -941,16 +1430,34 @@
         window.location.href = "<?= site_url('bilik_undian'); ?>?dept=" + dept;
     });
 
-    // ── Toggle Auto-Valid Switch ──
+    // ── Toggle Auto-Valid Switch & Arcade Auto Button ──
+    var btnArcadeAuto = document.getElementById('btnArcadeAuto');
+    var arcadeAutoIndicator = document.getElementById('arcadeAutoIndicator');
+
     toggleAutoValid.addEventListener('change', function() {
         if (this.checked) {
             toggleLabel.textContent = 'AUTO VALID: AKTIF';
             toggleLabel.className = 'toggle-status-text status-on';
+            if (arcadeAutoIndicator) {
+                arcadeAutoIndicator.style.background = '#22c55e';
+                arcadeAutoIndicator.style.boxShadow = '0 0 8px #22c55e';
+            }
         } else {
             toggleLabel.textContent = 'AUTO VALID: NONAKTIF';
             toggleLabel.className = 'toggle-status-text status-off';
+            if (arcadeAutoIndicator) {
+                arcadeAutoIndicator.style.background = '#ef4444';
+                arcadeAutoIndicator.style.boxShadow = '0 0 8px #ef4444';
+            }
         }
     });
+
+    if (btnArcadeAuto) {
+        btnArcadeAuto.addEventListener('click', function() {
+            toggleAutoValid.checked = !toggleAutoValid.checked;
+            toggleAutoValid.dispatchEvent(new Event('change'));
+        });
+    }
 
     // ── Fullscreen Toggle ──
     document.getElementById('btnFullscreen').addEventListener('click', function() {
@@ -1032,9 +1539,13 @@
                             var currentTotal = parseInt(countPemenang.textContent, 10) - 1;
                             countPemenang.textContent = currentTotal;
                             footerCount.textContent = currentTotal;
+                            var meterWin = document.getElementById('meterWinCount');
+                            if (meterWin) meterWin.textContent = currentTotal;
                             
                             var currentSisa = parseInt(counterPeserta.textContent, 10) + 1;
                             counterPeserta.textContent = currentSisa;
+                            var meterCredits = document.getElementById('meterCredits');
+                            if (meterCredits) meterCredits.textContent = (currentSisa * 100).toLocaleString('id-ID');
 
                             Swal.fire({
                                 icon: 'success',
@@ -1055,252 +1566,31 @@
         });
     };
 
-    // ── SPINNING WHEEL / SLOT ENGINE ──
-    btnSpin.addEventListener('click', function() {
-        if (isSpinning) return;
+    // ── Inisialisasi Arsitektur Modular Three.js 3D Casino Slot Machine ──
+    var threeScene = new ThreeScene('slot3dCanvasContainer');
+    var lightingManager = new LightingManager(threeScene.scene, threeScene.mainPivot);
+    var slotMachine = new SlotMachine(threeScene.scene, threeScene.mainPivot);
+    var particleSystem = new ParticleSystem(threeScene.scene, threeScene.mainPivot);
 
-        var hadiah = inputHadiah.value.trim() || 'Door Prize Utama';
-        var dept = filterDept.value;
-        var isAutoValid = toggleAutoValid.checked;
-
-        // Cek sisa peserta
-        var sisaNow = parseInt(counterPeserta.textContent, 10);
-        if (sisaNow <= 0) {
-            Swal.fire({
-                icon: 'info',
-                title: 'Tidak Ada Peserta Tersisa',
-                text: 'Seluruh peserta yang memenuhi syarat telah memenangkan undian.',
-                confirmButtonColor: '#1a1a1a'
-            });
-            return;
-        }
-
-        // Start UI Spinning State
-        isSpinning = true;
-        btnSpin.disabled = true;
-        btnSpin.classList.add('spinning');
-        btnSpinText.textContent = 'MENGACAK PEMENANG...';
-        slotBox.className = 'slot-box spinning';
-        slotDetails.style.display = 'none';
-        slotHint.style.display = 'none';
-
-        // Panggil server untuk mengacak calon pemenang
-        fetch(acakUrl + '?dept=' + encodeURIComponent(dept))
-            .then(function(res) { return res.json(); })
-            .then(function(response) {
-                if (response.status !== 'success') {
-                    isSpinning = false;
-                    btnSpin.disabled = false;
-                    btnSpin.classList.remove('spinning');
-                    btnSpinText.textContent = 'PUTAR UNDIAN SEKARANG';
-                    slotBox.className = 'slot-box';
-                    slotHint.style.display = 'block';
-
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Perhatian',
-                        text: response.message,
-                        confirmButtonColor: '#1a1a1a'
-                    });
-                    return;
-                }
-
-                var winner = response.data;
-                var pool = response.pool || [];
-
-                // Visual Rolling Animation (Rapid slot deceleration effect for 3.2 seconds)
-                var duration = 3200;
-                var startTime = performance.now();
-
-                function rollFrame(currentTime) {
-                    var elapsed = currentTime - startTime;
-                    var progress = Math.min(elapsed / duration, 1);
-
-                    // Ambil nama acak dari pool untuk ilusi perputaran cepat
-                    if (pool.length > 0) {
-                        var randomCandidate = pool[Math.floor(Math.random() * pool.length)];
-                        slotName.textContent = randomCandidate.nama.toUpperCase();
-                    } else {
-                        slotName.textContent = 'ACAK PESERTA...';
-                    }
-
-                    if (progress < 1) {
-                        requestAnimationFrame(rollFrame);
-                    } else {
-                        // Putaran Selesai! Tampilkan Pemenang
-                        revealWinner(winner, hadiah, isAutoValid, dept);
-                    }
-                }
-
-                requestAnimationFrame(rollFrame);
-            })
-            .catch(function(err) {
-                console.error(err);
-                isSpinning = false;
-                btnSpin.disabled = false;
-                btnSpin.classList.remove('spinning');
-                btnSpinText.textContent = 'PUTAR UNDIAN SEKARANG';
-                slotBox.className = 'slot-box';
-                slotHint.style.display = 'block';
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Kesalahan Sistem',
-                    text: 'Tidak dapat menghubungi server untuk mengacak undian.',
-                    confirmButtonColor: '#1a1a1a'
-                });
-            });
+    // Daftarkan listener render loop Three.js
+    threeScene.subscribe(function(delta, time) {
+        lightingManager.update(delta, time);
+        slotMachine.update(delta, time);
+        particleSystem.update(delta, time);
     });
 
-    // ── Reveal Winner Logic ──
-    function revealWinner(winner, hadiah, isAutoValid, dept) {
-        slotName.textContent = winner.nama.toUpperCase();
-        slotNik.textContent = winner.nik;
-        slotDept.textContent = winner.dept || '-';
-        if (winner.rfid) {
-            slotRfid.textContent = winner.rfid;
-            slotRfidBadge.style.display = 'inline-block';
-        } else {
-            slotRfidBadge.style.display = 'none';
-        }
-
-        slotDetails.style.display = 'flex';
-        slotBox.className = 'slot-box winner-revealed';
-        btnSpin.classList.remove('spinning');
-
-        // Check Auto-Valid toggle setting
-        if (isAutoValid) {
-            // Mode Auto Valid: Langsung Sah & Simpan
-            saveWinnerDirectly(winner, hadiah, dept);
-        } else {
-            // Mode Disable Auto Valid: Wajib Pop-up Konfirmasi Valid / Tidak
-            promptValidationPopup(winner, hadiah, dept);
-        }
-    }
-
-    // ── Auto Valid: Save directly with celebration ──
-    function saveWinnerDirectly(winner, hadiah, dept) {
-        var formData = new FormData();
-        formData.append('nik', winner.nik);
-        formData.append('nama_hadiah', hadiah);
-        formData.append('status', 'valid');
-        formData.append('dept', dept);
-
-        fetch(simpanUrl, {
-            method: 'POST',
-            body: formData
-        })
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
-            isSpinning = false;
-            btnSpin.disabled = false;
-            btnSpinText.textContent = 'PUTAR UNDIAN BERIKUTNYA';
-
-            if (data.status === 'success') {
-                ConfettiEngine.blast(160);
-                addWinnerToSidebar(winner, hadiah);
-                counterPeserta.textContent = data.sisa_peserta;
-                slotHint.innerHTML = 'Selamat! Pemenang <strong>' + hadiah + '</strong> telah disahkan otomatis.';
-                slotHint.style.display = 'block';
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Selamat Kepada Pemenang!',
-                    html: '<div style="font-size:18px; font-weight:700; color:#1a1a1a; margin:10px 0;">' + winner.nama + '</div>' +
-                          '<div style="font-size:14px; color:#6b7280; margin-bottom:12px;">NIK: ' + winner.nik + ' &bull; Dept: ' + (winner.dept || '-') + '</div>' +
-                          '<div style="padding:10px 16px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; color:#15803d; font-weight:700;">' + hadiah + '</div>' +
-                          '<p style="font-size:13px; color:#6b7280; margin-top:14px;">(Status: Sah Otomatis & Terdata)</p>',
-                    confirmButtonColor: '#1a1a1a',
-                    confirmButtonText: 'Selesai & Lanjutkan'
-                });
-            } else {
-                Swal.fire({ icon: 'error', title: 'Gagal Menyimpan', text: data.message });
-            }
-        })
-        .catch(function(err) {
-            console.error(err);
-            isSpinning = false;
-            btnSpin.disabled = false;
-            btnSpinText.textContent = 'PUTAR UNDIAN SEKARANG';
-        });
-    }
-
-    // ── Manual Valid: Pop-up Confirmation (Requirement: popup undian valid/tidak) ──
-    function promptValidationPopup(winner, hadiah, dept) {
-        Swal.fire({
-            title: 'Konfirmasi Kehadiran Pemenang',
-            html: '<div style="margin-top:12px;">' +
-                    '<div style="font-size:22px; font-weight:800; color:#1a1a1a; margin-bottom:6px;">' + winner.nama + '</div>' +
-                    '<div style="font-size:14px; color:#6b7280; margin-bottom:16px;">NIK: <b>' + winner.nik + '</b> &bull; Departemen: <b>' + (winner.dept || '-') + '</b></div>' +
-                    '<div style="padding:12px 18px; background:#fef3c7; border:1px solid #fde68a; border-radius:12px; color:#b45309; font-weight:700; margin-bottom:18px;">' +
-                        'Hadiah: ' + hadiah +
-                    '</div>' +
-                    '<div style="font-size:15px; font-weight:600; color:#1a1a1a;">Apakah anggota yang bersangkutan hadir di ruangan RAT?</div>' +
-                  '</div>',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#16a34a', // Green
-            cancelButtonColor: '#dc2626',  // Red
-            confirmButtonText: '✓ VALID (Hadir & Sah)',
-            cancelButtonText: '✕ TIDAK VALID (Hangus / Undi Ulang)',
-            allowOutsideClick: false,
-            allowEscapeKey: false
-        }).then(function(result) {
-            if (result.isConfirmed) {
-                // User memilih VALID / HADIR
-                var formData = new FormData();
-                formData.append('nik', winner.nik);
-                formData.append('nama_hadiah', hadiah);
-                formData.append('status', 'valid');
-                formData.append('dept', dept);
-
-                fetch(simpanUrl, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
-                    isSpinning = false;
-                    btnSpin.disabled = false;
-                    btnSpinText.textContent = 'PUTAR UNDIAN BERIKUTNYA';
-
-                    if (data.status === 'success') {
-                        ConfettiEngine.blast(180);
-                        addWinnerToSidebar(winner, hadiah);
-                        counterPeserta.textContent = data.sisa_peserta;
-                        slotHint.innerHTML = 'Pemenang <strong>' + winner.nama + '</strong> dinyatakan SAH dan HADIR.';
-                        slotHint.style.display = 'block';
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Undian Sah & Diterima!',
-                            text: 'Data pemenang ' + winner.nama + ' berhasil disimpan permanen.',
-                            confirmButtonColor: '#1a1a1a',
-                            timer: 2000
-                        });
-                    } else {
-                        Swal.fire({ icon: 'error', title: 'Gagal', text: data.message });
-                    }
-                });
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                // User memilih TIDAK VALID / HANGUS
-                isSpinning = false;
-                btnSpin.disabled = false;
-                btnSpinText.textContent = 'PUTAR ULANG UNDIAN';
-                slotBox.className = 'slot-box';
-                slotHint.innerHTML = '<span style="color:#dc2626; font-weight:600;">Undian Dibatalkan (Tidak Hadir). Silakan klik putar ulang.</span>';
-                slotHint.style.display = 'block';
-
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Undian Dibatalkan / Hangus',
-                    html: 'Peserta <b>' + winner.nama + '</b> dinyatakan tidak hadir/tidak valid.<br>Hadiah <b>' + hadiah + '</b> tetap tersedia untuk diundi kembali.',
-                    confirmButtonColor: '#1a1a1a',
-                    confirmButtonText: 'Siap Undi Ulang'
-                });
-            }
-        });
-    }
+    // Inisialisasi UIManager & Hubungkan Kontrol SPA
+    var uiManager = new UIManager({
+        threeScene: threeScene,
+        slotMachine: slotMachine,
+        lightingManager: lightingManager,
+        particleSystem: particleSystem,
+        btnSpinId: 'btnSpin',
+        btnSpinTextId: 'btnSpinText',
+        overlayId: 'jackpotOverlay',
+        acakUrl: acakUrl,
+        simpanUrl: simpanUrl
+    });
 
     // ── Dynamic DOM Add Winner to Sidebar ──
     function addWinnerToSidebar(winner, hadiah) {
@@ -1335,7 +1625,24 @@
 
         // Prepend to top of winners list
         winnersListContainer.insertBefore(card, winnersListContainer.firstChild);
+
+        // Sync Casino HUD Meters
+        var hudLast = document.getElementById('hudLastWinner');
+        if (hudLast) {
+            hudLast.textContent = winner.nik + ' - ' + winner.nama;
+        }
+        var meterWin = document.getElementById('meterWinCount');
+        if (meterWin) {
+            meterWin.textContent = total;
+        }
+        var sisaEl = document.getElementById('counterPeserta');
+        var creditsEl = document.getElementById('meterCredits');
+        if (sisaEl && creditsEl) {
+            var sVal = parseInt(sisaEl.textContent, 10) || 0;
+            creditsEl.textContent = (sVal * 100).toLocaleString('id-ID');
+        }
     }
+    window.addWinnerToSidebar = addWinnerToSidebar;
     </script>
 </body>
 </html>
