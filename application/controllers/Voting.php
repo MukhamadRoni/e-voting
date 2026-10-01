@@ -29,10 +29,42 @@ class Voting extends CI_Controller {
     }
 
     /**
+     * Helper mendeteksi dan menyimpan nomor tablet dari URL (?tablet=1 atau ?autofs=1) / Session
+     */
+    private function _get_tablet()
+    {
+        // 1. Cek dari parameter GET: prioritas ?tablet=1 lalu ?autofs=1
+        $tablet = $this->input->get('tablet', TRUE);
+        if ($tablet === null || $tablet === '') {
+            $autofs = $this->input->get('autofs', TRUE);
+            if (!empty($autofs)) {
+                $tablet = $autofs;
+            }
+        }
+
+        // 2. Cek jika dikirim via Header HTTP (AJAX Kiosk SPA)
+        if (($tablet === null || $tablet === '') && isset($_SERVER['HTTP_X_VOTING_TABLET'])) {
+            $tablet = trim($_SERVER['HTTP_X_VOTING_TABLET']);
+        }
+
+        // 3. Simpan ke session CI jika ada nilai baru agar awet antar pemilih
+        if ($tablet !== null && $tablet !== '') {
+            $this->session->set_userdata('voting_tablet', $tablet);
+        } else {
+            $tablet = $this->session->userdata('voting_tablet');
+        }
+
+        return $tablet ?: null;
+    }
+
+    /**
      * Halaman Awal Bilik Suara: Standby Layar Tap RFID / Input NIK (View Shell)
      */
     public function index()
     {
+        $tablet = $this->_get_tablet();
+        $data['tablet'] = $tablet;
+
         // Jika pemilih sedang dalam proses voting aktif, arahkan langsung ke bilik pemilihan
         if ($this->session->userdata('voter')) {
             redirect('voting/pilih');
@@ -43,10 +75,11 @@ class Voting extends CI_Controller {
         if ($this->input->is_ajax_request() || $this->input->get('ajax') === '1') {
             $data['title'] = 'Bilik Suara - E-Voting Koperasi';
             $this->_json_response('success', 'Layar standby dimuat.', array(
-                'step'  => null,
-                'voter' => null,
-                'title' => $data['title'],
-                'html'  => $this->load->view('voting/identifikasi', $data, TRUE)
+                'step'   => null,
+                'voter'  => null,
+                'tablet' => $tablet,
+                'title'  => $data['title'],
+                'html'   => $this->load->view('voting/identifikasi', $data, TRUE)
             ));
             return;
         }
@@ -54,7 +87,7 @@ class Voting extends CI_Controller {
         $data['title'] = 'Bilik Suara - E-Voting Koperasi';
         $this->load->view('voting/template_header', $data);
         $this->load->view('voting/identifikasi', $data);
-        $this->load->view('voting/template_footer');
+        $this->load->view('voting/template_footer', $data);
     }
 
     /**
@@ -109,6 +142,8 @@ class Voting extends CI_Controller {
             return;
         }
 
+        $tablet                   = $this->_get_tablet();
+        $data['tablet']           = $tablet;
         $data['title']            = 'Bilik Suara - Pilih Calon Ketua & Calon Pengawas';
         $data['voter']            = $voter;
         $data['kandidat_ketua']    = $this->Voting_model->get_all_ketua();
@@ -120,17 +155,18 @@ class Voting extends CI_Controller {
         // Jika request via AJAX untuk kiosk seamless transition (mencegah browser keluar fullscreen)
         if ($this->input->is_ajax_request() || $this->input->get('ajax') === '1') {
             $this->_json_response('success', 'Halaman bilik pemilihan dimuat.', array(
-                'voter' => $voter,
-                'step'  => 1,
-                'title' => $data['title'],
-                'html'  => $this->load->view('voting/pilih', $data, TRUE)
+                'voter'  => $voter,
+                'step'   => 1,
+                'tablet' => $tablet,
+                'title'  => $data['title'],
+                'html'   => $this->load->view('voting/pilih', $data, TRUE)
             ));
             return;
         }
 
         $this->load->view('voting/template_header', $data);
         $this->load->view('voting/pilih', $data);
-        $this->load->view('voting/template_footer');
+        $this->load->view('voting/template_footer', $data);
     }
 
     /**
@@ -162,6 +198,10 @@ class Voting extends CI_Controller {
         $voter        = $this->session->userdata('voter');
         $nik_ketua    = $this->input->post('ketua_nik', TRUE) ?: $this->session->userdata('pilihan_ketua');
         $nik_pengawas = $this->input->post('pengawas_nik', TRUE) ?: $this->session->userdata('pilihan_pengawas');
+        $tablet       = $this->input->post('tablet', TRUE);
+        if ($tablet === null || $tablet === '') {
+            $tablet = $this->_get_tablet();
+        }
 
         if (!$voter) {
             $this->_json_response('error', 'Sesi pemilihan Anda telah berakhir atau belum terdaftar. Silakan scan kartu kembali.', array(
@@ -181,12 +221,12 @@ class Voting extends CI_Controller {
             $this->_json_response('error', 'Kandidat yang Anda pilih tidak valid atau tidak terdaftar.');
         }
 
-        $sukses = $this->Voting_model->simpan_suara($voter['nik'], $nik_ketua, $nik_pengawas);
+        $sukses = $this->Voting_model->simpan_suara($voter['nik'], $nik_ketua, $nik_pengawas, $tablet);
 
         if ($sukses) {
             $nama_pemilih = $voter['nama'];
 
-            // Bersihkan session voting setelah sukses
+            // Bersihkan session voting setelah sukses (jangan hapus voting_tablet agar tablet tetap teridentifikasi)
             $this->session->unset_userdata('voter');
             $this->session->unset_userdata('pilihan_ketua');
             $this->session->unset_userdata('pilihan_pengawas');
@@ -212,6 +252,8 @@ class Voting extends CI_Controller {
      */
     public function selesai()
     {
+        $tablet        = $this->_get_tablet();
+        $data['tablet'] = $tablet;
         $data['title'] = 'Suara Berhasil Terkirim - E-Voting';
         $data['nama']  = $this->session->flashdata('nama_selesai') ?: 'Anggota';
         $data['step']  = 2;
@@ -219,17 +261,18 @@ class Voting extends CI_Controller {
         // Jika request via AJAX untuk kiosk seamless transition
         if ($this->input->is_ajax_request() || $this->input->get('ajax') === '1') {
             $this->_json_response('success', 'Halaman terima kasih dimuat.', array(
-                'step'  => 2,
-                'voter' => null,
-                'title' => $data['title'],
-                'html'  => $this->load->view('voting/selesai', $data, TRUE)
+                'step'   => 2,
+                'voter'  => null,
+                'tablet' => $tablet,
+                'title'  => $data['title'],
+                'html'   => $this->load->view('voting/selesai', $data, TRUE)
             ));
             return;
         }
 
         $this->load->view('voting/template_header', $data);
         $this->load->view('voting/selesai', $data);
-        $this->load->view('voting/template_footer');
+        $this->load->view('voting/template_footer', $data);
     }
 
     /**

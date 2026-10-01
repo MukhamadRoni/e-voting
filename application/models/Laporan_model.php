@@ -91,6 +91,7 @@ class Laporan_model extends CI_Model {
             h.pemilih_nik, 
             p.nama AS nama_pemilih, 
             p.dept AS dept_pemilih, 
+            p.tablet AS tablet_pemilih,
             h.ketua_nik, 
             kk.nama AS nama_ketua, 
             h.pengawas_nik, 
@@ -107,6 +108,7 @@ class Laporan_model extends CI_Model {
             $this->db->like('h.pemilih_nik', $search);
             $this->db->or_like('p.nama', $search);
             $this->db->or_like('p.dept', $search);
+            $this->db->or_like('p.tablet', $search);
             $this->db->or_like('h.ketua_nik', $search);
             $this->db->or_like('kk.nama', $search);
             $this->db->or_like('h.pengawas_nik', $search);

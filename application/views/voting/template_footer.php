@@ -2,6 +2,16 @@
 
 <footer style="background:#ffffff; border-top:1px solid #e5e5e5; padding:16px 32px; text-align:center; font-size:13px; color:#9ca3af; margin-top:auto;">
     E-Voting Koperasi &copy; <?= date('Y'); ?> &bull; Sistem Pemilihan Langsung, Umum, Bebas, dan Rahasia
+    <?php 
+        $current_tablet = isset($tablet) && $tablet !== '' ? $tablet : $this->session->userdata('voting_tablet'); 
+    ?>
+    <span id="footerTabletInfo" style="<?= !empty($current_tablet) ? '' : 'display:none;'; ?>">
+        &bull; 
+        <span style="display:inline-flex; align-items:center; gap:5px; background:#f1f5f9; color:#0f172a; padding:2px 10px; border-radius:9999px; font-weight:700; font-size:12px; border:1px solid #e2e8f0; vertical-align:middle;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+            <span id="footerTabletText">Tablet <?= html_escape($current_tablet); ?></span>
+        </span>
+    </span>
 </footer>
 
 <script src="<?= base_url('assets/vendor/sweetalert2/sweetalert2.all.min.js'); ?>"></script>
@@ -175,11 +185,17 @@ if (typeof Swal !== 'undefined') {
             return;
         }
 
+        var reqHeaders = {
+            'X-Requested-With': 'XMLHttpRequest'
+        };
+        var activeTab = localStorage.getItem('voting_tablet') || sessionStorage.getItem('voting_tablet');
+        if (activeTab) {
+            reqHeaders['X-Voting-Tablet'] = activeTab;
+        }
+
         fetch(url, {
             method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
+            headers: reqHeaders
         })
         .then(function(res) {
             if (!res.ok) throw new Error('Network error');
@@ -194,6 +210,10 @@ if (typeof Swal !== 'undefined') {
 
                 updateKioskNavbarState(data.data.step, data.data.voter);
                 setContentAndRunScripts(mainEl, data.data.html);
+
+                if (typeof syncTabletInfoUI === 'function') {
+                    syncTabletInfoUI(data.data.tablet || activeTab);
+                }
 
                 // Selalu fokuskan ke id inputIdentitas saat halaman voting dibuka/dimuat dinamis tanpa membuka keyboard virtual tablet
                 var rfidInput = document.getElementById('inputIdentitas');
@@ -323,8 +343,49 @@ if (typeof Swal !== 'undefined') {
         } catch(e) {}
     }
 
-    // Auto-detect parameter URL ?autofs=1 atau ?fullscreen=1
+    // ── Sinkronisasi Informasi Bilik / Tablet ──
+    window.syncTabletInfoUI = function(tabletVal) {
+        var val = tabletVal || localStorage.getItem('voting_tablet') || sessionStorage.getItem('voting_tablet');
+        if (val) {
+            try {
+                localStorage.setItem('voting_tablet', val);
+                sessionStorage.setItem('voting_tablet', val);
+            } catch(e) {}
+
+            var ftInfo = document.getElementById('footerTabletInfo');
+            var ftText = document.getElementById('footerTabletText');
+            if (ftInfo) ftInfo.style.display = 'inline';
+            if (ftText) ftText.textContent = 'Tablet ' + val;
+
+            var sumItemTab = document.getElementById('summaryItemTablet');
+            var sumValTab  = document.getElementById('summaryTabletVal');
+            if (sumItemTab) sumItemTab.style.display = 'flex';
+            if (sumValTab)  sumValTab.textContent = 'Tablet ' + val;
+
+            var inpTab = document.getElementById('inputVotingTablet');
+            if (inpTab) {
+                inpTab.value = val;
+            }
+        }
+    };
+
+    // Auto-detect parameter URL ?tablet=X atau ?autofs=X
     var urlParams = new URLSearchParams(window.location.search);
+    var detectedTablet = urlParams.get('tablet');
+    if (!detectedTablet) {
+        var autofsVal = urlParams.get('autofs');
+        if (autofsVal && autofsVal !== '0') {
+            detectedTablet = autofsVal;
+        }
+    }
+
+    if (detectedTablet) {
+        syncTabletInfoUI(detectedTablet);
+    } else {
+        syncTabletInfoUI();
+    }
+
+    // Auto-detect parameter URL ?autofs=1 atau ?fullscreen=1 untuk preferensi fullscreen
     if (urlParams.get('autofs') === '1' || urlParams.get('fullscreen') === '1') {
         setSavedFsPref('1');
     }

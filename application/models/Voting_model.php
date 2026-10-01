@@ -82,9 +82,9 @@ class Voting_model extends CI_Model {
      * Simpan hasil suara voting dengan database transaction
      * 1. Validasi pemilih belum pernah voting (pilih = 'F') dengan lock row
      * 2. Insert ke tabel hasil
-     * 3. Update status pemilih menjadi pilih = 'T'
+     * 3. Update status pemilih menjadi pilih = 'T' dan catat nomor tablet
      */
-    public function simpan_suara($pemilih_nik, $ketua_nik, $pengawas_nik)
+    public function simpan_suara($pemilih_nik, $ketua_nik, $pengawas_nik, $tablet = null)
     {
         $this->db->trans_start();
 
@@ -106,11 +106,18 @@ class Voting_model extends CI_Model {
             array($pemilih_nik, $ketua_nik, $pengawas_nik, $now)
         );
 
-        // 3. Update status pemilih
-        $this->db->query(
-            "UPDATE pemilih SET pilih = 'T' WHERE nik = ? AND pilih = 'F'",
-            array($pemilih_nik)
-        );
+        // 3. Update status pemilih dan catat tablet yang digunakan
+        if (!empty($tablet)) {
+            $this->db->query(
+                "UPDATE pemilih SET pilih = 'T', tablet = ? WHERE nik = ? AND pilih = 'F'",
+                array($tablet, $pemilih_nik)
+            );
+        } else {
+            $this->db->query(
+                "UPDATE pemilih SET pilih = 'T' WHERE nik = ? AND pilih = 'F'",
+                array($pemilih_nik)
+            );
+        }
 
         $this->db->trans_complete();
 

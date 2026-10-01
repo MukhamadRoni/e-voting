@@ -89,6 +89,7 @@ class Laporan extends Admin_Controller {
             '<b>NIK Pemilih</b>',
             '<b>Nama Pemilih</b>',
             '<b>Departemen</b>',
+            '<b>Bilik / Tablet</b>',
             '<b>Pilihan Ketua</b>',
             '<b>Pilihan Pengawas</b>'
         );
@@ -96,6 +97,7 @@ class Laporan extends Admin_Controller {
         $no = 1;
         foreach ($trace as $row) {
             $waktu = date('d M Y, H:i:s', strtotime($row->created_at));
+            $tabletInfo = !empty($row->tablet_pemilih) ? 'Tablet ' . $row->tablet_pemilih : '-';
             $pilihanKetua = $row->nama_ketua ? $row->nama_ketua . ' (NIK: ' . $row->ketua_nik . ')' : 'Tidak memilih';
             $pilihanPengawas = $row->nama_pengawas ? $row->nama_pengawas . ' (NIK: ' . $row->pengawas_nik . ')' : 'Tidak memilih';
 
@@ -105,6 +107,7 @@ class Laporan extends Admin_Controller {
                 "\0" . (string)$row->pemilih_nik,
                 (string)($row->nama_pemilih ?: '-'),
                 (string)($row->dept_pemilih ?: '-'),
+                $tabletInfo,
                 $pilihanKetua,
                 $pilihanPengawas
             );

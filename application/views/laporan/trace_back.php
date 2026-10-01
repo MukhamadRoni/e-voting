@@ -56,7 +56,8 @@
                     <th style="width:160px;">Waktu Voting</th>
                     <th style="width:120px;">NIK Pemilih</th>
                     <th>Nama Pemilih</th>
-                    <th style="width:140px;">Departemen</th>
+                    <th style="width:130px;">Departemen</th>
+                    <th style="width:100px; text-align:center;">Bilik / Tablet</th>
                     <th>Pilihan Ketua</th>
                     <th>Pilihan Pengawas</th>
                 </tr>
@@ -73,6 +74,15 @@
                             <td><code style="background:#f3f4f6; padding:3px 8px; border-radius:6px; font-size:12.5px; font-weight:600; color:#1a1a1a;"><?= $row->pemilih_nik; ?></code></td>
                             <td><strong style="color:#1a1a1a; font-size:14px;"><?= html_escape($row->nama_pemilih ?: '-'); ?></strong></td>
                             <td><span class="badge badge-warning"><?= html_escape($row->dept_pemilih ?: '-'); ?></span></td>
+                            <td style="text-align:center;">
+                                <?php if (!empty($row->tablet_pemilih)): ?>
+                                    <span class="badge" style="background:#f1f5f9; color:#0f172a; border:1px solid #e2e8f0; font-weight:700; font-size:12px; padding:3px 8px; border-radius:9999px;">
+                                        Tablet <?= html_escape($row->tablet_pemilih); ?>
+                                    </span>
+                                <?php else: ?>
+                                    <span style="color:#9ca3af; font-size:12px;">-</span>
+                                <?php endif; ?>
+                            </td>
                             <td>
                                 <?php if ($row->nama_ketua): ?>
                                     <strong style="color:#1a1a1a; font-size:13.5px;"><?= html_escape($row->nama_ketua); ?></strong>

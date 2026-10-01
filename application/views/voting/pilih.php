@@ -958,9 +958,13 @@ body {
 <!-- ========================================================
      FORM SUBMIT TERSEMBUNYI
      ======================================================== -->
+<?php 
+    $current_tablet = isset($tablet) && $tablet !== '' ? $tablet : $this->session->userdata('voting_tablet'); 
+?>
 <form id="formKirimSuara" method="post" action="<?= site_url('voting/kirim_suara'); ?>">
     <input type="hidden" name="ketua_nik" id="inputKetuaNik" value="<?= html_escape($terpilih_ketua); ?>">
     <input type="hidden" name="pengawas_nik" id="inputPengawasNik" value="<?= html_escape($terpilih_pengawas); ?>">
+    <input type="hidden" name="tablet" id="inputVotingTablet" value="<?= html_escape($current_tablet); ?>">
 </form>
 
 <!-- ========================================================
@@ -984,6 +988,17 @@ body {
                 <div class="summary-item-content">
                     <span class="summary-item-label">Pengawas Terpilih</span>
                     <span class="summary-item-value" id="summaryPengawasVal">Belum dipilih</span>
+                </div>
+            </div>
+
+            <!-- Informasi Tablet di Sticky Bottom Bar -->
+            <div class="summary-item summary-item-tablet" id="summaryItemTablet" style="<?= !empty($current_tablet) ? 'display:flex;' : 'display:none;'; ?> cursor:default;" title="Bilik Suara">
+                <div class="summary-item-icon" style="background:#f1f5f9; color:#0f172a;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                </div>
+                <div class="summary-item-content">
+                    <span class="summary-item-label">Bilik Suara</span>
+                    <span class="summary-item-value" id="summaryTabletVal" style="color:#0f172a; font-weight:700;">Tablet <?= html_escape($current_tablet); ?></span>
                 </div>
             </div>
         </div>
@@ -1060,6 +1075,11 @@ function initPilihUi() {
     <?php endif; ?>
 
     updateUiState();
+
+    // Pastikan informasi tablet tersinkronisasi
+    if (typeof syncTabletInfoUI === 'function') {
+        syncTabletInfoUI('<?= !empty($current_tablet) ? html_escape($current_tablet) : ""; ?>');
+    }
 
     // Jika ketua sudah terpilih di session namun pengawas belum, arahkan ke slide pengawas
     if (currentSelection.ketua.nik && !currentSelection.pengawas.nik) {
@@ -1377,6 +1397,11 @@ function handleKirimSuara() {
             showVoteLoader();
 
             var form = document.getElementById('formKirimSuara');
+            var inpTab = document.getElementById('inputVotingTablet');
+            if (inpTab && !inpTab.value) {
+                var storedTab = localStorage.getItem('voting_tablet') || sessionStorage.getItem('voting_tablet');
+                if (storedTab) inpTab.value = storedTab;
+            }
             var formData = new FormData(form);
             var startTime = Date.now();
             var minDisplayTime = 800;
