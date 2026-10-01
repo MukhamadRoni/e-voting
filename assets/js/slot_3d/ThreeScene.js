@@ -66,18 +66,25 @@
             self.onResize();
         });
 
-        // 5. Subtle interactive mouse tilt
+        // 5. Subtle interactive mouse tilt with natural 3/4 perspective base angle (like spin machine.png)
+        this.baseRotationY = 0.06;
+        this.baseRotationX = 0.03;
+        this.targetRotationY = this.baseRotationY;
+        this.targetRotationX = this.baseRotationX;
+        this.mainPivot.rotation.y = this.baseRotationY;
+        this.mainPivot.rotation.x = this.baseRotationX;
+
         this.container.addEventListener('mousemove', function(e) {
             var rect = self.container.getBoundingClientRect();
             var x = (e.clientX - rect.left) / rect.width - 0.5;
             var y = (e.clientY - rect.top) / rect.height - 0.5;
-            self.targetRotationY = x * 0.18;
-            self.targetRotationX = -y * 0.12;
+            self.targetRotationY = self.baseRotationY + x * 0.16;
+            self.targetRotationX = self.baseRotationX - y * 0.10;
         });
 
         this.container.addEventListener('mouseleave', function() {
-            self.targetRotationX = 0;
-            self.targetRotationY = 0;
+            self.targetRotationX = self.baseRotationX;
+            self.targetRotationY = self.baseRotationY;
         });
 
         // Start render loop
