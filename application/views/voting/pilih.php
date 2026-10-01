@@ -1548,8 +1548,10 @@ function handleBatalClick(e, url) {
         if (result.isConfirmed) {
             Swal.fire({
                 title: 'Membatalkan Sesi...',
-                text: 'Mohon tunggu sebentar...',
+                text: 'Mohon tunggu sebentar, mengembalikan bilik suara ke layar awal...',
                 allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
                 heightAuto: false,
                 didOpen: function() {
                     Swal.showLoading();
@@ -1564,18 +1566,23 @@ function handleBatalClick(e, url) {
             })
             .then(function(r) { return r.json(); })
             .then(function(res) {
-                Swal.close();
                 if (res.status === 'success' && res.data && res.data.redirect) {
                     if (typeof navigateKiosk === 'function') {
-                        navigateKiosk(res.data.redirect);
+                        navigateKiosk(res.data.redirect, function() {
+                            setTimeout(function() {
+                                Swal.close();
+                            }, 60);
+                        });
                     } else {
                         window.location.href = res.data.redirect;
                     }
                 } else {
+                    Swal.close();
                     window.location.href = url;
                 }
             })
             .catch(function() {
+                Swal.close();
                 window.location.href = url;
             });
         }

@@ -7,6 +7,74 @@ class Voting extends CI_Controller {
     {
         parent::__construct();
         $this->load->model('Voting_model');
+        $this->_ensure_voting_params();
+    }
+
+    /**
+     * Memastikan parameter tablet dan autofs selalu ada dan tampil di URL pada saat membuka bilik suara
+     */
+    private function _ensure_voting_params()
+    {
+        $currentMethod = $this->router->fetch_method();
+        if (in_array($currentMethod, array('identifikasi', 'kirim_suara', 'get_kandidat'))) {
+            return;
+        }
+
+        // Hanya untuk request browser non-AJAX dengan method GET
+        if (!$this->input->is_ajax_request() && $this->input->get('ajax') !== '1' && $this->input->method() === 'get') {
+            $tablet = $this->input->get('tablet', TRUE);
+            $autofs = $this->input->get('autofs', TRUE);
+
+            $needsRedirect = false;
+            $params = $this->input->get(null, TRUE) ?: array();
+
+            // 1. Pastikan parameter tablet selalu ada di URL
+            if ($tablet === null || $tablet === '') {
+                $savedTablet = $this->session->userdata('voting_tablet');
+                $tablet = !empty($savedTablet) ? $savedTablet : '1';
+                $params['tablet'] = $tablet;
+                $needsRedirect = true;
+            }
+
+            // Simpan ke session bilik suara
+            $this->session->set_userdata('voting_tablet', $tablet);
+
+            // 2. Pastikan parameter autofs selalu ada di URL
+            if ($autofs === null || $autofs === '') {
+                $params['autofs'] = '1';
+                $needsRedirect = true;
+            }
+
+            if ($needsRedirect) {
+                // Susun urutan parameter: tablet terlebih dahulu, lalu autofs
+                $orderedParams = array(
+                    'tablet' => $params['tablet'],
+                    'autofs' => $params['autofs']
+                );
+                unset($params['tablet'], $params['autofs']);
+                $orderedParams = array_merge($orderedParams, $params);
+
+                $uri = uri_string() ?: 'voting';
+                redirect($uri . '?' . http_build_query($orderedParams));
+                exit;
+            }
+        }
+    }
+
+    /**
+     * Helper menyusun query string default bilik suara (memastikan parameter tablet dan autofs selalu ada)
+     */
+    private function _build_query_string($extra = array())
+    {
+        $tablet = $this->_get_tablet();
+        $params = array(
+            'tablet' => $tablet ?: '1',
+            'autofs' => '1'
+        );
+        if (!empty($extra)) {
+            $params = array_merge($params, $extra);
+        }
+        return '?' . http_build_query($params);
     }
 
     /**
@@ -29,18 +97,12 @@ class Voting extends CI_Controller {
     }
 
     /**
-     * Helper mendeteksi dan menyimpan nomor tablet dari URL (?tablet=1 atau ?autofs=1) / Session
+     * Helper mendeteksi dan menyimpan nomor tablet dari URL (?tablet=1) / Session
      */
     private function _get_tablet()
     {
-        // 1. Cek dari parameter GET: prioritas ?tablet=1 lalu ?autofs=1
+        // 1. Cek dari parameter GET
         $tablet = $this->input->get('tablet', TRUE);
-        if ($tablet === null || $tablet === '') {
-            $autofs = $this->input->get('autofs', TRUE);
-            if (!empty($autofs)) {
-                $tablet = $autofs;
-            }
-        }
 
         // 2. Cek jika dikirim via Header HTTP (AJAX Kiosk SPA)
         if (($tablet === null || $tablet === '') && isset($_SERVER['HTTP_X_VOTING_TABLET'])) {
@@ -54,7 +116,7 @@ class Voting extends CI_Controller {
             $tablet = $this->session->userdata('voting_tablet');
         }
 
-        return $tablet ?: null;
+        return $tablet ?: '1';
     }
 
     /**
@@ -67,7 +129,7 @@ class Voting extends CI_Controller {
 
         // Jika pemilih sedang dalam proses voting aktif, arahkan langsung ke bilik pemilihan
         if ($this->session->userdata('voter')) {
-            redirect('voting/pilih');
+            redirect('voting/pilih' . $this->_build_query_string());
             return;
         }
 
@@ -126,7 +188,7 @@ class Voting extends CI_Controller {
         $this->session->unset_userdata('pilihan_pengawas');
 
         $this->_json_response('success', 'Identifikasi berhasil. Selamat datang, <strong>' . html_escape($pemilih->nama) . '</strong>.', array(
-            'redirect' => site_url('voting/pilih'),
+            'redirect' => site_url('voting/pilih' . $this->_build_query_string()),
             'voter'    => $voterData
         ));
     }
@@ -138,7 +200,7 @@ class Voting extends CI_Controller {
     {
         $voter = $this->session->userdata('voter');
         if (!$voter) {
-            redirect('voting');
+            redirect('voting' . $this->_build_query_string());
             return;
         }
 
@@ -233,7 +295,7 @@ class Voting extends CI_Controller {
             $this->session->set_flashdata('nama_selesai', $nama_pemilih);
 
             $this->_json_response('success', 'Suara Anda berhasil dicatat secara resmi ke dalam sistem!', array(
-                'redirect' => site_url('voting'),
+                'redirect' => site_url('voting' . $this->_build_query_string()),
                 'nama'     => $nama_pemilih
             ));
         } else {
@@ -242,7 +304,7 @@ class Voting extends CI_Controller {
             $this->session->unset_userdata('pilihan_pengawas');
 
             $this->_json_response('error', 'Gagal memproses suara. Hak suara mungkin telah digunakan sebelumnya.', array(
-                'redirect' => site_url('voting')
+                'redirect' => site_url('voting' . $this->_build_query_string())
             ));
         }
     }
@@ -284,13 +346,15 @@ class Voting extends CI_Controller {
         $this->session->unset_userdata('pilihan_ketua');
         $this->session->unset_userdata('pilihan_pengawas');
 
+        $redirectUrl = site_url('voting' . $this->_build_query_string());
+
         // Jika request via AJAX
         if ($this->input->is_ajax_request() || $this->input->method() === 'post') {
             $this->_json_response('success', 'Sesi pemilihan berhasil dibatalkan.', array(
-                'redirect' => site_url('voting')
+                'redirect' => $redirectUrl
             ));
         }
 
-        redirect('voting');
+        redirect($redirectUrl);
     }
 }

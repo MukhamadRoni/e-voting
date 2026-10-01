@@ -185,6 +185,19 @@ if (typeof Swal !== 'undefined') {
             return;
         }
 
+        // Pastikan parameter tablet dan autofs selalu ada pada URL tujuan kiosk
+        try {
+            var targetUrlObj = new URL(url, window.location.origin);
+            var activeTab = localStorage.getItem('voting_tablet') || sessionStorage.getItem('voting_tablet') || '1';
+            if (!targetUrlObj.searchParams.has('tablet')) {
+                targetUrlObj.searchParams.set('tablet', activeTab);
+            }
+            if (!targetUrlObj.searchParams.has('autofs')) {
+                targetUrlObj.searchParams.set('autofs', '1');
+            }
+            url = targetUrlObj.toString();
+        } catch(e) {}
+
         var reqHeaders = {
             'X-Requested-With': 'XMLHttpRequest'
         };
@@ -242,7 +255,7 @@ if (typeof Swal !== 'undefined') {
 
                 if (typeof onDone === 'function') onDone(data);
             } else if (data.data && data.data.redirect) {
-                navigateKiosk(data.data.redirect);
+                navigateKiosk(data.data.redirect, onDone);
             } else {
                 window.location.href = url;
             }
@@ -275,8 +288,10 @@ if (typeof Swal !== 'undefined') {
                     if (result.isConfirmed) {
                         Swal.fire({
                             title: 'Membatalkan Sesi...',
-                            text: 'Mohon tunggu sebentar...',
+                            text: 'Mohon tunggu sebentar, mengembalikan bilik suara ke layar awal...',
                             allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            showConfirmButton: false,
                             heightAuto: false,
                             didOpen: function() {
                                 Swal.showLoading();
@@ -291,14 +306,19 @@ if (typeof Swal !== 'undefined') {
                         })
                         .then(function(r) { return r.json(); })
                         .then(function(res) {
-                            Swal.close();
                             if (res.status === 'success' && res.data && res.data.redirect) {
-                                navigateKiosk(res.data.redirect);
+                                navigateKiosk(res.data.redirect, function() {
+                                    setTimeout(function() {
+                                        Swal.close();
+                                    }, 60);
+                                });
                             } else {
+                                Swal.close();
                                 window.location.href = href;
                             }
                         })
                         .catch(function() {
+                            Swal.close();
                             window.location.href = href;
                         });
                     }
@@ -389,6 +409,31 @@ if (typeof Swal !== 'undefined') {
     if (urlParams.get('autofs') === '1' || urlParams.get('fullscreen') === '1') {
         setSavedFsPref('1');
     }
+
+    // Pastikan parameter tablet dan autofs selalu ada pada browser address bar bilik suara
+    try {
+        var currentUrlObj = new URL(window.location.href);
+        var urlChanged = false;
+        var activeTab = localStorage.getItem('voting_tablet') || sessionStorage.getItem('voting_tablet') || '1';
+
+        if (!currentUrlObj.searchParams.has('tablet')) {
+            currentUrlObj.searchParams.set('tablet', activeTab);
+            urlChanged = true;
+        } else {
+            activeTab = currentUrlObj.searchParams.get('tablet');
+        }
+
+        if (!currentUrlObj.searchParams.has('autofs')) {
+            currentUrlObj.searchParams.set('autofs', '1');
+            urlChanged = true;
+        }
+
+        if (urlChanged) {
+            window.history.replaceState({ url: currentUrlObj.toString() }, '', currentUrlObj.toString());
+        }
+
+        syncTabletInfoUI(activeTab);
+    } catch(e) {}
 
     function showPromptBanner() {
         if (promptFs && !isFsActive() && getSavedFsPref() === '1') {
